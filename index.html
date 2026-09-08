@@ -3,111 +3,157 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lesmateriaal groep 8 · printbaar</title>
+<title>Lesmateriaal Blink</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
-  :root{--ink:#20303c;--muted:#6a7a86;--accent:#2c5f8a;}
-  body{font-family:-apple-system,system-ui,"Segoe UI",Verdana,sans-serif;color:var(--ink);
-    min-height:100vh;background:
-      radial-gradient(circle at 10% 4%,rgba(178,236,213,.5),transparent 480px),
-      radial-gradient(circle at 92% 6%,rgba(206,188,255,.55),transparent 520px),
-      radial-gradient(circle at 50% 112%,rgba(255,224,178,.4),transparent 560px),
-      #eef2f6;background-attachment:fixed;}
-  .wrap{max-width:1000px;margin:0 auto;padding:40px 20px 70px;}
-  header{text-align:center;margin-bottom:8px;}
-  h1{font-family:"Baloo 2",system-ui,sans-serif;font-size:clamp(34px,6vw,52px);line-height:1.05;}
-  .sub{color:var(--muted);font-size:16px;margin-top:6px;}
-  .badge{display:inline-block;background:var(--accent);color:#fff;font-weight:bold;text-transform:uppercase;
-    letter-spacing:1.5px;font-size:12px;padding:4px 14px;border-radius:20px;margin-bottom:12px;}
+  :root{--ink:#1f2733;--muted:#6a7683;--line:#e6e9ef;--card:#ffffff;
+    --brand1:#4f46e5;--brand2:#0ea5a4;--bg:#f4f6fb;}
+  body{font-family:-apple-system,system-ui,"Segoe UI",Verdana,sans-serif;color:var(--ink);background:var(--bg);}
+  h1,h2,.merk{font-family:"Baloo 2",system-ui,sans-serif;}
 
-  h2.cat{font-family:"Baloo 2",sans-serif;font-size:20px;margin:34px 0 14px;display:flex;align-items:center;gap:10px;}
-  h2.cat::after{content:"";flex:1;height:2px;background:rgba(0,0,0,.08);border-radius:2px;}
+  .hero{background:linear-gradient(120deg,var(--brand1),var(--brand2));color:#fff;
+    padding:40px 20px 54px;text-align:center;position:relative;}
+  .merk{font-size:clamp(30px,6vw,46px);font-weight:800;letter-spacing:.5px;}
+  .merk .dot{opacity:.7;}
+  .hero p{margin-top:8px;font-size:15.5px;opacity:.95;}
+  .zoek{margin:22px auto 0;max-width:440px;position:relative;}
+  .zoek input{width:100%;border:none;border-radius:14px;padding:14px 16px 14px 44px;font-size:15px;
+    font-family:inherit;box-shadow:0 8px 24px rgba(0,0,0,.18);color:var(--ink);}
+  .zoek .lo{position:absolute;left:15px;top:50%;transform:translateY(-50%);font-size:17px;opacity:.6;}
 
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;}
-  a.kaart{text-decoration:none;color:inherit;background:rgba(255,255,255,.9);border:1px solid rgba(0,0,0,.06);
-    border-radius:18px;padding:20px;box-shadow:0 8px 26px rgba(70,70,110,.09);display:flex;flex-direction:column;
-    gap:6px;transition:transform .1s ease,box-shadow .1s ease;border-top:5px solid var(--kl,#2c5f8a);}
-  a.kaart:hover{transform:translateY(-3px);box-shadow:0 14px 34px rgba(70,70,110,.16);}
-  .ic{font-size:34px;}
-  .t{font-weight:800;font-size:18px;}
-  .d{color:var(--muted);font-size:13.5px;line-height:1.45;flex:1;}
-  .go{margin-top:6px;color:var(--kl,#2c5f8a);font-weight:bold;font-size:13.5px;}
+  .wrap{max-width:1020px;margin:0 auto;padding:0 18px 60px;}
+  .sectie{margin-top:34px;}
+  .sectie h2{font-size:19px;display:flex;align-items:center;gap:9px;margin-bottom:14px;color:#33405a;}
+  .sectie h2::after{content:"";flex:1;height:2px;background:var(--line);border-radius:2px;}
 
-  footer{text-align:center;color:var(--muted);font-size:13px;margin-top:40px;line-height:1.6;}
+  /* Uitgelichte dagstarter-tegel */
+  .dagstarter{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 24px;
+    box-shadow:0 10px 30px rgba(40,50,90,.07);margin-top:-30px;position:relative;z-index:2;}
+  .dagstarter .kop{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+  .dagstarter .ic{font-size:32px;}
+  .dagstarter .t{font-weight:800;font-size:20px;font-family:"Baloo 2",sans-serif;}
+  .dagstarter .d{color:var(--muted);font-size:14px;line-height:1.5;margin-bottom:14px;max-width:640px;}
+  .niveaus{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;}
+  .niveaus a{text-decoration:none;text-align:center;border-radius:13px;padding:14px 10px;font-weight:800;
+    color:#1f6b4f;background:#e7f5ee;border:1px solid #cdeadb;transition:transform .08s;}
+  .niveaus a:hover{transform:translateY(-2px);}
+  .niveaus a small{display:block;font-weight:600;color:#5a8a73;font-size:11.5px;margin-top:2px;}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;}
+  a.kaart{text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);
+    border-radius:18px;padding:20px;box-shadow:0 6px 20px rgba(40,50,90,.06);display:flex;flex-direction:column;
+    gap:6px;transition:transform .1s,box-shadow .1s;}
+  a.kaart:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(40,50,90,.13);}
+  a.kaart .ic{font-size:30px;}
+  a.kaart .t{font-weight:800;font-size:17px;}
+  a.kaart .d{color:var(--muted);font-size:13.5px;line-height:1.45;flex:1;}
+  a.kaart .go{margin-top:4px;color:var(--brand1);font-weight:bold;font-size:13.5px;}
+  .leeg{color:var(--muted);font-size:14px;padding:10px 2px;display:none;}
+
+  footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:44px;line-height:1.6;}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="badge">Groep 6, 7 &amp; 8</div>
-    <h1>📚 Lesmateriaal groep 6, 7 &amp; 8</h1>
-    <p class="sub">Alle zelfgemaakte materialen op één plek — klik, open en print.</p>
-  </header>
-
-  <h2 class="cat">✏️ Rekenen &amp; taal</h2>
-  <div class="grid">
-    <a class="kaart" style="--kl:#2f7d4f" href="https://bartdevries43-arch.github.io/dagstarter-groep8/" target="_blank" rel="noopener">
-      <span class="ic">📆</span><span class="t">Dagstarter · groep 8</span>
-      <span class="d">200 dagstarters die oplopen in moeilijkheid: automatiseren, hoofdrekenen, redactiesommen, spelling en technisch lezen. Met kleurplaat en antwoordenboek.</span>
-      <span class="go">Openen &amp; printen →</span>
-    </a>
-    <a class="kaart" style="--kl:#2f7d4f" href="https://bartdevries43-arch.github.io/dagstarter-groep7/" target="_blank" rel="noopener">
-      <span class="ic">📆</span><span class="t">Dagstarter · groep 7</span>
-      <span class="d">Zelfde opzet, op groep 7-niveau: kleinere getallen, breuken (deel van een geheel), procenten later en eenvoudiger, en leeswoorden op groep 7-niveau.</span>
-      <span class="go">Openen &amp; printen →</span>
-    </a>
-    <a class="kaart" style="--kl:#2f7d4f" href="https://bartdevries43-arch.github.io/dagstarter-groep6/" target="_blank" rel="noopener">
-      <span class="ic">📆</span><span class="t">Dagstarter · groep 6</span>
-      <span class="d">Zelfde opzet, op groep 6-niveau: tafels automatiseren, optellen/aftrekken t/m ~5.000, makkelijke breuken en nog geen procenten. Leeswoorden op groep 6-niveau.</span>
-      <span class="go">Openen &amp; printen →</span>
-    </a>
-    <a class="kaart" style="--kl:#8d6be8" href="https://bartdevries43-arch.github.io/leesflitser/" target="_blank" rel="noopener">
-      <span class="ic">📖</span><span class="t">Leesflitser</span>
-      <span class="d">Technisch lezen: letters, woorden en zinnen flitsen op alle niveaus (groep 3-8), met racelezen-timer en leeskaarten om te printen. Voor digibord &amp; tablet.</span>
-      <span class="go">Openen →</span>
-    </a>
+  <div class="hero">
+    <div class="merk">Lesmateriaal Blink<span class="dot">.</span></div>
+    <p>Zelfgemaakt oefenmateriaal om te openen en te printen.</p>
+    <div class="zoek"><span class="lo">🔎</span>
+      <input id="zoek" type="search" placeholder="Zoek op materiaal, groep of onderwerp…" autocomplete="off">
+    </div>
   </div>
 
-  <h2 class="cat">🧩 Puzzels &amp; denken</h2>
-  <div class="grid">
-    <a class="kaart" style="--kl:#e08a1e" href="https://bartdevries43-arch.github.io/breinbrekers-groep8/" target="_blank" rel="noopener">
-      <span class="ic">🧠</span><span class="t">Breinbrekers</span>
-      <span class="d">Vellen met gevarieerde breinbrekers (rekenpuzzels, getallenrijen, logisch denken, raadsels) met antwoordblad. Printbare links per vel.</span>
-      <span class="go">Openen &amp; printen →</span>
-    </a>
-    <a class="kaart" style="--kl:#1b3a5c" href="https://bartdevries43-arch.github.io/murdoku-groep8/" target="_blank" rel="noopener">
-      <span class="ic">🕵️</span><span class="t">Murdoku</span>
-      <span class="d">Detective-logicapuzzels: los de zaak op met kruistabellen (verdachten × plaatsen × voorwerpen) en ontdek wie de dader is. Met antwoordblad.</span>
-      <span class="go">Openen &amp; printen →</span>
-    </a>
+  <div class="wrap">
+    <div class="dagstarter" data-tags="dagstarter rekenen taal spelling lezen groep 5 6 7 8 automatiseren">
+      <div class="kop"><span class="ic">📆</span><span class="t">Dagstarters</span></div>
+      <div class="d">Elke dag een korte startopdracht: automatiseren, hoofdrekenen, redactiesommen, een wisselopdracht, spelling en technisch lezen. Oplopend in moeilijkheid, met kleurplaat en antwoordenboek. Kies het niveau:</div>
+      <div class="niveaus">
+        <a href="https://bartdevries43-arch.github.io/dagstarter-groep5/" target="_blank" rel="noopener">Groep 5<small>openen &amp; printen</small></a>
+        <a href="https://bartdevries43-arch.github.io/dagstarter-groep6/" target="_blank" rel="noopener">Groep 6<small>openen &amp; printen</small></a>
+        <a href="https://bartdevries43-arch.github.io/dagstarter-groep7/" target="_blank" rel="noopener">Groep 7<small>openen &amp; printen</small></a>
+        <a href="https://bartdevries43-arch.github.io/dagstarter-groep8/" target="_blank" rel="noopener">Groep 8<small>openen &amp; printen</small></a>
+      </div>
+    </div>
+
+    <div class="sectie" data-sectie>
+      <h2>📖 Rekenen &amp; taal</h2>
+      <div class="grid">
+        <a class="kaart" data-tags="leesflitser technisch lezen flitsen woorden zinnen digibord groep 3 4 5 6 7 8" href="https://bartdevries43-arch.github.io/leesflitser/" target="_blank" rel="noopener">
+          <span class="ic">📖</span><span class="t">Leesflitser</span>
+          <span class="d">Technisch lezen: letters, woorden en zinnen flitsen op alle niveaus (groep 3-8), met racelezen-timer en leeskaarten om te printen.</span>
+          <span class="go">Openen →</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="sectie" data-sectie>
+      <h2>🧩 Puzzels &amp; denken</h2>
+      <div class="grid">
+        <a class="kaart" data-tags="breinbrekers puzzels rekenpuzzel getallenrij logisch raadsel groep 7 8" href="https://bartdevries43-arch.github.io/breinbrekers-groep8/" target="_blank" rel="noopener">
+          <span class="ic">🧠</span><span class="t">Breinbrekers</span>
+          <span class="d">Vellen met gevarieerde breinbrekers (rekenpuzzels, getallenrijen, logisch denken, raadsels) met antwoordblad. Printbare links per vel.</span>
+          <span class="go">Openen &amp; printen →</span>
+        </a>
+        <a class="kaart" data-tags="murdoku detective logica kruistabel verdachten groep 7 8" href="https://bartdevries43-arch.github.io/murdoku-groep8/" target="_blank" rel="noopener">
+          <span class="ic">🕵️</span><span class="t">Murdoku</span>
+          <span class="d">Detective-logicapuzzels: los de zaak op met kruistabellen (verdachten × plaatsen × voorwerpen) en ontdek wie de dader is.</span>
+          <span class="go">Openen &amp; printen →</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="sectie" data-sectie>
+      <h2>🎈 Klas &amp; sfeer</h2>
+      <div class="grid">
+        <a class="kaart" data-tags="gouden weken afspraken klasregels filmrol kinderboekenweek" href="https://bartdevries43-arch.github.io/gouden-weken-afspraken/" target="_blank" rel="noopener">
+          <span class="ic">🎬</span><span class="t">Gouden Weken · afspraken</span>
+          <span class="d">Klasafsprakenkaartjes in de filmrol-stijl van de Kinderboekenweek, in vrolijke kleuren om op te hangen.</span>
+          <span class="go">Openen &amp; printen →</span>
+        </a>
+        <a class="kaart" data-tags="ik ben klaar wat nu keuzekaart snelle werkers lamineren" href="https://bartdevries43-arch.github.io/ik-ben-klaar-groep8/" target="_blank" rel="noopener">
+          <span class="ic">✅</span><span class="t">Ik ben al klaar… wat nu?</span>
+          <span class="d">Keuzekaart met opdrachten voor snelle werkers, om te lamineren en op te hangen. Eén A4.</span>
+          <span class="go">Openen &amp; printen →</span>
+        </a>
+        <a class="kaart" data-tags="verjaardagskalender kalender maanden poster verjaardag" href="https://bartdevries43-arch.github.io/verjaardagskalender-groep8/" target="_blank" rel="noopener">
+          <span class="ic">🎂</span><span class="t">Verjaardagskalender</span>
+          <span class="d">Poster met alle 12 maanden en lege regels om zelf in te vullen. Lamineren en elk jaar opnieuw gebruiken.</span>
+          <span class="go">Openen &amp; printen →</span>
+        </a>
+      </div>
+    </div>
+
+    <p class="leeg" id="leeg">Niets gevonden. Probeer een ander zoekwoord.</p>
+
+    <footer>
+      Tip: kies bij het printen A4, marges "geen"/"standaard" en zet "achtergrondafbeeldingen" aan voor de kleuren.<br>
+      Zelfgemaakt oefenmateriaal · gratis te gebruiken en aan te passen.
+    </footer>
   </div>
 
-  <h2 class="cat">🎈 Klas &amp; sfeer</h2>
-  <div class="grid">
-    <a class="kaart" style="--kl:#c0397e" href="https://bartdevries43-arch.github.io/gouden-weken-afspraken/" target="_blank" rel="noopener">
-      <span class="ic">🎬</span><span class="t">Gouden Weken · afspraken</span>
-      <span class="d">Klasafsprakenkaartjes in de filmrol-stijl van de Kinderboekenweek ("De Gouden Filmrol"), in vrolijke kleuren om op te hangen.</span>
-      <span class="go">Openen &amp; printen →</span>
-    </a>
-    <a class="kaart" style="--kl:#c0392b" href="https://bartdevries43-arch.github.io/ik-ben-klaar-groep8/" target="_blank" rel="noopener">
-      <span class="ic">✅</span><span class="t">Ik ben al klaar… wat nu?</span>
-      <span class="d">Keuzekaart met opdrachten voor snelle werkers, om te lamineren en op te hangen. Eén A4.</span>
-      <span class="go">Openen &amp; printen →</span>
-    </a>
-    <a class="kaart" style="--kl:#12868a" href="https://bartdevries43-arch.github.io/verjaardagskalender-groep8/" target="_blank" rel="noopener">
-      <span class="ic">🎂</span><span class="t">Verjaardagskalender</span>
-      <span class="d">Poster met alle 12 maanden en lege regels om zelf in te vullen. Lamineren en elk jaar opnieuw gebruiken.</span>
-      <span class="go">Openen &amp; printen →</span>
-    </a>
-  </div>
-
-  <footer>
-    Tip: kies bij het printen A4, marges "geen"/"standaard" en zet "achtergrondafbeeldingen" aan voor de kleuren.<br>
-    Gemaakt voor groep 8 · alles gratis te gebruiken en aan te passen.
-  </footer>
-</div>
+<script>
+  const zoek = document.getElementById('zoek');
+  const kaarten = [...document.querySelectorAll('[data-tags]')];
+  const secties = [...document.querySelectorAll('[data-sectie]')];
+  const leeg = document.getElementById('leeg');
+  zoek.addEventListener('input', () => {
+    const q = zoek.value.trim().toLowerCase();
+    kaarten.forEach(k => {
+      const hit = !q || (k.dataset.tags + ' ' + k.textContent).toLowerCase().includes(q);
+      k.style.display = hit ? '' : 'none';
+    });
+    let zichtbaar = 0;
+    secties.forEach(s => {
+      const n = [...s.querySelectorAll('.kaart')].filter(k => k.style.display !== 'none').length;
+      s.style.display = n ? '' : 'none';
+      zichtbaar += n;
+    });
+    const dag = document.querySelector('.dagstarter');
+    if (dag.style.display !== 'none') zichtbaar++;
+    leeg.style.display = zichtbaar ? 'none' : 'block';
+  });
+</script>
 </body>
 </html>
