@@ -44,10 +44,13 @@
 
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;}
   a.kaart{text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);
+    border-top:5px solid var(--sc,#c9cfdb);
     border-radius:18px;padding:20px;box-shadow:0 6px 20px rgba(40,50,90,.06);display:flex;flex-direction:column;
     gap:6px;transition:transform .1s,box-shadow .1s;}
   a.kaart:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(40,50,90,.13);}
-  a.kaart .ic{font-size:30px;}
+  a.kaart .ic{font-size:26px;width:52px;height:52px;border-radius:15px;display:inline-flex;
+    align-items:center;justify-content:center;
+    background:color-mix(in srgb, var(--sc,#4f46e5) 13%, #fff);}
   a.kaart .t{font-weight:800;font-size:17px;}
   a.kaart .d{color:var(--muted);font-size:13.5px;line-height:1.45;flex:1;}
   a.kaart .go{margin-top:4px;color:var(--brand1);font-weight:bold;font-size:13.5px;}
@@ -66,7 +69,7 @@
   </div>
 
   <div class="wrap">
-    <div class="dagstarter" data-tags="dagstarter rekenen taal spelling lezen groep 5 6 7 8 automatiseren">
+    <div class="dagstarter" style="--sc:#2f7d4f" data-tags="dagstarter rekenen taal spelling lezen groep 5 6 7 8 automatiseren">
       <div class="kop"><span class="ic">📆</span><span class="t">Dagstarters</span></div>
       <div class="d">Elke dag een korte startopdracht: automatiseren, hoofdrekenen, redactiesommen, een wisselopdracht, spelling en technisch lezen. Oplopend in moeilijkheid, met kleurplaat en antwoordenboek. Kies het niveau:</div>
       <div class="niveaus">
@@ -77,7 +80,7 @@
       </div>
     </div>
 
-    <div class="sectie" data-sectie>
+    <div class="sectie" data-sectie style="--sc:#4f46e5">
       <h2>📖 Rekenen &amp; taal</h2>
       <div class="grid">
         <a class="kaart" data-tags="leesflitser technisch lezen flitsen woorden zinnen digibord groep 3 4 5 6 7 8" href="https://bartdevries43-arch.github.io/leesflitser/" target="_blank" rel="noopener">
@@ -88,7 +91,7 @@
       </div>
     </div>
 
-    <div class="sectie" data-sectie>
+    <div class="sectie" data-sectie style="--sc:#e08a1e">
       <h2>🧩 Puzzels &amp; denken</h2>
       <div class="grid">
         <a class="kaart" data-tags="breinbrekers puzzels rekenpuzzel getallenrij logisch raadsel groep 7 8" href="https://bartdevries43-arch.github.io/breinbrekers-groep8/" target="_blank" rel="noopener">
@@ -104,7 +107,7 @@
       </div>
     </div>
 
-    <div class="sectie" data-sectie>
+    <div class="sectie" data-sectie style="--sc:#c0397e">
       <h2>🎈 Klas &amp; sfeer</h2>
       <div class="grid">
         <a class="kaart" data-tags="gouden weken afspraken klasregels filmrol kinderboekenweek" href="https://bartdevries43-arch.github.io/gouden-weken-afspraken/" target="_blank" rel="noopener">
