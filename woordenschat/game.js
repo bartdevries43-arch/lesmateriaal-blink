@@ -473,7 +473,7 @@
     // achtergrond + raster
     ctx.fillStyle = "rgba(255,255,255,0.55)";
     ctx.fillRect(0, 0, size, size);
-    ctx.strokeStyle = "rgba(141,107,232,0.08)";
+    ctx.strokeStyle = "rgba(79, 70, 229,0.08)";
     ctx.lineWidth = 1;
     for (var i = 1; i < COLS; i++) {
       ctx.beginPath(); ctx.moveTo(i * CELL, 0); ctx.lineTo(i * CELL, size); ctx.stroke();
@@ -487,9 +487,9 @@
       ctx.fillStyle = "#ffffff";
       ctx.fill();
       ctx.lineWidth = 2;
-      ctx.strokeStyle = "rgba(141,107,232,0.55)";
+      ctx.strokeStyle = "rgba(79, 70, 229,0.55)";
       ctx.stroke();
-      ctx.fillStyle = "#3a2f5e";
+      ctx.fillStyle = "#1e2a5a";
       ctx.font = "700 " + Math.max(11, CELL * 0.5) + "px -apple-system, system-ui, sans-serif";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
@@ -501,7 +501,7 @@
       var seg = snake[s];
       var t = s / Math.max(1, snake.length);
       roundRect(seg.x * CELL + 2, seg.y * CELL + 2, CELL - 4, CELL - 4, 8);
-      ctx.fillStyle = s === 0 ? "#7c5cf0" : mix("#8d6be8", "#3a9d7b", t);
+      ctx.fillStyle = s === 0 ? "#4338ca" : mix("#4f46e5", "#0e9f9e", t);
       ctx.fill();
     }
     // ogen op de kop

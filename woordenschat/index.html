@@ -4,7 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Woordenschat · Snappet Taal</title>
-    <link rel="stylesheet" href="styles.css?v=apple-6" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css?v=blink-3" />
   </head>
   <body>
     <div class="app-shell">
@@ -12,10 +15,10 @@
         <button class="icon-button hidden" id="backButton" type="button" aria-label="Terug naar menu" title="Terug">
           <span aria-hidden="true">‹</span>
         </button>
-        <div>
+        <div class="ws-titel"><span class="ws-logo" aria-hidden="true">📚</span><div>
           <p class="kicker">Snappet Taal · Lesmateriaal Blink</p>
           <h1>Woordenschat Blok 1 t/m 9</h1>
-        </div>
+        </div></div>
         <button class="icon-button" id="resetButton" type="button" aria-label="Voortgang wissen" title="Voortgang wissen">
           <span aria-hidden="true">↺</span>
         </button>
@@ -264,7 +267,7 @@
       const EXTRA_KEY = "woordenschat-extra-woorden";
       const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
       let dataPromise = null;
-      const haalData = () => dataPromise || (dataPromise = fetch("data.enc.json?v=1").then((r) => r.json()));
+      const haalData = () => dataPromise || (dataPromise = fetch("data.enc.json?v=2").then((r) => r.json()));
 
       async function ontsleutel(code) {
         const enc = await haalData();
@@ -296,7 +299,7 @@
         window.EXTRA_GOALS = extraThemas();
         const s = document.createElement("script"); s.textContent = dataJs; document.body.appendChild(s);
         document.body.classList.add("ontgrendeld");
-        await laad("core.js?v=1"); await laad("enhance.js?v=1"); await laad("game.js?v=1");
+        await laad("core.js?v=2"); await laad("enhance.js?v=2"); await laad("game.js?v=2");
       }
 
       const form = document.getElementById("slotForm"), fout = document.getElementById("slotFout"), knop = document.getElementById("slotKnop");

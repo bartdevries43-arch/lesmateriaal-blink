@@ -142,7 +142,7 @@
     }
 
     var canvas, ctx, dpr, particles = [], rafId = null;
-    var COLORS = ["#8d6be8", "#3a9d7b", "#ffb340", "#ff9f1c", "#ff7eb6", "#ffffff"];
+    var COLORS = ["#4f46e5", "#0e9f9e", "#ffb340", "#ff9f1c", "#ff7eb6", "#ffffff"];
 
     function ensureCanvas() {
       if (canvas) return;
