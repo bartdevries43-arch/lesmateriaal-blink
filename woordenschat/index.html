@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Woordenschat · Snappet Taal</title>
+    <link rel="stylesheet" href="styles.css?v=apple-6" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <button class="icon-button hidden" id="backButton" type="button" aria-label="Terug naar menu" title="Terug">
+          <span aria-hidden="true">‹</span>
+        </button>
+        <div>
+          <p class="kicker">Snappet Taal · Lesmateriaal Blink</p>
+          <h1>Woordenschat Blok 1 t/m 9</h1>
+        </div>
+        <button class="icon-button" id="resetButton" type="button" aria-label="Voortgang wissen" title="Voortgang wissen">
+          <span aria-hidden="true">↺</span>
+        </button>
+      </header>
+
+      <main>
+        <section class="hero" id="menuView">
+          <div class="hero-copy">
+            <h2>Kies je groep en oefen stap voor stap.</h2>
+            <p>Start kort met herhaling, oefen per blok of maak de eindtoets wanneer je er klaar voor bent.</p>
+            <div class="profile-panel">
+              <div>
+                <p class="kicker">Leerlingprofiel</p>
+                <strong id="avatarLabel">Kies je avatar</strong>
+              </div>
+              <label class="profile-field">
+                <span>Naam</span>
+                <input id="studentNameInput" type="text" maxlength="24" placeholder="Typ je naam" autocomplete="off" />
+              </label>
+              <div class="avatar-row" id="avatarRow" aria-label="Kies een avatar"></div>
+              <p class="profile-status" id="profileStatus"></p>
+              <button class="secondary-button" id="teacherButton" type="button">Leerkracht</button>
+            </div>
+            <section class="route-panel" aria-label="Kies je leerroute">
+              <div>
+                <p class="kicker">Leerroute</p>
+                <strong id="routeLabel">Gewoon oefenen</strong>
+              </div>
+              <div class="route-row" id="routeRow">
+                <button type="button" data-route="calm">Rustig</button>
+                <button type="button" data-route="normal">Gewoon</button>
+                <button type="button" data-route="challenge">Uitdaging</button>
+              </div>
+            </section>
+            <div class="teacher-note hidden" id="teacherNote"></div>
+          </div>
+          <div class="hero-art profile-spotlight" aria-live="polite">
+            <div class="profile-card">
+              <span class="profile-card-avatar" id="heroAvatar" aria-hidden="true">✨</span>
+              <div class="profile-card-copy">
+                <p class="kicker">Jouw profiel</p>
+                <strong id="heroProfileName">Kies je avatar</strong>
+                <span id="heroProfileHint">Typ je naam en kies daarna je avatar.</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="step-strip" id="stepStrip" aria-label="Oefenroute">
+          <div class="step-item">
+            <span>1</span>
+            <strong>Kies groep</strong>
+          </div>
+          <div class="step-arrow" aria-hidden="true">›</div>
+          <div class="step-item">
+            <span>2</span>
+            <strong>Oefen woorden</strong>
+          </div>
+          <div class="step-arrow" aria-hidden="true">›</div>
+          <div class="step-item">
+            <span>3</span>
+            <strong>Maak toets</strong>
+          </div>
+        </section>
+
+        <section class="menu-grid" id="groupMenu" aria-label="Groepen en toetsdoelen"></section>
+
+        <section class="study-view hidden" id="studyView" aria-live="polite">
+          <div class="study-header">
+            <div>
+              <p class="kicker" id="studyGroup"></p>
+              <h2 id="studyTitle"></h2>
+            </div>
+            <div class="progress-pill" id="progressPill"></div>
+          </div>
+
+          <div class="controls">
+            <div class="segmented" role="group" aria-label="Oefenstand">
+              <button class="active" id="modeWord" type="button">Woord</button>
+              <button id="modeMeaning" type="button">Betekenis</button>
+            </div>
+            <button class="secondary-button" id="shuffleButton" type="button">Schudden</button>
+            <button class="secondary-button" id="practiceButton" type="button">Nog oefenen</button>
+          </div>
+
+          <article class="flashcard" id="flashcard" tabindex="0" role="button" aria-label="Draai flashcard om">
+            <div class="flashcard-face flashcard-front">
+              <span class="card-count" id="cardCount"></span>
+              <p id="frontLabel"></p>
+              <h3 id="frontText"></h3>
+              <span class="tap-hint">Klik om te draaien</span>
+            </div>
+            <div class="flashcard-face flashcard-back">
+              <span class="card-count" id="backCount"></span>
+              <p id="backLabel"></p>
+              <h3 id="backText"></h3>
+              <p class="example" id="exampleText"></p>
+            </div>
+          </article>
+
+          <div class="card-actions">
+            <button class="ghost-button" id="prevButton" type="button">Vorige</button>
+            <button class="needs-button" id="hardButton" type="button">Nog lastig</button>
+            <button class="known-button" id="knownButton" type="button">Ik weet hem</button>
+            <button class="ghost-button" id="nextButton" type="button">Volgende</button>
+          </div>
+
+          <section class="word-list-wrap">
+            <div class="list-header">
+              <div>
+                <h3>Woordenlijst</h3>
+                <p class="helper-lives" id="helperLives"></p>
+              </div>
+              <button class="secondary-button" id="toggleWordListButton" type="button">Woordenlijst openen</button>
+              <input id="searchInput" type="search" placeholder="Zoek woord of betekenis" aria-label="Zoeken in woordenlijst" />
+            </div>
+            <p class="helper-message" id="helperMessage"></p>
+            <div class="word-list" id="wordList"></div>
+          </section>
+        </section>
+
+        <section class="quiz-view hidden" id="quizView" aria-live="polite">
+          <div class="study-header">
+            <div>
+              <p class="kicker" id="quizGroup"></p>
+              <h2 id="quizTitle"></h2>
+            </div>
+            <div class="progress-pill" id="quizScore"></div>
+          </div>
+
+          <section class="score-bar hidden" id="scoreBar" aria-label="Score in procenten">
+            <div class="score-bar-header">
+              <strong>Score</strong>
+              <span id="scorePercent">0%</span>
+            </div>
+            <div class="score-track">
+              <div class="score-fill" id="scoreFill"></div>
+            </div>
+          </section>
+
+          <article class="quiz-card">
+            <span class="card-count" id="quizCount"></span>
+            <div class="quiz-visual hidden" id="quizVisual" aria-hidden="true"></div>
+            <p class="quiz-prompt" id="quizPrompt"></p>
+            <div class="answer-grid" id="answerGrid"></div>
+            <button class="secondary-button hint-button hidden" id="hintButton" type="button">Hint</button>
+            <p class="hint-text hidden" id="hintText"></p>
+            <p class="feedback" id="quizFeedback"></p>
+          </article>
+
+          <div class="card-actions">
+            <button class="ghost-button" id="quizPrevButton" type="button">Vorige</button>
+            <button class="known-button" id="quizNextButton" type="button">Volgende</button>
+            <button class="secondary-button" id="quizRestartButton" type="button">Opnieuw</button>
+          </div>
+
+          <section class="result-card hidden" id="resultCard">
+            <p class="kicker">Klaar</p>
+            <h3 id="resultTitle"></h3>
+            <p id="resultText"></p>
+            <div class="card-actions">
+              <button class="known-button" id="resultRestartButton" type="button">Opnieuw oefenen</button>
+              <button class="needs-button" id="resultDifficultButton" type="button">Lastige vragen</button>
+              <button class="ghost-button" id="resultMenuButton" type="button">Terug naar menu</button>
+            </div>
+          </section>
+
+          <section class="reflection-card hidden" id="reflectionCard">
+            <h3>Hoe ging het?</h3>
+            <div class="reflection-grid" id="reflectionGrid"></div>
+            <p id="reflectionText"></p>
+          </section>
+        </section>
+
+        <section class="teacher-view hidden" id="teacherView">
+          <div class="study-header">
+            <div>
+              <p class="kicker">Leerkrachtgedeelte</p>
+              <h2>Voortgang en feedback</h2>
+              <p class="privacy-note">Deze gegevens blijven op dit apparaat.</p>
+            </div>
+            <div class="progress-pill" id="teacherAvatar"></div>
+          </div>
+
+          <div class="teacher-layout">
+            <section class="teacher-panel">
+              <h3>Overzicht</h3>
+              <div id="teacherOverview"></div>
+            </section>
+            <section class="teacher-panel">
+              <h3>Feedback voor leerling</h3>
+              <div class="feedback-templates" id="feedbackTemplates"></div>
+              <textarea id="teacherFeedback" rows="6" placeholder="Typ hier korte feedback voor deze avatar"></textarea>
+              <div class="card-actions">
+                <button class="known-button" id="saveFeedbackButton" type="button">Feedback bewaren</button>
+                <button class="ghost-button" id="clearFeedbackButton" type="button">Wissen</button>
+                <button class="needs-button" id="deleteProfileButton" type="button">Leerlingprofiel wissen</button>
+              </div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+    <style>
+      body:not(.ontgrendeld) .app-shell{display:none;}
+      .slot-scherm{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:20px;
+        background:radial-gradient(circle at 8% 0%,rgba(14,159,158,.18),transparent 420px),radial-gradient(circle at 96% 6%,rgba(79,70,229,.2),transparent 480px),#f3f5fb;
+        font-family:-apple-system,system-ui,"Segoe UI",sans-serif;color:#1c2433;}
+      body.ontgrendeld .slot-scherm{display:none;}
+      .slot-kaart{width:100%;max-width:460px;background:#fff;border:1px solid rgba(79,70,229,.14);border-radius:26px;padding:28px 26px;
+        box-shadow:0 20px 50px rgba(31,41,90,.14);text-align:center;}
+      .slot-logo{width:64px;height:64px;margin:0 auto 12px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px;
+        background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e);box-shadow:0 10px 24px rgba(59,91,219,.3);}
+      .slot-kaart .slot-kicker{font-size:12px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:#0e9f9e;}
+      .slot-kaart h1{font-size:28px;margin:4px 0 8px;line-height:1.15;}
+      .slot-kaart p{font-size:15px;line-height:1.5;color:#4b5563;}
+      .slot-kaart form{margin-top:16px;display:flex;flex-direction:column;gap:10px;}
+      .slot-kaart input[type=text]{font:inherit;font-size:20px;text-align:center;padding:13px 14px;border:2px solid rgba(79,70,229,.25);border-radius:14px;}
+      .slot-kaart input[type=text]:focus{outline:none;border-color:#4f46e5;}
+      .slot-kaart label{font-size:14px;color:#4b5563;display:flex;gap:8px;align-items:center;justify-content:center;}
+      .slot-kaart button{font:inherit;font-size:18px;font-weight:800;color:#fff;border:none;border-radius:14px;padding:13px;cursor:pointer;
+        background:linear-gradient(120deg,#4f46e5,#3b5bdb);box-shadow:0 8px 20px rgba(79,70,229,.25);}
+      .slot-kaart button:disabled{opacity:.6;cursor:wait;}
+      .slot-fout{min-height:22px;color:#e2534a;font-weight:700;font-size:14px;margin-top:8px;}
+      .slot-klein{font-size:13px !important;margin-top:14px;}
+      .slot-klein a{color:#4f46e5;font-weight:700;text-decoration:none;}
+    </style>
+    <div class="slot-scherm" id="slotScherm">
+      <div class="slot-kaart">
+        <div class="slot-logo">📚</div>
+        <div class="slot-kicker">Lesmateriaal Blink · Snappet Taal</div>
+        <h1>Woordenschat oefenen</h1>
+        <p>De woordenlijsten komen uit Snappet Taal en zijn daarom afgeschermd. Vul de klascode in die je van je juf of meester hebt gekregen.</p>
+        <form id="slotForm" autocomplete="off">
+          <input type="text" id="slotCode" placeholder="klascode" autocapitalize="off" spellcheck="false" aria-label="Klascode">
+          <label><input type="checkbox" id="slotOnthoud" checked> Onthoud de code op dit apparaat</label>
+          <button type="submit" id="slotKnop">Openen</button>
+        </form>
+        <div class="slot-fout" id="slotFout" role="alert"></div>
+        <p class="slot-klein">Leerkracht? <a href="invullen.html">Woorden toevoegen voor groep 5 en 6</a><br><a href="../index.html">← Terug naar Lesmateriaal Blink</a></p>
+      </div>
+    </div>
+    <script>
+    (function () {
+      const CODE_KEY = "woordenschat-klascode";
+      const EXTRA_KEY = "woordenschat-extra-woorden";
+      const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+      let dataPromise = null;
+      const haalData = () => dataPromise || (dataPromise = fetch("data.enc.json?v=1").then((r) => r.json()));
+
+      async function ontsleutel(code) {
+        const enc = await haalData();
+        const basis = await crypto.subtle.importKey("raw", new TextEncoder().encode(code.trim().toLowerCase()), "PBKDF2", false, ["deriveKey"]);
+        const sleutel = await crypto.subtle.deriveKey({ name: "PBKDF2", salt: b64(enc.salt), iterations: enc.iter, hash: "SHA-256" },
+          basis, { name: "AES-GCM", length: 256 }, false, ["decrypt"]);
+        const platte = await crypto.subtle.decrypt({ name: "AES-GCM", iv: b64(enc.iv) }, sleutel, b64(enc.ct));
+        return new TextDecoder().decode(platte);
+      }
+
+      // Woorden die de leerkracht zelf heeft toegevoegd (groep 5 en 6), alleen thema's met minstens 4 complete woorden
+      function extraThemas() {
+        try {
+          const d = JSON.parse(localStorage.getItem(EXTRA_KEY) || "{}");
+          return Object.values(d).map((t) => ({
+            block: "Blok " + t.blok, group: t.group, title: t.titel, code: "#" + t.code + " " + t.titel,
+            words: (t.woorden || []).filter((w) => w[0] && w[1] && w[2]).map((w) => [w[0].trim(), w[1].trim(), w[2].trim()])
+          })).filter((t) => t.words.length >= 4);
+        } catch (e) { return []; }
+      }
+
+      function laad(src) {
+        return new Promise((ok, fout) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = fout; document.body.appendChild(s); });
+      }
+
+      async function open(code, onthoud) {
+        const dataJs = await ontsleutel(code);
+        try { if (onthoud) localStorage.setItem(CODE_KEY, code.trim().toLowerCase()); } catch (e) {}
+        window.EXTRA_GOALS = extraThemas();
+        const s = document.createElement("script"); s.textContent = dataJs; document.body.appendChild(s);
+        document.body.classList.add("ontgrendeld");
+        await laad("core.js?v=1"); await laad("enhance.js?v=1"); await laad("game.js?v=1");
+      }
+
+      const form = document.getElementById("slotForm"), fout = document.getElementById("slotFout"), knop = document.getElementById("slotKnop");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const code = document.getElementById("slotCode").value;
+        if (!code.trim()) { fout.textContent = "Vul eerst de klascode in."; return; }
+        knop.disabled = true; fout.textContent = "";
+        try { await open(code, document.getElementById("slotOnthoud").checked); }
+        catch (err) { fout.textContent = "Deze klascode klopt niet. Vraag het aan je juf of meester."; }
+        knop.disabled = false;
+      });
+
+      let bewaard = null; try { bewaard = localStorage.getItem(CODE_KEY); } catch (e) {}
+      if (bewaard) open(bewaard, true).catch(() => { try { localStorage.removeItem(CODE_KEY); } catch (e) {} });
+    })();
+    </script>
+
+  </body>
+</html>
