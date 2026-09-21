@@ -1,4 +1,4 @@
-const goals = [...RAW_GOALS, ...(window.EXTRA_GOALS || [])].map((goal, goalIndex) => ({
+const goals = [...RAW_GOALS, ...(window.EXTRA_GOALS || []).filter((e) => !RAW_GOALS.some((g) => g.code === e.code))].map((goal, goalIndex) => ({
   ...goal,
   id: `goal-${goalIndex}`,
   words: goal.words.map(([word, meaning, example], wordIndex) => ({
