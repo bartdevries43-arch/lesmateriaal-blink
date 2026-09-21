@@ -61,6 +61,14 @@
   a.kaart .d{color:var(--muted);font-size:13.5px;line-height:1.45;flex:1;}
   a.kaart .go{margin-top:4px;color:var(--brand1);font-weight:bold;font-size:13.5px;}
   .leeg{color:var(--muted);font-size:14px;padding:10px 2px;display:none;}
+  .extern{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px 20px;margin-top:16px;
+    box-shadow:0 6px 20px rgba(31,41,90,.05);}
+  .extern h3{font-family:"Baloo 2",system-ui,sans-serif;font-size:17px;margin-bottom:4px;}
+  .extern p.klein{color:var(--muted);font-size:13px;margin-bottom:8px;}
+  .extern ul{list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px 18px;}
+  .extern li{font-size:14px;line-height:1.45;padding:8px 0;border-bottom:1px solid var(--line);}
+  .extern a{color:var(--brand1);font-weight:700;text-decoration:none;}
+  .extern a:hover{text-decoration:underline;}
 
   footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:44px;line-height:1.6;}
 </style>
@@ -84,6 +92,35 @@
         <a href="https://bartdevries43-arch.github.io/dagstarter-groep6/" target="_blank" rel="noopener">Groep 6<small>openen &amp; printen</small></a>
         <a href="https://bartdevries43-arch.github.io/dagstarter-groep7/" target="_blank" rel="noopener">Groep 7<small>openen &amp; printen</small></a>
         <a href="https://bartdevries43-arch.github.io/dagstarter-groep8/" target="_blank" rel="noopener">Groep 8<small>openen &amp; printen</small></a>
+      </div>
+    </div>
+
+    <div class="sectie" data-sectie style="--sc:#f59e0b">
+      <h2>🧸 Groep 1-2 en 3 · digibord</h2>
+      <div class="grid">
+        <a class="kaart" data-tags="klankenspel groep 1 2 3 kleuters rijmen beginklank hakken plakken klanken letters fonemisch bewustzijn digibord" href="klankenspel.html">
+          <span class="nieuw">Nieuw</span>
+          <span class="ic">🔤</span><span class="t">Klankenspel</span>
+          <span class="d">Spelen met klanken op het digibord: rijmen, de beginklank horen en woorden hakken en plakken, met grote plaatjes. Voor groep 1-2 en de start van groep 3.</span>
+          <span class="go">Openen →</span>
+        </a>
+        <a class="kaart" data-tags="leesflitser groep 3 letters klanken aanvankelijk lezen flitsen digibord" href="https://bartdevries43-arch.github.io/leesflitser/?lijst=Letters%20%26%20klanken%20%C2%B7%20groep%203" target="_blank" rel="noopener">
+          <span class="ic">⚡</span><span class="t">Leesflitser · groep 3</span>
+          <span class="d">Letters en klankgroepen flitsen (aa, ei, sch …) en daarna de AVI-lijsten Start, M3 en E3. Opent direct op de lijst voor groep 3.</span>
+          <span class="go">Openen →</span>
+        </a>
+      </div>
+      <div class="extern" data-tags="extern websites schooltv letterliedjes letterbord bereslim prentenboeken voorleesdagen juf milou woordenflitser groep 1 2 3 digibord">
+        <h3>Handige websites voor het digibord (extern)</h3>
+        <p class="klein">Door mij bekeken op 21 september 2026. Controleer zelf of iets gratis is voor jouw school.</p>
+        <ul>
+          <li><a href="https://schooltv.nl/programma/letterliedjes/clips" target="_blank" rel="noopener">Schooltv · Letterliedjes</a><br>Liedjes om letters en lastige woorden te leren.</li>
+          <li><a href="https://schooltv.nl/thema/letterbord" target="_blank" rel="noopener">Schooltv · Letterbord</a><br>Alle letters en klanken, ingedeeld in letterfamilies.</li>
+          <li><a href="https://www.bereslim.nl/" target="_blank" rel="noopener">Bereslim</a><br>Digitale prentenboeken voor peuters en kleuters, via de bibliotheek. Ook op het digibord.</li>
+          <li><a href="https://onderwijs.cpnb.nl/" target="_blank" rel="noopener">Nationale Voorleesdagen (CPNB)</a><br>Prentenboek Top 10 met lesmateriaal voor groep 1-2, elk jaar in januari.</li>
+          <li><a href="https://www.juf-milou.nl/index.php?g=Groep+1%2F2&amp;m=Digibordlessen" target="_blank" rel="noopener">Juf Milou · digibordlessen groep 1/2</a><br>Lessen over rijmen, letters en kritisch luisteren.</li>
+          <li><a href="https://basisonderwijs.online/woorden-flitsen" target="_blank" rel="noopener">Woordenflitser</a><br>Gratis woorden flitsen op het digibord, ook met eigen woorden. Groep 3-8.</li>
+        </ul>
       </div>
     </div>
 
@@ -163,6 +200,7 @@
 <script>
   const zoek = document.getElementById('zoek');
   const kaarten = [...document.querySelectorAll('[data-tags]')];
+  // .extern telt mee als kaart in een sectie
   const secties = [...document.querySelectorAll('[data-sectie]')];
   const leeg = document.getElementById('leeg');
   zoek.addEventListener('input', () => {
@@ -173,7 +211,7 @@
     });
     let zichtbaar = 0;
     secties.forEach(s => {
-      const n = [...s.querySelectorAll('.kaart')].filter(k => k.style.display !== 'none').length;
+      const n = [...s.querySelectorAll('.kaart, .extern')].filter(k => k.style.display !== 'none').length;
       s.style.display = n ? '' : 'none';
       zichtbaar += n;
     });
