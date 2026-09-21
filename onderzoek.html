@@ -6,241 +6,173 @@
 <title>Onderzoek &amp; verantwoording · Lesmateriaal Blink</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
-  :root{--ink:#1f2733;--muted:#5c6773;--line:#e5e9f0;--accent:#4f46e5;--accent2:#0ea5a4;}
-  body{font-family:-apple-system,system-ui,"Segoe UI",Verdana,sans-serif;color:var(--ink);background:#f5f7fb;line-height:1.6;}
-  .hero{background:linear-gradient(120deg,var(--accent),var(--accent2));color:#fff;padding:38px 20px 30px;text-align:center;}
-  .hero .merk{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:15px;letter-spacing:1px;opacity:.9;}
-  .hero h1{font-family:"Baloo 2",sans-serif;font-size:clamp(26px,5vw,40px);margin:6px 0;}
-  .hero p{opacity:.95;font-size:15px;}
-  .doc{max-width:820px;margin:0 auto;padding:28px 22px 70px;}
-  .meta{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin:-46px auto 26px;
-    box-shadow:0 10px 30px rgba(40,50,90,.10);position:relative;z-index:2;font-size:14px;color:var(--muted);}
-  .meta b{color:var(--ink);}
-  h2{font-family:"Baloo 2",sans-serif;font-size:22px;margin:30px 0 10px;color:#26304a;
-    padding-bottom:6px;border-bottom:2px solid var(--line);}
-  h3{font-size:16px;margin:18px 0 4px;color:var(--accent);}
-  p{margin:9px 0;}
-  .lead{font-family:"Source Serif 4",Georgia,serif;font-size:17px;}
-  ul,ol{margin:8px 0 8px 22px;} li{margin:5px 0;}
-  .kader{background:#fff;border:1px solid var(--line);border-left:5px solid var(--accent2);
-    border-radius:12px;padding:14px 18px;margin:14px 0;}
-  .bronnen{background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px 20px 18px;margin-top:10px;}
-  .bronnen h3{color:#26304a;}
-  .bronnen a{color:var(--accent);word-break:break-word;}
-  .bron{font-size:14px;margin:8px 0;padding-left:18px;text-indent:-18px;}
-  .knop{display:inline-block;text-decoration:none;background:var(--accent);color:#fff;font-weight:bold;
-    padding:11px 18px;border-radius:12px;font-size:14px;}
-  .terug{color:#fff;text-decoration:none;font-size:14px;opacity:.9;display:inline-block;margin-top:8px;}
+  :root{--ink:#1c2433;--muted:#667085;--line:#e4e8f0;--card:#fff;--brand1:#4f46e5;--brand2:#0e9f9e;--bg:#f3f5fb;}
+  body{font-family:-apple-system,system-ui,"Segoe UI",Verdana,sans-serif;color:var(--ink);background:var(--bg);line-height:1.65;}
+  h1,h2,h3,.merk{font-family:"Baloo 2",system-ui,sans-serif;}
+  .hero{position:relative;overflow:hidden;background:linear-gradient(125deg,var(--brand1) 0%,#3b5bdb 48%,var(--brand2) 100%);
+    color:#fff;padding:42px 20px 70px;text-align:center;}
+  .hero::before,.hero::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.08);}
+  .hero::before{width:320px;height:320px;right:-80px;top:-120px;}
+  .hero::after{width:200px;height:200px;left:-60px;bottom:-110px;}
+  .hero .merk{font-weight:800;font-size:13px;letter-spacing:1.6px;text-transform:uppercase;opacity:.85;position:relative;}
+  .hero h1{font-size:clamp(28px,5vw,42px);line-height:1.1;margin:6px 0 8px;position:relative;}
+  .hero p{opacity:.92;font-size:15.5px;position:relative;}
+  .terug{color:#fff;text-decoration:none;font-size:14px;font-weight:700;display:inline-block;margin-top:14px;
+    background:rgba(255,255,255,.16);padding:7px 14px;border-radius:999px;position:relative;}
+  .doc{max-width:840px;margin:0 auto;padding:0 18px 70px;}
+  .meta{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 20px;margin:-42px 0 24px;
+    box-shadow:0 12px 32px rgba(31,41,90,.10);position:relative;z-index:2;font-size:14px;color:var(--muted);
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px 18px;}
+  .meta b{display:block;color:var(--ink);font-size:13px;text-transform:uppercase;letter-spacing:.5px;font-size:11.5px;color:var(--muted);}
+  .meta span{color:var(--ink);font-weight:600;}
+  .blok{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 24px;margin-top:16px;
+    box-shadow:0 4px 16px rgba(31,41,90,.04);}
+  .blok h2{font-size:22px;line-height:1.2;display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+  .blok h2 .nr{flex:none;width:32px;height:32px;border-radius:10px;display:inline-flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--brand1),var(--brand2));color:#fff;font-size:15px;}
+  .blok h3{font-size:17px;margin:16px 0 2px;color:#2b3450;}
+  p{margin:8px 0;}
+  .lead{font-size:17px;}
+  ul{margin:8px 0 8px 22px;} li{margin:6px 0;}
+  .let{background:rgba(14,159,158,.08);border:1px solid rgba(14,159,158,.24);border-radius:14px;padding:13px 16px;margin:14px 0 4px;}
+  .let.warm{background:rgba(224,138,30,.08);border-color:rgba(224,138,30,.28);}
+  .bron{font-size:14px;margin:9px 0;padding-left:24px;text-indent:-24px;word-break:break-word;}
+  .bron a{color:var(--brand1);}
+  .klein{font-size:13.5px;color:var(--muted);}
+  .knop{display:inline-block;text-decoration:none;background:var(--brand1);color:#fff;font-weight:700;padding:11px 18px;
+    border-radius:12px;font-size:14px;margin-top:22px;}
+  .printknop{position:fixed;top:14px;right:14px;z-index:20;border:none;cursor:pointer;background:#fff;color:var(--brand1);
+    font-family:inherit;font-weight:700;font-size:14px;padding:10px 15px;border-radius:12px;box-shadow:0 4px 14px rgba(0,0,0,.18);}
   footer{color:var(--muted);font-size:13px;text-align:center;margin-top:34px;}
-  .printknop{position:fixed;top:14px;right:14px;z-index:20;border:none;cursor:pointer;background:#fff;color:var(--accent);
-    font-family:inherit;font-weight:bold;font-size:14px;padding:10px 15px;border-radius:11px;box-shadow:0 4px 14px rgba(0,0,0,.18);}
+  @media (max-width:640px){ .printknop{top:auto;bottom:14px;} }
   @media print{
-    body{background:#fff;} .hero{background:#fff;color:#1f2733;padding:0 0 8px;}
-    .hero .merk{color:var(--accent);} .terug,.printknop{display:none;}
-    .meta{box-shadow:none;margin:10px 0 20px;} .doc{max-width:none;padding:0;}
-    a{color:#1f2733;text-decoration:underline;} @page{size:A4;margin:16mm;}
+    body{background:#fff;} .hero{background:#fff;color:var(--ink);padding:0 0 10px;text-align:left;}
+    .hero::before,.hero::after,.terug,.printknop,.knop{display:none;}
+    .meta{box-shadow:none;margin:8px 0 14px;} .blok{box-shadow:none;break-inside:avoid-page;}
+    .doc{max-width:none;padding:0;} a{color:var(--ink);} @page{size:A4;margin:16mm;}
   }
 </style>
 </head>
 <body>
 <button class="printknop" onclick="window.print()">🖨 Print / PDF</button>
 <div class="hero">
-  <div class="merk">LESMATERIAAL BLINK</div>
+  <div class="merk">Lesmateriaal Blink</div>
   <h1>Onderzoek &amp; verantwoording</h1>
-  <p>Waar komt ons lesmateriaal vandaan en welke bronnen hebben wij gebruikt?</p>
+  <p>Hoe is het materiaal gemaakt, en waarop is het gebaseerd?</p>
   <a class="terug" href="index.html">← terug naar het lesmateriaal</a>
 </div>
 
 <div class="doc">
   <div class="meta">
-    <b>Auteur:</b> Bart de Vries &nbsp;·&nbsp; <b>Groep:</b> 8 &nbsp;·&nbsp;
-    <b>School/wijk:</b> Schiedam Nieuwland &nbsp;·&nbsp; <b>Datum:</b> september 2026<br>
-    <b>Onderwerp:</b> verantwoording van het zelfgemaakte oefenmateriaal van Lesmateriaal Blink.
+    <div><b>Auteur</b><span>Bart de Vries</span></div>
+    <div><b>Voor</b><span>groep 4 t/m 8, nu ook in groep 6</span></div>
+    <div><b>Wijk</b><span>Schiedam Nieuwland</span></div>
+    <div><b>Bijgewerkt</b><span>21 september 2026</span></div>
   </div>
 
-  <p class="lead">In dit document leg ik uit hoe ik het materiaal van Lesmateriaal Blink heb
-  gemaakt en op welke bronnen ik mij heb gebaseerd. Zo kunnen collega's precies zien
-  waar de keuzes vandaan komen en met welk vertrouwen zij het materiaal in de klas
-  kunnen gebruiken.</p>
-
-  <h2>1. Inleiding en aanleiding</h2>
-  <p>Voor mijn groep 8 in Schiedam Nieuwland wilde ik dagelijks oefenmateriaal dat direct
-  aansluit bij het niveau van de kinderen: kort, gevarieerd en oplopend in moeilijkheid.
-  Kant-en-klare pakketten waren vaak te duur, niet op maat of niet vrij te delen. Daarom
-  heb ik zelf materiaal gemaakt en gebundeld in Lesmateriaal Blink, zodat ook mijn
-  collega's het gratis kunnen openen en printen.</p>
-
-  <h2>2. Doel en onderzoeksvraag</h2>
-  <p><b>Doel:</b> print- en digibord-klaar oefenmateriaal maken dat per leerjaar op het
-  juiste niveau zit en dat foutloos en aantrekkelijk is.</p>
-  <p><b>Hoofdvraag:</b> hoe maak ik oefenmateriaal voor groep 5 tot en met 8 dat aansluit
-  bij de landelijke doelen en bij de methodes die wij op school gebruiken?</p>
-  <ul>
-    <li>Welke reken- en taaldoelen horen bij elk leerjaar?</li>
-    <li>Hoe bouwen methodes als Estafette en Blink Lezen het technisch lezen op?</li>
-    <li>Hoe zorg ik dat het materiaal klopt (geen rekenfouten, geen dubbele opgaven)?</li>
-  </ul>
-
-  <h2>3. Methode en werkwijze</h2>
-  <h3>Niveau bepalen</h3>
-  <p>Per leerjaar heb ik de landelijke doelen opgezocht (zie de bronnen bij rekenen en lezen)
-  en de moeilijkheid daarop afgestemd. De dagstarters lopen binnen een schooljaar op, en de
-  vier niveaus (groep 5 t/m 8) verschillen duidelijk van elkaar: van tafels en optellen tot
-  1000 in groep 5, tot vermenigvuldigen met twee cijfers en procenten in groep 8.</p>
-  <h3>Aansluiten bij de methodes</h3>
-  <p>Voor technisch lezen (de Leesflitser) heb ik de opbouw in AVI-niveaus aangehouden, zoals
-  in Estafette, en de gedachte van betekenisvol lezen uit Blink Lezen. Voor het flitsen zelf
-  heb ik de didactiek gevolgd: woorden kort tonen, herhalen en oefenen op woord- én zinsniveau.</p>
-  <h3>Controle op fouten</h3>
-  <div class="kader">
-    Alle rekenopgaven zijn met een controlescript nagerekend over alle 200 dagen per leerjaar.
-    Dubbele sommen, niet-passende antwoorden en onduidelijke opgaven zijn verwijderd. De
-    logica-puzzels (Murdoku) zijn met een oplosser gecontroleerd op één sluitende oplossing.
-  </div>
-  <h3>Eigen en netjes gemaakt</h3>
-  <p>Al het materiaal is eigen werk. Ik heb methodes en websites als naslag gebruikt voor het
-  niveau en de opbouw, maar geen woordenlijsten, teksten of opgaven letterlijk overgenomen.
-  Voor de kleurplaten en icoontjes gebruik ik OpenMoji (vrije licentie, met bronvermelding).</p>
-
-  <h2>4. Resultaten: het materiaal</h2>
-  <ul>
-    <li><b>Dagstarters</b> voor groep 4, 5, 6, 7 en 8 (rekenen, spelling, technisch lezen), met antwoordenboek. Elk niveau is apart afgestemd: groep 4 doet bijvoorbeeld nog geen keer- en deelsommen.</li>
-    <li><b>Leesflitser</b>: letters, woorden en zinnen flitsen op AVI-niveau, met racelezen en leeskaarten.</li>
-    <li><b>Rekenflitser</b>: sommen flitsen om te automatiseren (tafels, plus/min en grote getallen), met sprint-timer en sommenblad.</li>
-    <li><b>Breinbrekers</b> en <b>Murdoku</b>: puzzels om het denken te stimuleren, met antwoordbladen.</li>
-    <li><b>Gouden Weken-afspraken</b>, <b>"Ik ben al klaar"-kaart</b> en <b>verjaardagskalender</b> voor de klas.</li>
-  </ul>
-
-  <h2>5. Kleine meta-analyse: wat werkt volgens onderzoek?</h2>
-  <p>Om te onderbouwen waarom kort en dagelijks flitsen en oefenen zinvol is, heb ik meerdere
-  betrouwbare bronnen naast elkaar gelegd. Dit is een beknopte samenvatting (geen volledige
-  systematische review), maar de rode draad is duidelijk:</p>
-  <ul>
-    <li><b>Automatiseren maakt ruimte in het hoofd.</b> Wanneer rekenfeiten en directe
-      woordherkenning geautomatiseerd zijn, houden kinderen werkgeheugen over voor moeilijkere
-      taken. Veel en regelmatig oefenen vergroot de snelheid én de nauwkeurigheid.</li>
-    <li><b>Ophalen en spreiden is de sterkste combinatie.</b> Kennis actief uit je geheugen
-      ophalen (retrieval practice) en oefenen verspreid over de tijd (spaced practice) kwam in
-      groot vergelijkend onderzoek als meest effectieve leerstrategie naar voren. Flitsen is
-      precies zo'n korte ophaal-oefening.</li>
-    <li><b>Dagelijkse herhaling in kleine stapjes werkt.</b> Korte, dagelijkse herhaling is een
-      kernprincipe van effectieve instructie (Rosenshine). Dat is de basis onder een dagstarter.</li>
-    <li><b>Nuance bij technisch lezen.</b> Er is geen eenduidig bewijs dat losse woorden flitsen
-      beter is dan teksten lezen. Het beste is een combinatie van oefenen op woord-, zins- én
-      tekstniveau. Daarom biedt de Leesflitser bewust ook zinnen aan.</li>
-  </ul>
-  <div class="kader">
-    <b>Wat betekent dit voor ons materiaal?</b> Kort, dagelijks en met actief ophalen oefenen
-    (de flitsers en de dagstarters), gecombineerd met het lezen van hele teksten, sluit aan bij
-    wat onderzoek als effectief aanwijst. De bronnen hieronder onderbouwen deze keuzes.
+  <div class="blok">
+    <h2><span class="nr">1</span>Waarom dit materiaal?</h2>
+    <p class="lead">Ik wilde oefenmateriaal dat past bij de kinderen in onze wijk: kort, elke dag, oplopend in moeilijkheid en gratis voor mijn collega's.</p>
+    <p>Kant-en-klare pakketten waren vaak te duur, niet op maat of niet vrij te delen. Daarom maak ik het zelf en bundel ik het in Lesmateriaal Blink. Op deze pagina leg ik uit hoe ik het heb gemaakt en op welke bronnen ik mijn keuzes baseer. Zo kan iedereen zien waar het vandaan komt.</p>
   </div>
 
-  <h2>6. Werkt dit ook voor kinderen in een achterstandswijk?</h2>
-  <p>Onze context (Schiedam Nieuwland) is een gemengde wijk waar sommige kinderen thuis
-  minder taal- en oefenkansen krijgen. Ik heb meerdere bronnen bekeken over dit soort
-  materiaal voor deze groep. Het eerlijke antwoord: het hangt af van <b>hóe</b> je het inzet.</p>
-  <p><b>Wél waardevol:</b></p>
-  <ul>
-    <li>Voor kinderen met een achterstand werkt vooral <b>expliciete (directe) instructie</b> met
-      veel oefenen, voordoen en directe feedback. Oefenen zónder uitleg vooraf heeft weinig effect.
-      Dagstarters en flitsers passen precies als <i>korte, dagelijkse herhaling ná de instructie</i>.</li>
-    <li>Vaste, voorspelbare routines en <b>succeservaringen</b> (haalbare sommen die langzaam
-      oplopen) geven houvast en zelfvertrouwen, juist voor kinderen die thuis minder structuur hebben.</li>
-    <li>Breinbrekers en murdoku zijn <b>talig en motiverend</b>: de murdoku vraagt zorgvuldig lezen
-      en redeneren, wat aansluit bij begrijpend lezen.</li>
-  </ul>
-  <p><b>Nuance, niet vanzelf:</b></p>
-  <ul>
-    <li>Puzzels en "breintraining" maken kinderen niet automatisch <i>slimmer</i>. Onderzoek laat
-      zien dat je vooral beter wordt in de puzzel zélf; de overdracht naar andere vaardigheden
-      (ver-transfer) is beperkt en omstreden. Zie breinbrekers en murdoku dus als motiverende
-      oefening in lezen en logisch denken, niet als wondermiddel.</li>
-    <li>Zonder goede uitleg vooraf werkt losse oefening nauwelijks: het materiaal is een
-      <b>aanvulling</b>, geen vervanging van de les.</li>
-    <li>Te veel herhaling zonder betekenis kan demotiveren. Afwisseling, haalbaarheid en het
-      combineren met echte teksten en context blijven belangrijk.</li>
-  </ul>
-  <div class="kader">
-    <b>Kort:</b> als dagelijkse, korte oefening ná de uitleg, met een haalbare opbouw en veel
-    bemoediging, sluit dit materiaal aan bij wat werkt voor kinderen met een achterstand. Als
-    losstaand "slimmer-maak-middel" overschat je het effect.
+  <div class="blok">
+    <h2><span class="nr">2</span>Doel en vragen</h2>
+    <p><b>Doel:</b> oefenmateriaal maken dat per leerjaar op het juiste niveau zit, dat klopt en dat kinderen graag gebruiken.</p>
+    <p><b>Hoofdvraag:</b> hoe maak ik oefenmateriaal voor groep 4 tot en met 8 dat aansluit bij de landelijke doelen, bij de methodes op school en bij wat onderzoek zegt over effectief oefenen?</p>
+    <ul>
+      <li>Welke doelen voor rekenen en taal horen bij elk leerjaar?</li>
+      <li>Hoe bouwen methodes voor technisch lezen de moeilijkheid op?</li>
+      <li>Wat zegt onderzoek over kort en dagelijks oefenen, flitsen en herhaald lezen?</li>
+      <li>Hoe zorg ik dat het materiaal foutloos is?</li>
+    </ul>
   </div>
 
-  <h2>7. Conclusie</h2>
-  <p>Met Lesmateriaal Blink is er nu een gratis, gecontroleerde en op niveau afgestemde
-  verzameling oefenmateriaal voor groep 5 tot en met 8. Het sluit aan bij de landelijke doelen
-  en bij onze methodes, en is eenvoudig te openen, te printen en te delen. In de toekomst kan
-  het materiaal verder worden uitgebreid en op basis van ervaringen in de klas worden bijgesteld.</p>
-
-  <h2>8. Verantwoording van de bronnen</h2>
-  <div class="bronnen">
-    <h3>Reken­doelen per leerjaar</h3>
-    <p class="bron">Onderwijsconsument (OCO). Wat leert mijn kind in groep 7? Geraadpleegd van
-      <a href="https://www.onderwijsconsument.nl/wat-leert-mijn-kind-in-groep-7/">onderwijsconsument.nl</a></p>
-    <p class="bron">Wijzer over de basisschool. Rekenen groep 7. Geraadpleegd van
-      <a href="https://wijzeroverdebasisschool.nl/groepen/groep-7/rekenen">wijzeroverdebasisschool.nl</a></p>
-    <p class="bron">Rekenen.nl. Rekenen groep 5. Geraadpleegd van
-      <a href="https://www.rekenen.nl/groep-5/">rekenen.nl/groep-5</a></p>
-    <p class="bron">Oudersvannu. Wat leert mijn kind in groep 5? Geraadpleegd van
-      <a href="https://www.oudersvannu.nl/kind/wat-leert-mijn-kind-in-groep-5~9218bfc">oudersvannu.nl</a></p>
-
-    <h3>Technisch lezen en leesmethodes</h3>
-    <p class="bron">Uitgeverij Zwijsen. Estafette: hoe het werkt (voortgezet technisch lezen, AVI-opbouw).
-      Geraadpleegd van <a href="https://www.zwijsen.nl/lesmethodes/estafette/hoe-het-werkt/">zwijsen.nl</a></p>
-    <p class="bron">Blink. Blink Lezen: didactiek technisch lezen. Geraadpleegd van
-      <a href="https://blink.nl/blink-lezen/didactiek/technisch-lezen/">blink.nl</a></p>
-    <p class="bron">Kennisrotonde. Wat is effectiever voor zwakke lezers: flitsen van woorden of lezen
-      van teksten? Geraadpleegd van
-      <a href="https://www.kennisrotonde.nl/vraag-en-antwoord/woordlezen-op-tempo">kennisrotonde.nl</a></p>
-
-    <h3>Onderzoek naar leren (voor de meta-analyse)</h3>
-    <p class="bron">Kennisrotonde (NRO). Wat werkt in het rekenonderwijs om leerlingen basisbewerkingen
-      te leren automatiseren en memoriseren? Geraadpleegd van
-      <a href="https://www.kennisrotonde.nl/vraag-en-antwoord/rekenen-op-de-basisschool">kennisrotonde.nl</a></p>
-    <p class="bron">Wij-leren.nl. Het effect van gericht automatiseren van rekenvaardigheden.
-      Geraadpleegd van <a href="https://wij-leren.nl/rekenen-automatiseren.php">wij-leren.nl</a></p>
-    <p class="bron">Onderwijskennis.nl (NRO). Aanpakken van rekenachterstanden. Geraadpleegd van
-      <a href="https://www.onderwijskennis.nl/kennisbank/aanpakken-van-rekenachterstanden">onderwijskennis.nl</a></p>
-    <p class="bron">RetrievalPractice.org. Ophalen en spreiden (retrieval en spaced practice) als
-      effectieve leerstrategie. Geraadpleegd van
-      <a href="https://pdf.retrievalpractice.org/translations/Dutch_Spacing.pdf">retrievalpractice.org</a></p>
-    <p class="bron">Centrum voor Didactiek. Spaced repetition (gespreid herhalen). Geraadpleegd van
-      <a href="https://centrumvoordidactiek.nl/begrippen/spaced-repetition/">centrumvoordidactiek.nl</a></p>
-    <p class="bron">Wij-leren.nl. De tien principes van Rosenshine (o.a. dagelijkse herhaling).
-      Geraadpleegd van <a href="https://wij-leren.nl/tien-principes-van-rosenshine.php">wij-leren.nl</a></p>
-    <p class="bron">Onderwijskennis.nl (NRO). Expliciete instructie inzetten. Geraadpleegd van
-      <a href="https://www.onderwijskennis.nl/kennisbank/expliciete-instructie-inzetten">onderwijskennis.nl</a></p>
-    <p class="bron">Onderwijskennis.nl (NRO). Onderwijskansen: achterstanden verkleinen. Geraadpleegd van
-      <a href="https://www.onderwijskennis.nl/onderwijskansen">onderwijskennis.nl</a></p>
-    <p class="bron">National Geographic. Kun je je brein trainen met puzzels? (over beperkte transfer).
-      Geraadpleegd van <a href="https://www.nationalgeographic.nl/wetenschap/a64510548/brein-trainen-kruiswoordpuzzels">nationalgeographic.nl</a></p>
-    <p class="bron">Tijdwinst.com. Brein trainen met spelletjes: wat zegt de wetenschap? Geraadpleegd van
-      <a href="https://tijdwinst.com/brein-trainen-4/">tijdwinst.com</a></p>
-
-    <h3>Beeldmateriaal (kleurplaten en icoontjes)</h3>
-    <p class="bron">OpenMoji. Open-source emoji- en icoonbibliotheek (licentie CC BY-SA 4.0).
-      Geraadpleegd van <a href="https://openmoji.org">openmoji.org</a></p>
-
-    <h3>Inspiratie voor vorm en opzet (concept, niet overgenomen)</h3>
-    <p class="bron">Schoolkadootje. Voorbeeld van een automatiseren/dagstarter voor groep 8.</p>
-    <p class="bron">Eduki. Voorbeelden van breinbrekers en een detective-logicapuzzel (murdoku) voor groep 7/8.</p>
-    <p class="bron">JufBijtje, Juf Maike en Meester Danny. Voorbeelden van klas- en oefenmateriaal
-      voor de bovenbouw.</p>
-    <p class="bron">Thema Kinderboekenweek 2026, "De Gouden Filmrol", als inspiratie voor de
-      Gouden Weken-afsprakenkaartjes.</p>
-
-    <h3>Over het schrijven van dit verslag</h3>
-    <p class="bron">Universiteit Utrecht, Universiteitsbibliotheek. Onderzoeksverslag (opbouw volgens
-      inleiding, methode, resultaten en conclusie). Geraadpleegd van
-      <a href="https://libguides.library.uu.nl/c.php?g=202130&p=1331602">libguides.library.uu.nl</a></p>
+  <div class="blok">
+    <h2><span class="nr">3</span>Hoe heb ik het gemaakt?</h2>
+    <h3>Niveau per leerjaar</h3>
+    <p>Voor rekenen heb ik de kerndoelen rekenen en wiskunde van SLO als kader gebruikt (SLO, 2025). Binnen een schooljaar lopen de dagstarters op in moeilijkheid, en de niveaus verschillen duidelijk van elkaar. Groep 4 doet bijvoorbeeld nog geen keer- en deelsommen.</p>
+    <h3>Aansluiten bij de leesmethodes</h3>
+    <p>Voor technisch lezen volg ik de AVI-opbouw. Estafette zet per les één woordtype centraal en werkt met M- en E-niveaus van AVI M4 tot AVI Plus (Zwijsen, z.d.). Blink Lezen verwerkt technisch lezen in het hele programma, met veel oefenen in rijke teksten, hardop lezen en herhaald lezen (Blink, z.d.). Ik heb geen woordenlijsten of teksten uit deze methodes overgenomen: ik gebruik ze alleen om het niveau en de opbouw te bepalen.</p>
+    <h3>Controle op fouten</h3>
+    <div class="let">Alle rekenopgaven zijn met een controlescript nagerekend, over alle 200 dagen per leerjaar. Dubbele sommen, verkeerde antwoorden en onduidelijke opgaven zijn eruit gehaald. De logicapuzzels (Murdoku) zijn met een oplosser gecontroleerd op één sluitende oplossing.</div>
+    <h3>Eigen werk</h3>
+    <p>Al het materiaal is eigen werk. Voor de kleurplaten en icoontjes gebruik ik OpenMoji, met een vrije licentie en bronvermelding (OpenMoji, z.d.).</p>
   </div>
 
-  <p style="margin-top:22px;"><a class="knop" href="index.html">← Terug naar het lesmateriaal</a></p>
+  <div class="blok">
+    <h2><span class="nr">4</span>Het materiaal</h2>
+    <ul>
+      <li><b>Dagstarters</b> voor groep 4 tot en met 8 (rekenen, spelling en technisch lezen), met antwoordenboek.</li>
+      <li><b>Leesflitser</b>: letters, woorden en zinnen flitsen op AVI-niveau, met racelezen en leeskaarten. Nieuw is de <b>onderzoeksmodus</b> voor een leesgroepje: flitsen waarbij het woord na een korte tijd verdwijnt, herhaald lezen, lastige woorden die terugkomen, een logboek van de oefentijd en een voor- en nameting.</li>
+      <li><b>Rekenflitser</b>: sommen flitsen om te automatiseren, met sprint-timer en sommenblad.</li>
+      <li><b>Breinbrekers</b> en <b>Murdoku</b>: puzzels om te lezen en logisch te redeneren, met antwoordbladen.</li>
+      <li><b>Gouden Weken-afspraken</b>, een <b>"Ik ben al klaar"-kaart</b> en een <b>verjaardagskalender</b> voor de klas.</li>
+    </ul>
+  </div>
 
-  <footer>Lesmateriaal Blink · verantwoording · september 2026</footer>
+  <div class="blok">
+    <h2><span class="nr">5</span>Wat zegt onderzoek?</h2>
+    <h3>Automatiseren maakt ruimte in je hoofd</h3>
+    <p>Wie woorden vlot herkent, houdt werkgeheugen over om te begrijpen wat er staat (Van der Leij &amp; Vernooy, 2023). Bij rekenen scoren leerlingen die meer oefenen beter op automatiseren. Zwakke rekenaars hebben baat bij een vaste opbouw, herhaling en directe instructie, en het advies is om er minimaal tien minuten per dag aan te besteden (Punt &amp; Schoevers, 2023).</p>
+    <h3>Ophalen en spreiden</h3>
+    <p>Kennis zelf uit je geheugen ophalen en oefenen verspreid over de tijd horen bij de meest effectieve leertechnieken (Dunlosky et al., 2013). Flitsen en een dagstarter zijn precies zulke korte ophaal-oefeningen.</p>
+    <h3>Kort herhalen, elke dag</h3>
+    <p>Begin een les met een korte herhaling van wat de kinderen al geleerd hebben, en herhaal ook elke week en elke maand (Rosenshine, 2012). Dat is de basis onder de dagstarter.</p>
+    <h3>Nuance bij technisch lezen</h3>
+    <p>Losse woorden flitsen maakt die woorden sneller, maar dat gaat niet vanzelf over op teksten. Oefenen op woord- en tekstniveau samen werkt het best (Gijsel, 2019). Herhaald lezen werkt vooral als kinderen een tekst drie tot vier keer hardop lezen aan een volwassene die feedback geeft (Hoogeveen, 2024). Daarom heeft de Leesflitser ook zinnen, en volgt in de onderzoeksmodus na het flitsen altijd herhaald lezen.</p>
+    <h3>De oefentijd moet er ook echt zijn</h3>
+    <p>In een groot Nederlands onderzoek naar een flitsprogramma oefenden scholen veel minder dan bedoeld. Toen werkte het niet beter dan de gewone aanpak, maar kinderen die meer oefenden gingen wel meer vooruit (Nationaal Kennisinstituut Onderwijs [NKO], z.d.). Oefenen met woorden die maar kort in beeld zijn, hielp zwakke lezers om sneller te decoderen (Van den Bosch et al., 1995). Daarom houdt de Leesflitser in de onderzoeksmodus de oefentijd bij en kun je de flitsduur instellen.</p>
+  </div>
+
+  <div class="blok">
+    <h2><span class="nr">6</span>Werkt dit ook in een wijk als Nieuwland?</h2>
+    <p>In 2020 had 42% van de bewoners van Nieuwland een taalachterstand. Kinderen in Nieuwland en Oost starten vaker met een achterstand op de basisschool en krijgen buiten schooltijd weinig leerkansen (Nationaal Programma Nieuwland en Oost, 2025). Wie weinig leest, blijft achter en gaat daardoor nog minder lezen (Stanovich, 1986). Voor deze kinderen moet de school dus zorgen voor veel oefentijd.</p>
+    <p><b>Wel waardevol:</b></p>
+    <ul>
+      <li>Leerlingen met een achterstand hebben extra baat bij expliciete instructie: stap voor stap uitleggen, voordoen en veel begeleid oefenen (Van der Vegt, 2025). De flitsers en dagstarters zijn de korte, dagelijkse herhaling ná die instructie.</li>
+      <li>Vaste routines en haalbare opdrachten die langzaam moeilijker worden, geven houvast en succeservaringen.</li>
+    </ul>
+    <p><b>Niet vanzelf:</b></p>
+    <ul>
+      <li>Puzzels en "breintraining" maken kinderen niet slimmer in het algemeen. Er is weinig bewijs dat zulke training beter maakt in taken die niet getraind zijn (Simons et al., 2016). Breinbrekers en Murdoku zijn daarom een motiverende oefening in lezen en logisch denken, geen wondermiddel.</li>
+      <li>Oefenmateriaal is een aanvulling op goede instructie, geen vervanging.</li>
+    </ul>
+    <div class="let warm"><b>Kort gezegd:</b> als korte, dagelijkse oefening na de uitleg, met een haalbare opbouw, sluit dit materiaal aan bij wat werkt. Als los middel om kinderen slimmer te maken overschat je het.</div>
+  </div>
+
+  <div class="blok">
+    <h2><span class="nr">7</span>Conclusie</h2>
+    <p>Lesmateriaal Blink is een gratis, gecontroleerde en op niveau afgestemde verzameling oefenmateriaal. Het sluit aan bij de kerndoelen, bij de leesmethodes en bij wat onderzoek zegt over effectief oefenen. Met de onderzoeksmodus van de Leesflitser kan ik nu ook bijhouden en meten of het flitsen en herhaald lezen in mijn groep echt helpt. Ik pas het materiaal aan op basis van wat ik in de klas zie.</p>
+  </div>
+
+  <div class="blok">
+    <h2><span class="nr">8</span>Bronnen</h2>
+    <p class="bron">Blink. (z.d.). <i>Technisch lezen</i>. Geraadpleegd op 21 september 2026, van <a href="https://blink.nl/blink-lezen/didactiek/technisch-lezen/">https://blink.nl/blink-lezen/didactiek/technisch-lezen/</a></p>
+    <p class="bron">Dunlosky, J., Rawson, K. A., Marsh, E. J., Nathan, M. J., &amp; Willingham, D. T. (2013). Improving students' learning with effective learning techniques: Promising directions from cognitive and educational psychology. <i>Psychological Science in the Public Interest, 14</i>(1), 4-58. <a href="https://doi.org/10.1177/1529100612453266">https://doi.org/10.1177/1529100612453266</a></p>
+    <p class="bron">Gijsel, M. (2019, 18 december). <i>Wat is voor zwakke lezers effectiever voor goede resultaten op de Drie-Minuten-Toets: Flitsen van woorden of lezen van teksten?</i> Kennisrotonde. Geraadpleegd op 21 september 2026, van <a href="https://www.kennisrotonde.nl/vraag-en-antwoord/woordlezen-op-tempo">https://www.kennisrotonde.nl/vraag-en-antwoord/woordlezen-op-tempo</a></p>
+    <p class="bron">Hoogeveen, K. (2024, 20 december). <i>Wat is de invloed van herhaald lezen op tekstbegrip?</i> (VRAAG-2328). Kennisrotonde. Geraadpleegd op 21 september 2026, van <a href="https://www.kennisrotonde.nl/vraag-en-antwoord/invloed-herhaald-lezen-op-tekstbegrip">https://www.kennisrotonde.nl/vraag-en-antwoord/invloed-herhaald-lezen-op-tekstbegrip</a></p>
+    <p class="bron">Nationaal Kennisinstituut Onderwijs. (z.d.). <i>RCT onderzoek naar de interventie 'Flits! Tutorlezen'</i>. Geraadpleegd op 21 september 2026, van <a href="https://www.nko.nl/onderzoeksprojecten/rct-onderzoek-naar-de-interventie-flits-tutorlezen">https://www.nko.nl/onderzoeksprojecten/rct-onderzoek-naar-de-interventie-flits-tutorlezen</a></p>
+    <p class="bron">Nationaal Programma Nieuwland en Oost. (2025). <i>Focus- en actieplan 2025-2026</i>. Gemeente Schiedam. Geraadpleegd op 21 september 2026, van <a href="https://www.schiedam.nl/sites/www.schiedam.nl/files/inline-files/NPNO_jaarplan_2025-2026_DEF_LR.pdf">https://www.schiedam.nl/sites/www.schiedam.nl/files/inline-files/NPNO_jaarplan_2025-2026_DEF_LR.pdf</a></p>
+    <p class="bron">OpenMoji. (z.d.). <i>OpenMoji</i> [Open source emoji-bibliotheek, licentie CC BY-SA 4.0]. Geraadpleegd op 21 september 2026, van <a href="https://openmoji.org">https://openmoji.org</a></p>
+    <p class="bron">Punt, R., &amp; Schoevers, E. (2023, 17 april). <i>Wat werkt in het rekenonderwijs om leerlingen het automatiseren en memoriseren van basisbewerkingen aan te leren?</i> (VRAAG-808). Kennisrotonde. Geraadpleegd op 21 september 2026, van <a href="https://www.kennisrotonde.nl/vraag-en-antwoord/rekenen-op-de-basisschool">https://www.kennisrotonde.nl/vraag-en-antwoord/rekenen-op-de-basisschool</a></p>
+    <p class="bron">Rosenshine, B. (2012). Principles of instruction: Research-based strategies that all teachers should know. <i>American Educator, 36</i>(1), 12-19, 39.</p>
+    <p class="bron">Simons, D. J., Boot, W. R., Charness, N., Gathercole, S. E., Chabris, C. F., Hambrick, D. Z., &amp; Stine-Morrow, E. A. L. (2016). Do "brain-training" programs work? <i>Psychological Science in the Public Interest, 17</i>(3), 103-186. <a href="https://doi.org/10.1177/1529100616661983">https://doi.org/10.1177/1529100616661983</a></p>
+    <p class="bron">SLO. (2025). <i>Definitieve conceptkerndoelen rekenen en wiskunde: Herziene versie 2025</i>. Geraadpleegd op 21 september 2026, van <a href="https://www.slo.nl/@24175/definitieve-conceptkerndoelen-rekenen/">https://www.slo.nl/@24175/definitieve-conceptkerndoelen-rekenen/</a></p>
+    <p class="bron">Stanovich, K. E. (1986). Matthew effects in reading: Some consequences of individual differences in the acquisition of literacy. <i>Reading Research Quarterly, 21</i>(4), 360-407.</p>
+    <p class="bron">Van den Bosch, K., Van Bon, W. H. J., &amp; Schreuder, R. (1995). Poor readers' decoding skills: Effects of training with limited exposure duration. <i>Reading Research Quarterly, 30</i>(1), 110-125.</p>
+    <p class="bron">Van der Leij, A., &amp; Vernooy, K. (2023, 15 juni). <i>Technisch lezen in het primair onderwijs</i>. Onderwijskennis.nl. Geraadpleegd op 21 september 2026, van <a href="https://www.onderwijskennis.nl/kennisbank/technisch-lezen-in-het-primair-onderwijs">https://www.onderwijskennis.nl/kennisbank/technisch-lezen-in-het-primair-onderwijs</a></p>
+    <p class="bron">Van der Vegt, A. L. (2025, 21 oktober). <i>Expliciete instructie inzetten</i>. Onderwijskennis.nl. Geraadpleegd op 21 september 2026, van <a href="https://www.onderwijskennis.nl/kennisbank/expliciete-instructie-inzetten">https://www.onderwijskennis.nl/kennisbank/expliciete-instructie-inzetten</a></p>
+    <p class="bron">Werkgroep APA. (2021). <i>De APA-richtlijnen uitgelegd: Een praktische handleiding voor bronvermelding in het hoger onderwijs</i> (3e herziene editie). SURF. Geraadpleegd op 21 september 2026, van <a href="https://auteursrechten.nl/files/auteursrechten/2021-07/De%20APA-richtlijnen%20uitgelegd%20-%203e%20editie.pdf">https://auteursrechten.nl/files/auteursrechten/2021-07/De%20APA-richtlijnen%20uitgelegd%20-%203e%20editie.pdf</a></p>
+    <p class="bron">Zwijsen. (z.d.). <i>Estafette: Plezier in lezen begint met sterk technisch lezen</i>. Geraadpleegd op 21 september 2026, van <a href="https://www.zwijsen.nl/lesmethodes/estafette/hoe-het-werkt/">https://www.zwijsen.nl/lesmethodes/estafette/hoe-het-werkt/</a></p>
+    <p class="klein" style="margin-top:14px;">Bronvermelding volgens De APA-richtlijnen uitgelegd (Werkgroep APA, 2021). Voor de vorm van sommige materialen (dagstarter, breinbrekers, afsprakenkaartjes, het Kinderboekenweekthema 2026) heb ik voorbeelden van andere leerkrachten bekeken als inspiratie. Er is niets van overgenomen.</p>
+  </div>
+
+  <a class="knop" href="index.html">← Terug naar het lesmateriaal</a>
+  <footer>Lesmateriaal Blink · onderzoek en verantwoording · bijgewerkt 21 september 2026</footer>
 </div>
 </body>
 </html>

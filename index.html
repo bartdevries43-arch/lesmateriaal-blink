@@ -9,13 +9,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
-  :root{--ink:#1f2733;--muted:#6a7683;--line:#e6e9ef;--card:#ffffff;
-    --brand1:#4f46e5;--brand2:#0ea5a4;--bg:#f4f6fb;}
+  :root{--ink:#1c2433;--muted:#667085;--line:#e4e8f0;--card:#ffffff;
+    --brand1:#4f46e5;--brand2:#0e9f9e;--bg:#f3f5fb;}
   body{font-family:-apple-system,system-ui,"Segoe UI",Verdana,sans-serif;color:var(--ink);background:var(--bg);}
   h1,h2,.merk{font-family:"Baloo 2",system-ui,sans-serif;}
 
-  .hero{background:linear-gradient(120deg,var(--brand1),var(--brand2));color:#fff;
-    padding:40px 20px 54px;text-align:center;position:relative;}
+  .hero{background:linear-gradient(125deg,var(--brand1) 0%,#3b5bdb 48%,var(--brand2) 100%);color:#fff;
+    padding:44px 20px 60px;text-align:center;position:relative;overflow:hidden;}
+  .hero::before,.hero::after{content:"";position:absolute;border-radius:50%;background:rgba(255,255,255,.08);pointer-events:none;}
+  .hero::before{width:340px;height:340px;right:-90px;top:-130px;}
+  .hero::after{width:220px;height:220px;left:-70px;bottom:-120px;}
+  .hero > *{position:relative;}
   .merk{font-size:clamp(30px,6vw,46px);font-weight:800;letter-spacing:.5px;}
   .merk .dot{opacity:.7;}
   .hero p{margin-top:8px;font-size:15.5px;opacity:.95;}
@@ -43,11 +47,13 @@
   .niveaus a small{display:block;font-weight:600;color:#5a8a73;font-size:11.5px;margin-top:2px;}
 
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:16px;}
-  a.kaart{text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);
-    border-top:5px solid var(--sc,#c9cfdb);
-    border-radius:18px;padding:20px;box-shadow:0 6px 20px rgba(40,50,90,.06);display:flex;flex-direction:column;
-    gap:6px;transition:transform .1s,box-shadow .1s;}
-  a.kaart:hover{transform:translateY(-3px);box-shadow:0 14px 32px rgba(40,50,90,.13);}
+  a.kaart{text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);position:relative;
+    border-radius:20px;padding:20px;box-shadow:0 6px 20px rgba(31,41,90,.05);display:flex;flex-direction:column;
+    gap:6px;transition:transform .12s,box-shadow .12s,border-color .12s;}
+  a.kaart:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(31,41,90,.12);
+    border-color:color-mix(in srgb, var(--sc,#4f46e5) 35%, #fff);}
+  .nieuw{position:absolute;top:16px;right:16px;font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;
+    color:#fff;background:linear-gradient(120deg,var(--brand1),var(--brand2));padding:4px 9px;border-radius:999px;}
   a.kaart .ic{font-size:26px;width:52px;height:52px;border-radius:15px;display:inline-flex;
     align-items:center;justify-content:center;
     background:color-mix(in srgb, var(--sc,#4f46e5) 13%, #fff);}
@@ -84,9 +90,10 @@
     <div class="sectie" data-sectie style="--sc:#4f46e5">
       <h2>📖 Rekenen &amp; taal</h2>
       <div class="grid">
-        <a class="kaart" data-tags="leesflitser technisch lezen flitsen woorden zinnen digibord groep 3 4 5 6 7 8" href="https://bartdevries43-arch.github.io/leesflitser/" target="_blank" rel="noopener">
+        <a class="kaart" data-tags="leesflitser technisch lezen flitsen woorden zinnen digibord groep 3 4 5 6 7 8 onderzoek herhaald lezen logboek dmt avi" href="https://bartdevries43-arch.github.io/leesflitser/" target="_blank" rel="noopener">
+          <span class="nieuw">Nieuw</span>
           <span class="ic">📖</span><span class="t">Leesflitser</span>
-          <span class="d">Technisch lezen: letters, woorden en zinnen flitsen op alle niveaus (groep 3-8), met racelezen-timer en leeskaarten om te printen.</span>
+          <span class="d">Technisch lezen: letters, woorden en zinnen flitsen op alle niveaus (groep 3-8), met racelezen en leeskaarten. Nieuw: een onderzoeksmodus voor leesgroepjes, met flitsen, herhaald lezen, een logboek en metingen.</span>
           <span class="go">Openen →</span>
         </a>
         <a class="kaart" data-tags="rekenflitser rekenen sommen flitsen automatiseren tafels plus min grote getallen digibord" href="https://bartdevries43-arch.github.io/rekenflitser/" target="_blank" rel="noopener">
@@ -141,7 +148,7 @@
       <div class="grid">
         <a class="kaart" data-tags="onderzoek verantwoording bronnen waar komt de informatie vandaan methode collega" href="onderzoek.html">
           <span class="ic">🔎</span><span class="t">Onderzoek &amp; bronnen</span>
-          <span class="d">Waar komt ons lesmateriaal vandaan? Een nette verantwoording met de gebruikte bronnen en werkwijze, voor collega's om in te zien.</span>
+          <span class="d">Waar komt ons lesmateriaal vandaan? Werkwijze, onderzoek en bronnen (APA), voor collega's om in te zien.</span>
           <span class="go">Openen →</span>
         </a>
       </div>
