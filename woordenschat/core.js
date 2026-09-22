@@ -1616,6 +1616,34 @@ function renderQuizVisual(exercise, question) {
 }
 
 function topicVisualHints(title) {
+  // Terugval als een woord zelf geen plaatjes heeft: een hint die bij het thema past.
+  const perThema = [
+    ["Eten", ["🍽️", "🥗", "🍞"]],
+    ["Verkeer", ["🚗", "🚦", "🛣️"]],
+    ["School", ["🏫", "✏️", "📚"]],
+    ["Bewegen", ["🏃", "⚽", "🏅"]],
+    ["Feest", ["🎉", "🎈", "🎂"]],
+    ["Richting", ["🧭", "🗺️", "➡️"]],
+    ["lichaam", ["🦴", "🩺", "💪"]],
+    ["Natuur", ["🌳", "🌦️", "🏞️"]],
+    ["Gedrag", ["😊", "💭", "🤝"]],
+    ["Familie", ["👨‍👩‍👧", "🏠", "❤️"]],
+    ["Rekenen", ["🔢", "➕", "🧮"]],
+    ["Kleding", ["👕", "👗", "👟"]],
+    ["Mening", ["💬", "👍", "🤔"]],
+    ["Maken", ["🔧", "🪛", "🛠️"]],
+    ["Uitdrukking", ["💬", "📖", "😊"]],
+    ["Dieren", ["🐾", "🐘", "🦜"]],
+    ["Informatie", ["🔎", "📚", "🌐"]],
+    ["Kunst", ["🎨", "🖼️", "🎵"]],
+    ["Omgang", ["🤝", "💬", "👥"]],
+    ["Moeilijke", ["📚", "💡", "🧠"]],
+    ["Vroeger", ["🏰", "⏳", "📜"]],
+    ["Reizen", ["🧳", "🗺️", "✈️"]],
+    ["Tijd", ["🕓", "⏳", "📅"]],
+  ];
+  const gevonden = perThema.find(([woord]) => title.includes(woord));
+  if (gevonden) return gevonden[1];
   if (title.includes("Media")) return ["📺", "📰", "🎥"];
   if (title.includes("milieu") || title.includes("Omgeving")) return ["🌍", "🌱", "⚡"];
   if (title.includes("Wereld")) return ["🌍", "🤝", "🗺️"];
