@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="styles.css?v=blink-9" />
+    <link rel="stylesheet" href="styles.css?v=blink-10" />
   </head>
   <body>
     <div class="app-shell">
@@ -268,7 +268,7 @@
       const EXTRA_KEY = "woordenschat-extra-woorden";
       const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
       let dataPromise = null;
-      const haalData = () => dataPromise || (dataPromise = fetch("data.enc.json?v=5").then((r) => r.json()));
+      const haalData = () => dataPromise || (dataPromise = fetch("data.enc.json?v=6").then((r) => r.json()));
 
       async function ontsleutel(code) {
         const enc = await haalData();
@@ -300,7 +300,7 @@
         window.EXTRA_GOALS = extraThemas();
         const s = document.createElement("script"); s.textContent = dataJs; document.body.appendChild(s);
         document.body.classList.add("ontgrendeld");
-        await laad("core.js?v=5"); await laad("enhance.js?v=5"); await laad("game.js?v=5");
+        await laad("core.js?v=6"); await laad("enhance.js?v=6"); await laad("game.js?v=6");
       }
 
       const form = document.getElementById("slotForm"), fout = document.getElementById("slotFout"), knop = document.getElementById("slotKnop");
