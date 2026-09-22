@@ -2280,14 +2280,22 @@ button:active,
   }
 }
 
-/* ------------------------------------------------------------------
+/* ==================================================================
    Huisstijl Lesmateriaal Blink (indigo naar blauwgroen, Baloo 2)
-   ------------------------------------------------------------------ */
+   Deze regels staan achter styles.css en overschrijven de oude opmaak.
+   ================================================================== */
 :root {
   --ink: #1c2433;
   --muted: #667085;
   --soft: #eef0fe;
   --line: #e0e4f5;
+  --blink-1: #4f46e5;
+  --blink-2: #3b5bdb;
+  --blink-3: #0e9f9e;
+  --blink-rand: rgba(79, 70, 229, 0.14);
+  --blink-rand-2: rgba(79, 70, 229, 0.28);
+  --blink-schaduw: 0 12px 30px rgba(31, 41, 90, 0.08);
+  --blink-schaduw-op: 0 18px 38px rgba(31, 41, 90, 0.16);
 }
 
 body {
@@ -2305,6 +2313,22 @@ h3 {
   letter-spacing: 0;
 }
 
+.kicker {
+  color: var(--blink-3);
+  letter-spacing: 0.1em;
+}
+
+/* Toetsenbordgebruikers zien altijd waar ze zijn */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(79, 70, 229, 0.45);
+  outline-offset: 2px;
+}
+
+/* ---------- Kop ---------- */
 .topbar {
   overflow: hidden;
   margin-bottom: 6px;
@@ -2315,16 +2339,28 @@ h3 {
   box-shadow: 0 18px 40px rgba(59, 91, 219, 0.26);
 }
 
-.topbar::before {
+.topbar::before,
+.topbar::after {
   content: "";
   position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+.topbar::before {
   width: 260px;
   height: 260px;
   right: -70px;
   top: -110px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  pointer-events: none;
+}
+
+.topbar::after {
+  width: 140px;
+  height: 140px;
+  right: 130px;
+  bottom: -100px;
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .ws-titel {
@@ -2370,22 +2406,159 @@ h3 {
   background: rgba(255, 255, 255, 0.26);
 }
 
-@media (max-width: 560px) {
-  .topbar {
-    padding: 16px;
-    border-radius: 22px;
-  }
-  .ws-logo {
-    width: 46px;
-    height: 46px;
-    border-radius: 15px;
-    font-size: 23px;
-  }
+/* ---------- Welkom ---------- */
+.hero {
+  gap: 20px;
+  padding: 22px 0 16px;
+  align-items: start;
 }
 
-/* Er staat per blok nog maar één groep: gebruik de volle breedte */
+.hero-copy h2 {
+  max-width: 560px;
+  margin-bottom: 8px;
+  font-size: clamp(1.5rem, 2.6vw, 2.25rem);
+  line-height: 1.08;
+}
+
+.hero-copy > p {
+  max-width: 560px;
+  color: var(--muted);
+}
+
+.hero-art {
+  align-self: start;
+}
+
+.profile-spotlight .profile-card {
+  border-radius: 22px;
+  border: 1px solid var(--blink-rand);
+  box-shadow: var(--blink-schaduw);
+}
+
+/* ---------- Panelen en kaarten ---------- */
+.profile-panel,
+.route-panel,
+.dashboard-panel,
+.block-tabs,
+.block-panel,
+.group-panel,
+.quiz-card,
+.word-list-wrap,
+.teacher-panel {
+  border-radius: 22px;
+  border: 1px solid var(--blink-rand);
+  box-shadow: var(--blink-schaduw);
+}
+
+/* ---------- Stappen 1-2-3 ---------- */
+.step-strip {
+  border-radius: 20px;
+  border: 1px solid var(--blink-rand);
+  box-shadow: var(--blink-schaduw);
+}
+
+.step-item {
+  border-radius: 16px;
+}
+
+.step-item.active,
+.step-item[aria-current="step"] {
+  background: linear-gradient(120deg, rgba(79, 70, 229, 0.12), rgba(14, 159, 158, 0.12));
+}
+
+/* ---------- Snel starten ---------- */
+.dashboard-panel {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
+  padding: 18px;
+  align-items: stretch;
+}
+
+.group-switch {
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.group-switch button {
+  padding: 13px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--blink-rand-2);
+  background: #fff;
+  color: var(--ink);
+  font-weight: 800;
+  font-size: 1rem;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+.group-switch button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--blink-schaduw);
+}
+
+.group-switch button.active {
+  background: linear-gradient(120deg, var(--blink-1), var(--blink-2));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(79, 70, 229, 0.28);
+}
+
+.dashboard-copy h3 {
+  font-size: 1.35rem;
+}
+
+.dashboard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.dashboard-button {
+  flex: 1 1 220px;
+  border-radius: 18px;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.dashboard-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--blink-schaduw-op);
+}
+
+/* ---------- Blokken ---------- */
+.block-tabs {
+  grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+  gap: 10px;
+  padding: 12px;
+}
+
+.block-tabs button {
+  padding: 11px 8px;
+  border-radius: 16px;
+  border: 1px solid var(--blink-rand);
+  background: #fff;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.block-tabs button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--blink-schaduw);
+}
+
+.block-tabs button.active {
+  background: linear-gradient(120deg, var(--blink-1), var(--blink-2));
+  border-color: transparent;
+  color: #fff;
+}
+
+.block-tabs button.active small {
+  color: rgba(255, 255, 255, 0.85);
+}
+
 .block-grid {
   grid-template-columns: minmax(0, 1fr);
+}
+
+.block-heading {
+  border-radius: 20px;
 }
 
 @media (min-width: 820px) {
@@ -2395,7 +2568,194 @@ h3 {
   }
 }
 
-/* Ruimte onderaan, zodat de sterrenknop rechtsonder niets bedekt */
+/* ---------- Kaarten om op te klikken ---------- */
+.goal-card,
+.exercise-card,
+.quick-action {
+  border-radius: 18px;
+  border: 1px solid var(--blink-rand);
+  background: #fff;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+}
+
+.goal-card:hover,
+.exercise-card:hover,
+.quick-action:hover {
+  transform: translateY(-2px);
+  border-color: var(--blink-rand-2);
+  box-shadow: var(--blink-schaduw-op);
+}
+
+.goal-meter,
+.exercise-meter {
+  border-radius: 999px;
+  background: rgba(14, 159, 158, 0.12);
+  color: #0b7c7b;
+  font-weight: 800;
+}
+
+/* ---------- Leren, oefenen, toetsen ---------- */
+.segmented button.active,
+.menu-stage-tabs button.active {
+  background: linear-gradient(120deg, var(--blink-1), var(--blink-2));
+  color: #fff;
+  border-color: transparent;
+}
+
+/* ---------- Woordkaart ---------- */
+.flashcard {
+  border-radius: 28px;
+  box-shadow: var(--blink-schaduw-op);
+}
+
+.flashcard-face {
+  border-radius: 28px;
+}
+
+.flashcard-front h3,
+.flashcard-back h3 {
+  font-family: "Baloo 2", system-ui, sans-serif;
+  font-size: clamp(1.9rem, 4.6vw, 2.9rem);
+  line-height: 1.1;
+}
+
+.flashcard .example {
+  color: var(--muted);
+}
+
+/* ---------- Quiz ---------- */
+.quiz-card {
+  padding: 20px;
+}
+
+.quiz-prompt {
+  font-family: "Baloo 2", system-ui, sans-serif;
+  font-size: clamp(1.15rem, 2.4vw, 1.6rem);
+  line-height: 1.25;
+}
+
+.answer-button {
+  border-radius: 16px;
+  border: 1px solid var(--blink-rand-2);
+  font-weight: 700;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+.answer-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--blink-schaduw);
+}
+
+.progress-pill {
+  border-radius: 999px;
+  background: rgba(79, 70, 229, 0.1);
+  color: var(--blink-1);
+  font-weight: 800;
+}
+
+/* ---------- Knoppen ---------- */
+.secondary-button,
+.ghost-button,
+.known-button,
+.needs-button,
+.speak-button,
+.hint-button {
+  border-radius: 14px;
+  font-weight: 800;
+}
+
+.secondary-button:hover,
+.ghost-button:hover,
+.known-button:hover,
+.needs-button:hover,
+.speak-button:hover,
+.hint-button:hover {
+  transform: translateY(-1px);
+}
+
+/* ---------- Voettekst ---------- */
+.ws-voet {
+  margin: 30px auto 0;
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.ws-voet a {
+  color: var(--blink-1);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.ws-voet a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Ruimte onderaan, zodat de sterrenknop niets bedekt ---------- */
 .app-shell {
   padding-bottom: 110px;
+}
+
+/* ---------- Kleine schermen ---------- */
+@media (max-width: 420px) {
+  .ws-logo {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 16px;
+  }
+  .hero-art {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .topbar {
+    padding: 14px 14px;
+    border-radius: 22px;
+    gap: 10px;
+  }
+  .topbar h1 {
+    font-size: 1.25rem;
+    overflow-wrap: anywhere;
+  }
+  .topbar .kicker {
+    font-size: 0.66rem;
+  }
+  .ws-titel {
+    gap: 10px;
+  }
+  .ws-logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    font-size: 21px;
+  }
+  .topbar .icon-button {
+    width: 42px;
+    height: 42px;
+    font-size: 1.4rem;
+  }
+  /* de sterrenknop niet te dominant op een klein scherm */
+  #starHud {
+    transform: scale(0.85);
+    transform-origin: bottom right;
+  }
+  .block-tabs {
+    grid-template-columns: repeat(auto-fit, minmax(86px, 1fr));
+    gap: 8px;
+    padding: 10px;
+  }
+}
+
+/* ---------- Rustige weergave voor wie dat wil ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
