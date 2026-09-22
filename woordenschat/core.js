@@ -110,7 +110,12 @@ function createSentenceExercises() {
           .slice(0, 3)
           .map((word) => word.word);
         const escapedWord = item.word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        const blankedExample = item.example.replace(new RegExp(escapedWord, "i"), "_____");
+        // Staat het woord met lidwoord niet in de zin? Probeer het dan zonder lidwoord (de zin blijft zo een invulzin).
+        const kaalWoord = item.word.replace(/^(de|het|een|zich) /i, "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        let blankedExample = item.example.replace(new RegExp(escapedWord, "i"), "_____");
+        if (!blankedExample.includes("_____")) {
+          blankedExample = item.example.replace(new RegExp("(^|[^a-z\u00e0-\u00ff])" + kaalWoord + "(?![a-z\u00e0-\u00ff])", "i"), "$1_____");
+        }
 
         return {
           id: `sentence-exercise-${sectionIndex}-question-${questionIndex}`,
