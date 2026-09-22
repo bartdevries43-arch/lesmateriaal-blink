@@ -313,8 +313,21 @@
         knop.disabled = false;
       });
 
+      // Directe link: ...?code=klascode opent de app meteen. De code verdwijnt daarna uit de adresbalk.
+      const uitLink = new URLSearchParams(location.search).get("code") || new URLSearchParams(location.search).get("klascode");
       let bewaard = null; try { bewaard = localStorage.getItem(CODE_KEY); } catch (e) {}
-      if (bewaard) open(bewaard, true).catch(() => { try { localStorage.removeItem(CODE_KEY); } catch (e) {} });
+      const eersteCode = uitLink || bewaard;
+      if (eersteCode) {
+        if (uitLink) {
+          const schoon = new URL(location.href);
+          schoon.searchParams.delete("code"); schoon.searchParams.delete("klascode");
+          history.replaceState(null, "", schoon.pathname + schoon.search + schoon.hash);
+        }
+        open(eersteCode, true).catch(() => {
+          try { localStorage.removeItem(CODE_KEY); } catch (e) {}
+          if (uitLink) fout.textContent = "Deze klascode klopt niet. Vraag het aan je juf of meester.";
+        });
+      }
     })();
     </script>
 
