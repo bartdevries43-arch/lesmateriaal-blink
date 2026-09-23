@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verhoudingstabel · Lesmateriaal Blink</title>
+<meta name="description" content="Werkblad met verhoudingstabellen: vul de lege vakjes in. Met of zonder verhaal, van prijs per stuk tot kilometers per uur. Met antwoordblad en herhaalcode.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1220px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .vlak{display:grid; grid-template-columns:minmax(300px,.8fr) minmax(0,1.2fr); gap:18px; margin-top:18px; align-items:start;}
+  @media (max-width:980px){ .vlak{grid-template-columns:minmax(0,1fr);} }
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:18px;}
+
+  .groep{margin-bottom:18px;}
+  .groep:last-child{margin-bottom:0;}
+  .groep h2{font-size:17px; margin-bottom:10px;}
+  .groep .klein{font-size:13px; color:var(--muted); margin:-6px 0 10px;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .velden{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px;}
+  .veld label{display:block; font-size:12.5px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; color:var(--muted); margin-bottom:4px;}
+  .veld input, .veld select{width:100%; font:inherit; font-size:15px; padding:10px 12px; border:1px solid var(--line-2); border-radius:13px; background:#fff; color:var(--ink);}
+  .knoppen{display:flex; flex-wrap:wrap; gap:9px; margin-top:6px;}
+  .knop{font:inherit; font-size:15px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:15px; padding:12px 17px; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent;}
+  .melding{font-size:14px; color:#b45309; margin-top:8px; min-height:20px;}
+
+  /* Het werkblad */
+  .bladvak{padding:0; overflow:hidden;}
+  .blad{background:#fff; padding:26px 30px 34px; font-size:16px;}
+  .bladkop{display:flex; align-items:flex-end; gap:16px; border-bottom:2px solid #e6e9f5; padding-bottom:12px; margin-bottom:18px; flex-wrap:wrap;}
+  .bladkop h2{font-size:24px;}
+  .bladkop .regels{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:#5b647f;}
+  .bladkop .regels span{display:inline-block; min-width:140px; border-bottom:1.5px dotted #b8c0d8; padding-bottom:2px;}
+  .opgaven{display:grid; gap:13px 24px;}
+  .opg{padding:8px 4px 10px; border-bottom:1px dotted #dfe3f0; break-inside:avoid;}
+  .opg .nr{font-size:12px; color:#9aa3bd; margin-right:6px;}
+  .opg .vraag{font-weight:700; line-height:1.45;}
+  .opg .lijn{display:inline-block; border-bottom:1.5px solid #c9cfe3; min-width:76px; height:1.15em; vertical-align:-2px;}
+  .opg .antwoord{font-weight:800; color:var(--accent); font-variant-numeric:tabular-nums; margin-top:3px;}
+  .opg .hint{font-size:12.5px; color:#8b93ad; margin-top:3px;}
+
+  .bladvoet{margin-top:22px; font-size:12px; color:#9aa3bd; display:flex; justify-content:space-between; gap:12px;}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .bron{font-size:13.5px; line-height:1.5; color:#4b5563; padding-left:22px; text-indent:-22px; margin-top:6px;}
+  .bron a{color:var(--accent); word-break:break-word;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  @media print{
+    body{background:#fff;}
+    .app{max-width:none; padding:0;}
+    .kop, .instellingen, details.uitleg, .voet{display:none;}
+    .bladvak{box-shadow:none; border:none; padding:0;}
+    .blad{padding:0; font-size:15px;}
+    .paginabreak{break-before:page;}
+    @page{size:A4 portrait; margin:14mm;}
+  }
+
+  /* De verhoudingstabel */
+  table.vt{border-collapse:collapse; margin-top:7px; font-variant-numeric:tabular-nums;}
+  table.vt th{font-family:"Baloo 2",system-ui,sans-serif; font-size:.82em; font-weight:800; color:#5b647f;
+    text-align:left; padding:5px 11px 5px 2px; white-space:nowrap;}
+  table.vt td{border:1.4px solid #c9cfe3; min-width:2.9em; height:2.15em; text-align:center; font-weight:700; padding:2px 7px;}
+  table.vt td.leeg{background:#fbfcff;}
+  table.vt td.vol{color:var(--accent);}
+  .opg .pijl{font-size:.8em; color:#9aa3bd; margin-top:4px;}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="kop">
+    <span class="logo" aria-hidden="true">📊</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · rekenen</div>
+      <h1>Verhoudingstabel</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="printKnop" type="button">🖨 Afdrukken</button>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <div class="vlak">
+    <section class="kaart instellingen" aria-label="Instellingen">
+      <div class="groep">
+        <h2>Waar gaat het over?</h2>
+        <div class="chips" id="soorten">
+          <button class="chip aan" type="button" data-soort="prijs"><span class="bol"></span>Prijs per stuk</button>
+          <button class="chip aan" type="button" data-soort="recept"><span class="bol"></span>Recept</button>
+          <button class="chip" type="button" data-soort="afstand"><span class="bol"></span>Afstand en tijd</button>
+          <button class="chip" type="button" data-soort="gewicht"><span class="bol"></span>Gewicht</button>
+          <button class="chip" type="button" data-soort="kaal"><span class="bol"></span>Kale tabel</button>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Hoe moeilijk?</h2>
+        <div class="seg" id="kolomSeg">
+          <button type="button" data-kol="3">3 kolommen</button>
+          <button type="button" data-kol="4" class="aan">4 kolommen</button>
+          <button type="button" data-kol="5">5 kolommen</button>
+        </div>
+        <div class="seg" id="legeSeg" style="margin-top:8px;">
+          <button type="button" data-leeg="2" class="aan">2 lege vakjes</button>
+          <button type="button" data-leeg="3">3 lege vakjes</button>
+          <button type="button" data-leeg="4">4 lege vakjes</button>
+        </div>
+        <div class="seg" id="bereikSeg" style="margin-top:8px;">
+          <button type="button" data-tot="10" class="aan">kleine getallen</button>
+          <button type="button" data-tot="25">grotere getallen</button>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Het blad</h2>
+        <div class="velden">
+          <div class="veld"><label for="titel">Titel</label><input id="titel" type="text" value="Verhoudingstabel" maxlength="40"></div>
+          <div class="veld"><label for="aantal">Aantal tabellen</label><input id="aantal" type="number" min="2" max="24" step="1" value="8"></div>
+          <div class="veld"><label for="kolommen">Kolommen op het blad</label>
+            <select id="kolommen"><option value="1">1</option><option value="2" selected>2</option></select></div>
+          <div class="veld"><label for="grootte">Lettergrootte</label>
+            <select id="grootte"><option value="15">gewoon</option><option value="17" selected>groot</option><option value="20">extra groot</option></select></div>
+          <div class="veld"><label for="code">Herhaalcode</label><input id="code" type="text" maxlength="8" placeholder="bijv. 4821"></div>
+        </div>
+        <div class="chips" style="margin-top:10px;">
+          <button class="chip aan" type="button" id="pijlChip"><span class="bol"></span>Hulpzin bij de tabel</button>
+          <button class="chip aan" type="button" id="antwoordChip"><span class="bol"></span>Antwoordblad erbij</button>
+          <button class="chip aan" type="button" id="naamChip"><span class="bol"></span>Regel voor naam en datum</button>
+        </div>
+      </div>
+
+      <div class="knoppen">
+        <button class="knop primair" id="maakKnop" type="button">Maak het werkblad</button>
+        <button class="knop" id="printKnop2" type="button">🖨 Afdrukken</button>
+      </div>
+      <p class="melding" id="melding"></p>
+    </section>
+
+    <section class="kaart bladvak" aria-label="Werkblad">
+      <div class="blad" id="blad"></div>
+    </section>
+  </div>
+
+  <details class="uitleg">
+    <summary>Waarom de verhoudingstabel (voor de leerkracht)</summary>
+    <p>De verhoudingstabel is een van de handigste modellen uit het rekenonderwijs. Je zet twee dingen die bij elkaar horen onder elkaar, bijvoorbeeld het aantal appels en de prijs. Daarna kun je stap voor stap verder rekenen: keer twee, gedeeld door vijf, of eerst terug naar één. Dat werkt bij prijzen, bij recepten, bij snelheid en later bij procenten en schaal.</p>
+    <h3>Wat helpt volgens onderzoek</h3>
+    <ul>
+      <li><b>Een model dat je kunt afbouwen.</b> Modellen zoals de getallenlijn en de tabel helpen om van concreet naar abstract te werken, mits je ze langzaam naar de achtergrond laat verdwijnen (Hickendorff, 2023). Daarom kun je van vier naar drie kolommen en van een verhaal naar een kale tabel.</li>
+      <li><b>Herkenbare types bij verhaalsommen.</b> Leerlingen lossen verhaalsommen beter op als ze het onderliggende schema herkennen. Expliciete instructie en directe feedback werken daarbij beter dan een algemene strategie (Van Luit, 2022). De tabel maakt dat schema zichtbaar.</li>
+      <li><b>Laat de tussenstap staan.</b> Kinderen die de stap naar één stuk opschrijven, maken minder fouten bij lastige verhoudingen dan kinderen die het in één keer proberen.</li>
+    </ul>
+    <h3>Hoe het blad werkt</h3>
+    <ul>
+      <li>Vijf onderwerpen: prijs per stuk, recept, afstand en tijd, gewicht en een kale tabel zonder verhaal.</li>
+      <li>Drie tot vijf kolommen en twee tot vier lege vakjes, zodat je makkelijk op- en afbouwt.</li>
+      <li>De hulpzin onder de tabel vertelt wat er per stuk hoort. Die kun je uitzetten.</li>
+      <li>Met een <b>herhaalcode</b> krijg je precies hetzelfde blad terug.</li>
+    </ul>
+    <h3>Bronnen</h3>
+    <p class="bron">Hickendorff, M. (2023, 4 april). <i>Aanvankelijk en gevorderd rekenen in groep 3, 4 en 5</i>. Onderwijskennis.nl. Geraadpleegd op 23 september 2026, van <a href="https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5">https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5</a></p>
+    <p class="bron">SLO. (2025). <i>Definitieve conceptkerndoelen rekenen en wiskunde: Herziene versie 2025</i>. Geraadpleegd op 23 september 2026, van <a href="https://www.slo.nl/@24175/definitieve-conceptkerndoelen-rekenen/">https://www.slo.nl/@24175/definitieve-conceptkerndoelen-rekenen/</a></p>
+    <p class="bron">Van Luit, H. (2022, 14 oktober). <i>Wat zijn effectieve manieren om leerlingen te leren de juiste kale som uit een redactiesom te halen?</i> (VRAAG-1452). Kennisrotonde. Geraadpleegd op 23 september 2026, van <a href="https://www.kennisrotonde.nl/vraag-en-antwoord/redactiesom-leren-omzetten-naar-kale-som">https://www.kennisrotonde.nl/vraag-en-antwoord/redactiesom-leren-omzetten-naar-kale-som</a></p>
+  </details>
+
+  <footer class="voet">Verhoudingstabel · onderdeel van <a href="index.html">Lesmateriaal Blink</a> · groep 6, 7 en 8</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const BEWAAR = "blink-verhoudingstabel";
+
+const ONDERWERPEN = {
+  prijs: [["appels", "euro"], ["broodjes", "euro"], ["pennen", "euro"], ["kaartjes", "euro"], ["stickers", "euro"]],
+  recept: [["personen", "gram meel"], ["personen", "eieren"], ["personen", "ml melk"], ["koekjes", "gram suiker"]],
+  afstand: [["uren", "kilometer"], ["minuten", "meter"], ["uren", "kilometer"]],
+  gewicht: [["zakken", "kilogram"], ["dozen", "kilogram"], ["kratten", "kilogram"]],
+  kaal: [["a", "b"]],
+};
+
+let staat = { soorten: ["prijs", "recept"], kol: 4, leeg: 2, tot: 10,
+  titel: "Verhoudingstabel", aantal: 8, kolommen: 2, grootte: 17, code: "", pijl: true, antwoord: true, naam: true };
+try { const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}"); Object.keys(staat).forEach((k) => { if (k in b) staat[k] = b[k]; }); } catch (e) {}
+const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
+
+function zaadje(tekst) {
+  let h = 2166136261;
+  for (let i = 0; i < tekst.length; i++) { h ^= tekst.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+function maakRandom(zaad) {
+  let a = zaad >>> 0;
+  return function () {
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const kies = (r, lijst) => lijst[Math.floor(r() * lijst.length)];
+const tussen = (r, van, tot) => van + Math.floor(r() * (tot - van + 1));
+
+function maakTabel(r, soort) {
+  const [bovenNaam, onderNaam] = kies(r, ONDERWERPEN[soort]);
+  const perStuk = soort === "recept" ? kies(r, [25, 50, 75, 100, 125, 150, 200])
+    : soort === "afstand" ? kies(r, [4, 5, 6, 8, 10, 12, 15, 20, 60, 80])
+    : tussen(r, 2, staat.tot === 10 ? 9 : 25);
+
+  // de bovenste rij: altijd een 1 erbij, en daarna oplopende aantallen
+  const opties = staat.tot === 10 ? [2, 3, 4, 5, 6, 8, 10] : [2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 25];
+  const boven = [1];
+  const over = [...opties];
+  while (boven.length < staat.kol && over.length) {
+    const i = Math.floor(r() * over.length);
+    boven.push(over.splice(i, 1)[0]);
+  }
+  boven.sort((a, b) => a - b);
+  const onder = boven.map((n) => n * perStuk);
+
+  // lege vakjes kiezen, maar de eerste kolom blijft altijd heel
+  const plekken = [];
+  for (let kol = 1; kol < staat.kol; kol++) { plekken.push([0, kol]); plekken.push([1, kol]); }
+  const leeg = [];
+  const hoeveel = Math.min(staat.leeg, plekken.length - 1);
+  while (leeg.length < hoeveel && plekken.length) {
+    const i = Math.floor(r() * plekken.length);
+    const p = plekken.splice(i, 1)[0];
+    // nooit allebei de vakjes van dezelfde kolom leeg
+    if (leeg.some(([, k]) => k === p[1])) continue;
+    leeg.push(p);
+  }
+
+  return { bovenNaam, onderNaam, boven, onder, leeg, perStuk,
+    sleutel: soort + perStuk + boven.join("-") + leeg.map((p) => p.join("")).join(".") };
+}
+
+function tabelHtml(o, metAntwoord) {
+  const isLeeg = (rij, kol) => o.leeg.some(([rr, kk]) => rr === rij && kk === kol);
+  const cel = (rij, kol, waarde) => {
+    if (!isLeeg(rij, kol)) return `<td>${waarde}</td>`;
+    return metAntwoord ? `<td class="vol">${waarde}</td>` : `<td class="leeg"></td>`;
+  };
+  const hulp = staat.pijl && o.bovenNaam !== "a"
+    ? `<div class="pijl">Tip: kijk eerst wat er bij 1 ${o.bovenNaam.replace(/s$/, "")} hoort.</div>` : "";
+  return `<table class="vt">
+    <tr><th>${o.bovenNaam}</th>${o.boven.map((w, k) => cel(0, k, w)).join("")}</tr>
+    <tr><th>${o.onderNaam}</th>${o.onder.map((w, k) => cel(1, k, w)).join("")}</tr>
+  </table>${hulp}`;
+}
+
+function maakBlad() {
+  if (!staat.soorten.length) { $("melding").textContent = "Kies eerst minstens één onderwerp."; return; }
+  $("melding").textContent = "";
+  const code = staat.code.trim() || String(Math.floor(1000 + Math.random() * 9000));
+  $("code").value = code; staat.code = code; bewaar();
+  const r = maakRandom(zaadje(code + "|" + staat.soorten.join(",") + "|" + staat.kol + "|" + staat.leeg + "|" + staat.tot + "|" + staat.aantal));
+
+  const tabellen = [], gezien = new Set();
+  for (let i = 0; i < staat.aantal; i++) {
+    const soort = staat.soorten[i % staat.soorten.length];
+    let t = maakTabel(r, soort);
+    for (let p = 0; p < 60 && gezien.has(t.sleutel); p++) t = maakTabel(r, soort);
+    gezien.add(t.sleutel); tabellen.push(t);
+  }
+
+  const naamregel = staat.naam ? `<div class="regels"><div>Naam <span></span></div><div>Datum <span></span></div></div>` : "";
+  const kolomcss = `grid-template-columns:repeat(${staat.kolommen},minmax(0,1fr)); font-size:${staat.grootte}px;`;
+  const rij = (o, i, metAntwoord) => `
+    <div class="opg"><div class="vraag"><span class="nr">${i + 1}.</span>Vul de lege vakjes in.</div>${tabelHtml(o, metAntwoord)}</div>`;
+
+  let html = `
+    <div class="bladkop"><h2>${staat.titel || "Verhoudingstabel"}</h2>${naamregel}</div>
+    <div class="opgaven" style="${kolomcss}">${tabellen.map((o, i) => rij(o, i, false)).join("")}</div>
+    <div class="bladvoet"><span>Lesmateriaal Blink · verhoudingstabel</span><span>code ${code}</span></div>`;
+  if (staat.antwoord) {
+    html += `
+      <div class="paginabreak"></div>
+      <div class="bladkop" style="margin-top:22px;"><h2>Antwoorden · ${staat.titel || "Verhoudingstabel"}</h2></div>
+      <div class="opgaven" style="${kolomcss}">${tabellen.map((o, i) => rij(o, i, true)).join("")}</div>
+      <div class="bladvoet"><span>Lesmateriaal Blink · antwoordblad</span><span>code ${code}</span></div>`;
+  }
+  $("blad").innerHTML = html;
+}
+
+$("soorten").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-soort]"); if (!b) return;
+  const s = b.dataset.soort;
+  staat.soorten = staat.soorten.includes(s) ? staat.soorten.filter((x) => x !== s) : [...staat.soorten, s];
+  b.classList.toggle("aan", staat.soorten.includes(s)); bewaar();
+});
+[["kolomSeg", "kol", "kol"], ["legeSeg", "leeg", "leeg"], ["bereikSeg", "tot", "tot"]].forEach(([id, data, sleutel]) => {
+  $(id).addEventListener("click", (e) => {
+    const b = e.target.closest("[data-" + data + "]"); if (!b) return;
+    staat[sleutel] = Number(b.dataset[data]);
+    [...document.querySelectorAll("#" + id + " button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset[data]) === staat[sleutel]));
+    bewaar();
+  });
+});
+[["pijlChip", "pijl"], ["antwoordChip", "antwoord"], ["naamChip", "naam"]].forEach(([id, sleutel]) => {
+  $(id).addEventListener("click", () => { staat[sleutel] = !staat[sleutel]; $(id).classList.toggle("aan", staat[sleutel]); bewaar(); });
+});
+["titel", "aantal", "kolommen", "grootte", "code"].forEach((id) => {
+  $(id).addEventListener("change", () => {
+    staat[id] = ["aantal", "kolommen", "grootte"].includes(id) ? Number($(id).value) : $(id).value;
+    bewaar();
+  });
+});
+$("maakKnop").addEventListener("click", () => { staat.code = ""; $("code").value = ""; maakBlad(); });
+$("printKnop").addEventListener("click", () => window.print());
+$("printKnop2").addEventListener("click", () => window.print());
+
+[...document.querySelectorAll("#soorten [data-soort]")].forEach((b) => b.classList.toggle("aan", staat.soorten.includes(b.dataset.soort)));
+[["kolomSeg", "kol", "kol"], ["legeSeg", "leeg", "leeg"], ["bereikSeg", "tot", "tot"]].forEach(([id, data, sleutel]) => {
+  [...document.querySelectorAll("#" + id + " button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset[data]) === staat[sleutel]));
+});
+$("titel").value = staat.titel; $("aantal").value = staat.aantal;
+$("kolommen").value = staat.kolommen; $("grootte").value = staat.grootte; $("code").value = staat.code;
+[["pijlChip", "pijl"], ["antwoordChip", "antwoord"], ["naamChip", "naam"]].forEach(([id, sleutel]) => $(id).classList.toggle("aan", staat[sleutel]));
+maakBlad();
+</script>
+</body>
+</html>
