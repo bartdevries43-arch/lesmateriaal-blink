@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Klokwerkblad · Lesmateriaal Blink</title>
+<meta name="description" content="Maak een werkblad met klokken: analoog naar digitaal, digitaal naar analoog, de tijd in woorden of zelf de wijzers tekenen. Met antwoordblad.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1220px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .vlak{display:grid; grid-template-columns:minmax(300px,.8fr) minmax(0,1.2fr); gap:18px; margin-top:18px; align-items:start;}
+  @media (max-width:980px){ .vlak{grid-template-columns:minmax(0,1fr);} }
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:18px;}
+
+  .groep{margin-bottom:18px;} .groep:last-child{margin-bottom:0;}
+  .groep h2{font-size:17px; margin-bottom:10px;}
+  .groep .klein{font-size:13px; color:var(--muted); margin:-6px 0 10px;}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+  .velden{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px;}
+  .veld label{display:block; font-size:12.5px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; color:var(--muted); margin-bottom:4px;}
+  .veld input, .veld select{width:100%; font:inherit; font-size:15px; padding:10px 12px; border:1px solid var(--line-2); border-radius:13px; background:#fff;}
+  .knoppen{display:flex; flex-wrap:wrap; gap:9px; margin-top:8px;}
+  .knop{font:inherit; font-size:15px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:15px; padding:12px 17px; cursor:pointer;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent;}
+  .melding{font-size:14px; color:#b45309; margin-top:8px; min-height:20px;}
+
+  .bladvak{padding:0; overflow:hidden;}
+  .blad{background:#fff; padding:26px 30px 34px;}
+  .bladkop{display:flex; align-items:flex-end; gap:16px; border-bottom:2px solid #e6e9f5; padding-bottom:12px; margin-bottom:18px; flex-wrap:wrap;}
+  .bladkop h2{font-size:24px;}
+  .bladkop .regels{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:#5b647f;}
+  .bladkop .regels span{display:inline-block; min-width:140px; border-bottom:1.5px dotted #b8c0d8; padding-bottom:2px;}
+  .opgaven{display:grid; gap:18px 20px;}
+  .opgave{border:1px solid #e6e9f5; border-radius:16px; padding:12px; text-align:center; break-inside:avoid;}
+  .opgave .nr{font-size:11.5px; color:#9aa3bd; text-align:left;}
+  .opgave svg{width:100%; max-width:150px; height:auto; margin:4px auto 6px; display:block;}
+  .opgave .vraag{font-family:"Baloo 2",system-ui,sans-serif; font-size:20px; min-height:26px;}
+  .opgave .invul{margin-top:6px; border-bottom:1.6px solid #c9cfe3; height:22px;}
+  .opgave .antwoord{margin-top:6px; font-weight:800; color:var(--accent); font-family:"Baloo 2",system-ui,sans-serif; font-size:19px;}
+  .bladvoet{margin-top:22px; font-size:12px; color:#9aa3bd; display:flex; justify-content:space-between; gap:12px;}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .bron{font-size:13.5px; line-height:1.5; color:#4b5563; padding-left:22px; text-indent:-22px; margin-top:6px;}
+  .bron a{color:var(--accent); word-break:break-word;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  @media print{
+    body{background:#fff;}
+    .app{max-width:none; padding:0;}
+    .kop, .instellingen, details.uitleg, .voet{display:none;}
+    .kaart{box-shadow:none; border:none;}
+    .blad{padding:0;}
+    .paginabreak{break-before:page;}
+    @page{size:A4 portrait; margin:13mm;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="kop">
+    <span class="logo" aria-hidden="true">🕐</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · rekenen met tijd</div>
+      <h1>Klokwerkblad</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="printKnop" type="button">🖨 Afdrukken</button>
+      <a href="klok.html">🕐 Naar de klok</a>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <div class="vlak">
+    <section class="kaart instellingen" aria-label="Instellingen">
+      <div class="groep">
+        <h2>Welke opdracht?</h2>
+        <div class="seg" id="soortSeg">
+          <button type="button" data-soort="lezen" class="aan">Klok aflezen</button>
+          <button type="button" data-soort="tekenen">Wijzers tekenen</button>
+          <button type="button" data-soort="woorden">Tijd in woorden</button>
+          <button type="button" data-soort="gemengd">Door elkaar</button>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Welke tijden?</h2>
+        <p class="klein">Bouw het rustig op.</p>
+        <div class="seg" id="stapSeg">
+          <button type="button" data-stap="60">Hele uren</button>
+          <button type="button" data-stap="30" class="aan">Halve uren</button>
+          <button type="button" data-stap="15">Kwartier</button>
+          <button type="button" data-stap="5">5 minuten</button>
+          <button type="button" data-stap="1">1 minuut</button>
+        </div>
+        <div class="chips" style="margin-top:10px;">
+          <button class="chip" type="button" id="middagChip"><span class="bol"></span>Ook middagtijden (13:00 tot 23:00)</button>
+          <button class="chip aan" type="button" id="cijferChip"><span class="bol"></span>Cijfers op de klok</button>
+          <button class="chip" type="button" id="vijfChip"><span class="bol"></span>5-minuten erbij</button>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Het blad</h2>
+        <div class="velden">
+          <div class="veld"><label for="titel">Titel</label><input id="titel" type="text" value="Klokkijken" maxlength="40"></div>
+          <div class="veld"><label for="aantal">Aantal opgaven</label><input id="aantal" type="number" min="4" max="40" step="2" value="12"></div>
+          <div class="veld"><label for="kolommen">Kolommen</label>
+            <select id="kolommen"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option></select></div>
+          <div class="veld"><label for="code">Herhaalcode</label><input id="code" type="text" maxlength="8" placeholder="bijv. 2413"></div>
+        </div>
+        <div class="chips" style="margin-top:10px;">
+          <button class="chip aan" type="button" id="antwoordChip"><span class="bol"></span>Antwoordblad erbij</button>
+          <button class="chip aan" type="button" id="naamChip"><span class="bol"></span>Regel voor naam en datum</button>
+        </div>
+      </div>
+
+      <div class="knoppen">
+        <button class="knop primair" id="maakKnop" type="button">Maak het werkblad</button>
+        <button class="knop" id="printKnop2" type="button">🖨 Afdrukken</button>
+      </div>
+      <p class="melding" id="melding"></p>
+    </section>
+
+    <section class="kaart bladvak" aria-label="Werkblad">
+      <div class="blad" id="blad"></div>
+    </section>
+  </div>
+
+  <details class="uitleg">
+    <summary>Waarom dit werkblad zo is opgebouwd (voor de leerkracht)</summary>
+    <p>Klokkijken vraagt rekenen, taal en werkgeheugen tegelijk. Hoe preciezer de tijd, hoe meer een kind moet onthouden en hoe groter de kans op fouten (Aarssen et al., 2023). Daarom bouw je op: eerst hele uren, dan halve, dan kwartieren, dan 5 minuten en pas daarna de losse minuten.</p>
+    <ul>
+      <li><b>Drie soorten opdrachten.</b> Aflezen, wijzers tekenen en de tijd in woorden. Aflezen en zeggen zijn namelijk twee verschillende dingen (Aarssen et al., 2023).</li>
+      <li><b>Middagtijden apart.</b> Zet ze aan als je 15:00 en 3 uur aan elkaar wilt koppelen. Die koppeling is een apart doel in de leerlijn (SLO, z.d.).</li>
+      <li><b>Dezelfde klok als op het digibord</b>, zodat het blad er net zo uitziet als de <a href="klok.html">Klok</a> die je klassikaal gebruikt.</li>
+      <li><b>Een herhaalcode</b>: met dezelfde code krijg je exact hetzelfde blad terug.</li>
+    </ul>
+    <h3>Bronnen</h3>
+    <p class="bron">Aarssen, J., Matthijsen, K., Beekhoven, S., &amp; Schoevers, E. (2023, 27 maart). <i>Wat kunnen leerkrachten in groep 3 tot en met 6 inzetten om kinderen te leren klokkijken (zowel analoog als digitaal)?</i> (KR. 564). Kennisrotonde. Geraadpleegd op 23 september 2026, van <a href="https://www.kennisrotonde.nl/vraag-en-antwoord/leren-klokkijken">https://www.kennisrotonde.nl/vraag-en-antwoord/leren-klokkijken</a></p>
+    <p class="bron">SLO. (z.d.). <i>Rekenen/wiskunde: Meten en meetkunde, kerndoel 33</i>. Geraadpleegd op 23 september 2026, van <a href="https://www.slo.nl/thema/meer/tule/rekenen-wiskunde/kerndoel-33/">https://www.slo.nl/thema/meer/tule/rekenen-wiskunde/kerndoel-33/</a></p>
+  </details>
+
+  <footer class="voet">Klokwerkblad · onderdeel van <a href="index.html">Lesmateriaal Blink</a></footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const staat = { soort: "lezen", stap: 30, middag: false, cijfers: true, vijf: false, antwoord: true, naam: true };
+
+function zaadje(t) { let h = 1779033703 ^ t.length; for (let i = 0; i < t.length; i++) { h = Math.imul(h ^ t.charCodeAt(i), 3432918353); h = (h << 13) | (h >>> 19); } return h >>> 0; }
+function maakRandom(z) { let a = z; return () => { a |= 0; a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+
+const UURNAMEN = ["twaalf","een","twee","drie","vier","vijf","zes","zeven","acht","negen","tien","elf"];
+const GETALLEN = ["nul","een","twee","drie","vier","vijf","zes","zeven","acht","negen","tien","elf","twaalf","dertien","veertien"];
+const uurNaam = (u) => UURNAMEN[((u % 12) + 12) % 12];
+function inWoorden(u, m) {
+  const v = uurNaam(u + 1);
+  if (m === 0) return uurNaam(u) + " uur";
+  if (m === 15) return "kwart over " + uurNaam(u);
+  if (m === 30) return "half " + v;
+  if (m === 45) return "kwart voor " + v;
+  if (m < 15) return GETALLEN[m] + " over " + uurNaam(u);
+  if (m < 30) return GETALLEN[30 - m] + " voor half " + v;
+  if (m < 45) return GETALLEN[m - 30] + " over half " + v;
+  return GETALLEN[60 - m] + " voor " + uurNaam(u + 1);
+}
+
+function klokSvg(u, m, metWijzers) {
+  const M = 100, punt = (gr, r) => { const a = (gr - 90) * Math.PI / 180; return [M + r * Math.cos(a), M + r * Math.sin(a)]; };
+  let d = `<svg viewBox="0 0 200 200" role="img" aria-label="klok"><circle cx="100" cy="100" r="92" fill="#fff" stroke="#28324c" stroke-width="3"/>`;
+  for (let i = 0; i < 60; i++) {
+    const groot = i % 5 === 0;
+    const [x1, y1] = punt(i * 6, groot ? 78 : 84), [x2, y2] = punt(i * 6, 90);
+    d += `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" stroke="${groot ? "#28324c" : "#aab2cc"}" stroke-width="${groot ? 2.6 : 1.2}" stroke-linecap="round"/>`;
+  }
+  if (staat.cijfers) for (let h = 1; h <= 12; h++) {
+    const [x, y] = punt(h * 30, 62);
+    d += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-family="Baloo 2, system-ui, sans-serif" font-size="21" font-weight="800" fill="#28324c">${h}</text>`;
+  }
+  if (staat.vijf) for (let k = 5; k <= 60; k += 5) {
+    const [x, y] = punt(k * 6, 104);
+    d += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-family="Baloo 2, system-ui, sans-serif" font-size="12" font-weight="800" fill="#0e9f9e">${k === 60 ? 0 : k}</text>`;
+  }
+  if (metWijzers) {
+    const uurHoek = ((u % 12) * 60 + m) * 0.5, minHoek = m * 6;
+    const [ux, uy] = punt(uurHoek, 46), [mx, my] = punt(minHoek, 72);
+    d += `<line x1="100" y1="100" x2="${ux.toFixed(1)}" y2="${uy.toFixed(1)}" stroke="#4f46e5" stroke-width="7" stroke-linecap="round"/>`;
+    d += `<line x1="100" y1="100" x2="${mx.toFixed(1)}" y2="${my.toFixed(1)}" stroke="#0e9f9e" stroke-width="4.5" stroke-linecap="round"/>`;
+  }
+  d += `<circle cx="100" cy="100" r="6" fill="#1c2433"/></svg>`;
+  return d;
+}
+
+function maakBlad() {
+  const aantal = Math.max(4, Math.min(40, Number($("aantal").value) || 12));
+  $("aantal").value = aantal;
+  const kolommen = Number($("kolommen").value);
+  const titel = ($("titel").value || "Klokkijken").trim();
+  let code = $("code").value.trim();
+  if (!code) { code = String(Math.floor(1000 + Math.random() * 9000)); $("code").value = code; }
+  const random = maakRandom(zaadje([code, staat.soort, staat.stap, staat.middag, aantal].join("|")));
+
+  const tijden = [], gezien = new Set();
+  while (tijden.length < aantal) {
+    const uur = staat.middag ? 1 + Math.floor(random() * 23) : 1 + Math.floor(random() * 12);
+    const minuut = Math.floor(random() * (60 / staat.stap)) * staat.stap % 60;
+    const sleutel = uur + ":" + minuut;
+    if (gezien.has(sleutel) && gezien.size < (staat.middag ? 23 : 12) * (60 / staat.stap)) continue;
+    gezien.add(sleutel);
+    tijden.push({ uur, minuut });
+  }
+
+  const soortVan = (i) => staat.soort === "gemengd" ? ["lezen", "tekenen", "woorden"][i % 3] : staat.soort;
+  const opgave = (t, i, metAntwoord) => {
+    const soort = soortVan(i);
+    const digitaal = String(t.uur).padStart(2, "0") + ":" + String(t.minuut).padStart(2, "0");
+    const woorden = inWoorden(t.uur, t.minuut);
+    if (soort === "lezen") {
+      return `<div class="opgave"><div class="nr">${i + 1}.</div>${klokSvg(t.uur, t.minuut, true)}
+        <div class="vraag">Hoe laat is het?</div>${metAntwoord ? `<div class="antwoord">${digitaal}</div>` : `<div class="invul"></div>`}</div>`;
+    }
+    if (soort === "woorden") {
+      return `<div class="opgave"><div class="nr">${i + 1}.</div>${klokSvg(t.uur, t.minuut, true)}
+        <div class="vraag">Schrijf de tijd in woorden.</div>${metAntwoord ? `<div class="antwoord">${woorden}</div>` : `<div class="invul"></div><div class="invul"></div>`}</div>`;
+    }
+    return `<div class="opgave"><div class="nr">${i + 1}.</div>${klokSvg(t.uur, t.minuut, metAntwoord)}
+      <div class="vraag">${digitaal}</div>${metAntwoord ? `<div class="antwoord">${woorden}</div>` : `<div class="vraag" style="font-size:14px; color:#6b7590;">teken de wijzers</div>`}</div>`;
+  };
+
+  const lijst = (metAntwoord) => `<div class="opgaven" style="grid-template-columns:repeat(${kolommen},minmax(0,1fr));">` +
+    tijden.map((t, i) => opgave(t, i, metAntwoord)).join("") + `</div>`;
+  const regels = staat.naam ? `<div class="regels"><span>naam</span><span>datum</span></div>` : "";
+
+  $("blad").innerHTML =
+    `<div class="bladkop"><h2>${titel}</h2>${regels}</div>` + lijst(false) +
+    `<div class="bladvoet"><span>Lesmateriaal Blink · klokwerkblad</span><span>code ${code}</span></div>` +
+    (staat.antwoord ? `<div class="paginabreak" style="margin-top:32px;"><div class="bladkop"><h2>${titel} · antwoorden</h2></div>${lijst(true)}
+      <div class="bladvoet"><span>Lesmateriaal Blink · antwoordblad</span><span>code ${code}</span></div></div>` : "");
+
+  $("melding").textContent = `${aantal} opgaven. Zelfde blad terug? Vul code ${code} in.`;
+}
+
+$("soortSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-soort]"); if (!b) return;
+  staat.soort = b.dataset.soort;
+  [...document.querySelectorAll("#soortSeg button")].forEach((x) => x.classList.toggle("aan", x.dataset.soort === staat.soort));
+  maakBlad();
+});
+$("stapSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-stap]"); if (!b) return;
+  staat.stap = Number(b.dataset.stap);
+  [...document.querySelectorAll("#stapSeg button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.stap) === staat.stap));
+  maakBlad();
+});
+[["middagChip", "middag"], ["cijferChip", "cijfers"], ["vijfChip", "vijf"], ["antwoordChip", "antwoord"], ["naamChip", "naam"]].forEach(([id, sleutel]) => {
+  $(id).addEventListener("click", () => { staat[sleutel] = !staat[sleutel]; $(id).classList.toggle("aan", staat[sleutel]); maakBlad(); });
+});
+["titel", "aantal", "kolommen", "code"].forEach((id) => $(id).addEventListener("change", maakBlad));
+$("maakKnop").addEventListener("click", () => { $("code").value = ""; maakBlad(); });
+$("printKnop").addEventListener("click", () => window.print());
+$("printKnop2").addEventListener("click", () => window.print());
+
+maakBlad();
+</script>
+</body>
+</html>
