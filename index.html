@@ -32,6 +32,12 @@
   .sectie{margin-top:34px;}
   .sectie h2{font-size:19px;display:flex;align-items:center;gap:9px;margin-bottom:14px;color:#33405a;}
   .sectie h2::after{content:"";flex:1;height:2px;background:var(--line);border-radius:2px;}
+  .sectie h2 .aantal{font-size:12.5px;font-weight:700;color:var(--muted);background:var(--card);
+    border:1px solid var(--line);border-radius:999px;padding:3px 10px;}
+  .subkop{font-family:"Baloo 2",system-ui,sans-serif;font-size:14px;letter-spacing:.4px;text-transform:uppercase;
+    color:var(--sc,#4f46e5);margin:18px 0 10px;display:flex;align-items:center;gap:8px;}
+  .subkop::after{content:"";flex:1;height:1px;background:var(--line);}
+  .subkop:first-of-type{margin-top:2px;}
 
   /* Uitgelichte dagstarter-tegel */
   .dagstarter{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 24px;
@@ -124,8 +130,8 @@
       </div>
     </div>
 
-    <div class="sectie" data-sectie style="--sc:#4f46e5">
-      <h2>📖 Rekenen &amp; taal</h2>
+    <div class="sectie" data-sectie style="--sc:#0e9f9e">
+      <h2>📖 Lezen</h2>
       <div class="grid">
         <a class="kaart" data-tags="leesflitser technisch lezen flitsen woorden zinnen digibord groep 3 4 5 6 7 8 onderzoek herhaald lezen logboek dmt avi" href="https://bartdevries43-arch.github.io/leesflitser/" target="_blank" rel="noopener">
           <span class="nieuw">Nieuw</span>
@@ -133,33 +139,34 @@
           <span class="d">Technisch lezen: letters, woorden en zinnen flitsen op alle niveaus (groep 3-8), met racelezen en leeskaarten. Nieuw: een onderzoeksmodus voor leesgroepjes, met flitsen, herhaald lezen, een logboek en metingen, en een tab Woordenschat.</span>
           <span class="go">Openen →</span>
         </a>
+      </div>
+    </div>
+
+    <div class="sectie" data-sectie style="--sc:#7c3aed">
+      <h2>✏️ Taal &amp; spelling</h2>
+      <div class="grid">
+        <a class="kaart" data-tags="woordenschat snappet taal woorden oefenen oefentoets toets betekenis lastige woorden groep 5 6 7 8 klascode" href="woordenschat/index.html">
+          <span class="nieuw">Nieuw</span>
+          <span class="ic">📚</span><span class="t">Woordenschat · Snappet Taal</span>
+          <span class="d">De woorden van Snappet Taal oefenen per blok: leren, begrippenquiz, oefentoets en herhaling van lastige woorden. Groep 7 en 8 staan er al in, groep 5 en 6 vult de leerkracht zelf aan. Openen met de klascode.</span>
+          <span class="go">Openen →</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="sectie" data-sectie style="--sc:#4f46e5">
+      <h2>🔢 Rekenen</h2>
+      <div class="subkop" data-groep>Samen op het digibord</div>
+      <div class="grid">
         <a class="kaart" data-tags="rekenflitser rekenen sommen flitsen automatiseren tafels plus min grote getallen digibord" href="https://bartdevries43-arch.github.io/rekenflitser/" target="_blank" rel="noopener">
           <span class="ic">🔢</span><span class="t">Rekenflitser</span>
           <span class="d">Sommen flitsen om te automatiseren: tafels, plus- en minsommen en een grote-getallen-flitser. Met sprint-timer en printbaar sommenblad.</span>
           <span class="go">Openen →</span>
         </a>
-        <a class="kaart" data-tags="breuken breukenstrook cirkel gelijkwaardig vergelijken noemer teller digibord groep 5 6 7 8" href="breuken.html">
+        <a class="kaart" data-tags="getalkaart positiewaarde duizendtallen honderdtallen tientallen eenheden getalbegrip digibord groep 4 5 6 7 8" href="getalkaart.html">
           <span class="nieuw">Nieuw</span>
-          <span class="ic">🍕</span><span class="t">Breuken</span>
-          <span class="d">Breukenstroken en cirkels op het digibord. Kleur de delen, vergelijk twee breuken en zie meteen of ze gelijk zijn. Met of zonder de breuk in cijfers erbij.</span>
-          <span class="go">Openen →</span>
-        </a>
-        <a class="kaart" data-tags="bussommen erbij eraf verhaal kettingsom instappen uitstappen digibord groep 3 4" href="bussommen.html">
-          <span class="nieuw">Nieuw</span>
-          <span class="ic">🚌</span><span class="t">Bussommen</span>
-          <span class="d">Kinderen stappen in en uit bij de haltes. Hoeveel zitten er nu in de bus? Met een, twee of drie haltes, erbij, eraf of allebei, tot 10, 20 of 100.</span>
-          <span class="go">Openen →</span>
-        </a>
-        <a class="kaart" data-tags="getallenlijn lege getallenlijn rijgen sprongen tellen plaatsen digibord groep 3 4 5 6" href="getallenlijn.html">
-          <span class="nieuw">Nieuw</span>
-          <span class="ic">📏</span><span class="t">Getallenlijn</span>
-          <span class="d">Lege lijn, streepjes of met getallen, van 0 tot 10 tot en met 0 tot 1000. Zelf getallen plaatsen, het juiste getal zoeken of de sprongen van een som laten tekenen.</span>
-          <span class="go">Openen →</span>
-        </a>
-        <a class="kaart" data-tags="splitsen splitshuisje getalbegrip tot 10 20 100 digibord groep 3 4 rekenen" href="splitsmachine.html">
-          <span class="nieuw">Nieuw</span>
-          <span class="ic">🏠</span><span class="t">Splitsmachine</span>
-          <span class="d">Splitsen in het splitshuisje, met stippen erbij. Tot 5, 10, 20 of met tientallen tot 100. Links, rechts of door elkaar invullen, of samen vrij splitsen op het digibord.</span>
+          <span class="ic">🔢</span><span class="t">Getalkaart</span>
+          <span class="d">Bouw een getal uit duizendtallen, honderdtallen, tientallen en eenheden, elk in een eigen kleur en met blokken erbij. Met het getal in woorden, de som eronder en een stand waarin de kinderen zelf een getal maken.</span>
           <span class="go">Openen →</span>
         </a>
         <a class="kaart" data-tags="rekenrek kralen vijfstructuur getalbegrip digibord groep 3 4 tellen splitsen" href="rekenrek.html">
@@ -168,6 +175,39 @@
           <span class="d">Schuif de kralen op het digibord, met de vijfstructuur in kleur. Eén, twee of vier rijen, tellers aan of uit, een getal laten zetten en het rek verstoppen om te schatten.</span>
           <span class="go">Openen →</span>
         </a>
+        <a class="kaart" data-tags="splitsen splitshuisje getalbegrip tot 10 20 100 digibord groep 3 4 rekenen" href="splitsmachine.html">
+          <span class="nieuw">Nieuw</span>
+          <span class="ic">🏠</span><span class="t">Splitsmachine</span>
+          <span class="d">Splitsen in het splitshuisje, met stippen erbij. Tot 5, 10, 20 of met tientallen tot 100. Links, rechts of door elkaar invullen, of samen vrij splitsen op het digibord.</span>
+          <span class="go">Openen →</span>
+        </a>
+        <a class="kaart" data-tags="getallenlijn lege getallenlijn rijgen sprongen tellen plaatsen digibord groep 3 4 5 6" href="getallenlijn.html">
+          <span class="nieuw">Nieuw</span>
+          <span class="ic">📏</span><span class="t">Getallenlijn</span>
+          <span class="d">Lege lijn, streepjes of met getallen, van 0 tot 10 tot en met 0 tot 1000. Zelf getallen plaatsen, het juiste getal zoeken of de sprongen van een som laten tekenen.</span>
+          <span class="go">Openen →</span>
+        </a>
+        <a class="kaart" data-tags="bussommen erbij eraf verhaal kettingsom instappen uitstappen digibord groep 3 4" href="bussommen.html">
+          <span class="nieuw">Nieuw</span>
+          <span class="ic">🚌</span><span class="t">Bussommen</span>
+          <span class="d">Kinderen stappen in en uit bij de haltes. Hoeveel zitten er nu in de bus? Met een, twee of drie haltes, erbij, eraf of allebei, tot 10, 20 of 100.</span>
+          <span class="go">Openen →</span>
+        </a>
+        <a class="kaart" data-tags="breuken breukenstrook cirkel gelijkwaardig vergelijken noemer teller digibord groep 5 6 7 8" href="breuken.html">
+          <span class="nieuw">Nieuw</span>
+          <span class="ic">🍕</span><span class="t">Breuken</span>
+          <span class="d">Breukenstroken en cirkels op het digibord. Kleur de delen, vergelijk twee breuken en zie meteen of ze gelijk zijn. Met of zonder de breuk in cijfers erbij.</span>
+          <span class="go">Openen →</span>
+        </a>
+        <a class="kaart" data-tags="klok klokkijken tijd analoog digitaal wijzers uren minuten over voor half digibord groep 3 4 5 6" href="klok.html">
+          <span class="nieuw">Nieuw</span>
+          <span class="ic">🕐</span><span class="t">Klok</span>
+          <span class="d">Leerklok voor op het digibord: sleep de wijzers, met de digitale tijd en de tijd in woorden ernaast. Gekleurde tijdvakken voor over, voor, over half en voor half. Alles los aan en uit te zetten, zodat je de klok rustig opbouwt.</span>
+          <span class="go">Openen →</span>
+        </a>
+      </div>
+      <div class="subkop" data-groep>Werkbladen om te printen</div>
+      <div class="grid">
         <a class="kaart" data-tags="sommenmaker werkblad sommen plus min keer delen tafels brug antwoordblad printen groep 3 4 5 6 7 8" href="sommenmaker.html">
           <span class="nieuw">Nieuw</span>
           <span class="ic">➕</span><span class="t">Sommenmaker</span>
@@ -178,18 +218,6 @@
           <span class="nieuw">Nieuw</span>
           <span class="ic">📝</span><span class="t">Klokwerkblad</span>
           <span class="d">Print een werkblad met klokken: aflezen, wijzers tekenen of de tijd in woorden. Van hele uren tot losse minuten, met of zonder middagtijden, en met antwoordblad.</span>
-          <span class="go">Openen →</span>
-        </a>
-        <a class="kaart" data-tags="klok klokkijken tijd analoog digitaal wijzers uren minuten over voor half digibord groep 3 4 5 6" href="klok.html">
-          <span class="nieuw">Nieuw</span>
-          <span class="ic">🕐</span><span class="t">Klok</span>
-          <span class="d">Leerklok voor op het digibord: sleep de wijzers, met de digitale tijd en de tijd in woorden ernaast. Gekleurde tijdvakken voor over, voor, over half en voor half. Alles los aan en uit te zetten, zodat je de klok rustig opbouwt.</span>
-          <span class="go">Openen →</span>
-        </a>
-        <a class="kaart" data-tags="woordenschat snappet taal woorden oefenen oefentoets toets betekenis lastige woorden groep 5 6 7 8 klascode" href="woordenschat/index.html">
-          <span class="nieuw">Nieuw</span>
-          <span class="ic">📚</span><span class="t">Woordenschat · Snappet Taal</span>
-          <span class="d">De woorden van Snappet Taal oefenen per blok: leren, begrippenquiz, oefentoets en herhaling van lastige woorden. Groep 7 en 8 staan er al in, groep 5 en 6 vult de leerkracht zelf aan. Openen met de klascode.</span>
           <span class="go">Openen →</span>
         </a>
       </div>
@@ -257,6 +285,14 @@
   // .extern telt mee als kaart in een sectie
   const secties = [...document.querySelectorAll('[data-sectie]')];
   const leeg = document.getElementById('leeg');
+
+  // aantal materialen per sectie in de kop
+  secties.forEach(s => {
+    const n = s.querySelectorAll('.kaart').length;
+    const h2 = s.querySelector('h2');
+    if (h2 && n > 1) { const b = document.createElement('span'); b.className = 'aantal'; b.textContent = n; h2.appendChild(b); }
+  });
+
   zoek.addEventListener('input', () => {
     const q = zoek.value.trim().toLowerCase();
     kaarten.forEach(k => {
@@ -265,6 +301,13 @@
     });
     let zichtbaar = 0;
     secties.forEach(s => {
+      // subkopje verbergen als het bijbehorende blok leeg is
+      [...s.querySelectorAll('[data-groep]')].forEach(kop => {
+        const grid = kop.nextElementSibling;
+        const vol = grid && [...grid.querySelectorAll('.kaart')].some(k => k.style.display !== 'none');
+        kop.style.display = vol ? '' : 'none';
+        if (grid) grid.style.display = vol ? '' : 'none';
+      });
       const n = [...s.querySelectorAll('.kaart, .extern')].filter(k => k.style.display !== 'none').length;
       s.style.display = n ? '' : 'none';
       zichtbaar += n;
