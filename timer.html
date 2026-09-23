@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Timer · Lesmateriaal Blink</title>
+<meta name="description" content="Een rustige timer voor op het digibord: aftellen of een stopwatch, met een ring die leegloopt, een eigen opdracht erboven en een zacht signaal aan het eind.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+    --ring:#4f46e5; --ringbaan:#e7eaf7;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1060px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:22px; margin-top:18px;}
+
+  /* de klok zelf */
+  .vak{display:flex; flex-direction:column; align-items:center; gap:14px;}
+  .opdracht{width:100%; max-width:640px;}
+  .opdracht input{width:100%; font:inherit; font-family:"Baloo 2",system-ui,sans-serif; font-weight:700;
+    font-size:clamp(1.15rem,2.6vw,1.7rem); text-align:center; color:var(--ink);
+    background:transparent; border:none; border-bottom:2px dashed var(--line-2); padding:6px 4px;}
+  .opdracht input::placeholder{color:#b8c0d8; font-weight:600;}
+
+  .ringvak{position:relative; width:min(72vw,430px); aspect-ratio:1;}
+  .ringvak svg{width:100%; height:100%; transform:rotate(-90deg);}
+  .baan{fill:none; stroke:var(--ringbaan); stroke-width:15;}
+  .lopend{fill:none; stroke:var(--ring); stroke-width:15; stroke-linecap:round;
+    transition:stroke .5s ease;}
+  .cijfers{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;}
+  .cijfers .tijd{font-family:"Baloo 2",system-ui,sans-serif; font-weight:800; font-variant-numeric:tabular-nums;
+    font-size:clamp(2.8rem,12vw,5.2rem); line-height:1; letter-spacing:1px; color:var(--ink);}
+  .cijfers .onder{font-size:14px; font-weight:700; color:var(--muted); letter-spacing:.6px; text-transform:uppercase;}
+
+  .knoppen{display:flex; flex-wrap:wrap; gap:10px; justify-content:center;}
+  .knop{font:inherit; font-size:16px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:16px; padding:13px 20px; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent; min-width:150px;}
+  .knop.groot{font-size:18px; padding:15px 26px;}
+
+  .titelrij{display:flex; align-items:baseline; gap:10px; margin-bottom:12px; flex-wrap:wrap;}
+  .titelrij h2{font-size:18px;} .titelrij .klein{font-size:13.5px; color:var(--muted);}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+  .rij{display:flex; flex-wrap:wrap; gap:9px; align-items:center;}
+  .tijden{display:flex; flex-wrap:wrap; gap:8px;}
+  .tijden button{font:inherit; font-size:15px; font-weight:800; min-width:56px; padding:11px 13px; border-radius:14px;
+    border:1px solid var(--line-2); background:#fff; color:var(--ink); cursor:pointer;}
+  .tijden button.aan{background:var(--accent2); color:#fff; border-color:transparent;}
+  .veld label{display:block; font-size:12.5px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; color:var(--muted); margin-bottom:4px;}
+  .veld input{width:110px; font:inherit; font-size:15px; padding:10px 12px; border:1px solid var(--line-2); border-radius:13px; background:#fff; color:var(--ink);}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .bron{font-size:13.5px; line-height:1.5; color:#4b5563; padding-left:22px; text-indent:-22px; margin-top:6px;}
+  .bron a{color:var(--accent); word-break:break-word;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  /* laatste minuut en klaar */
+  body.bijna{--ring:#e0a33c;}
+  body.laatste{--ring:#e2584f;}
+  body.klaar .cijfers .tijd{color:#16a34a;}
+  body.klaar .ringvak{animation:tik 1.1s ease 3;}
+  @keyframes tik{0%,100%{transform:scale(1);} 50%{transform:scale(1.035);}}
+
+  /* digibord */
+  body.digibord{background:#0f1430; --ink:#eef1ff; --ringbaan:rgba(255,255,255,.12);}
+  body.digibord .kaart{background:#161c3d; border-color:rgba(255,255,255,.1); color:#eef1ff;}
+  body.digibord .knop, body.digibord .chip, body.digibord .seg, body.digibord .tijden button,
+  body.digibord .veld input{background:#1e2650; color:#eef1ff; border-color:rgba(255,255,255,.18);}
+  body.digibord .chip.aan{background:rgba(129,140,248,.25); border-color:#a5b4fc;}
+  body.digibord .opdracht input{color:#eef1ff; border-bottom-color:rgba(255,255,255,.22);}
+  body.digibord .cijfers .onder, body.digibord .titelrij .klein, body.digibord .voet{color:#a9b2d6;}
+  body.digibord details.uitleg p, body.digibord details.uitleg li{color:#dbe2ff;}
+
+  /* groot scherm: alleen de klok */
+  body.alleenklok .kaart.instellingen, body.alleenklok details.uitleg, body.alleenklok .voet, body.alleenklok .kop{display:none;}
+  body.alleenklok .ringvak{width:min(84vmin,720px);}
+  body.alleenklok .app{padding-top:4vh;}
+
+  @media (prefers-reduced-motion:reduce){
+    body.klaar .ringvak{animation:none;}
+    .knop:hover{transform:none;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="kop">
+    <span class="logo" aria-hidden="true">⏳</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · in de klas</div>
+      <h1>Timer</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="digibordKnop" type="button">🌙 Digibord</button>
+      <button id="alleenKnop" type="button">🔍 Alleen de klok</button>
+      <button id="schermKnop" type="button">⛶ Volledig scherm</button>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <section class="kaart" aria-label="De klok">
+    <div class="vak">
+      <div class="opdracht">
+        <input id="opdracht" type="text" maxlength="60" placeholder="Waar werken we aan? (bijvoorbeeld: stil lezen)" aria-label="Opdracht">
+      </div>
+
+      <div class="ringvak">
+        <svg viewBox="0 0 220 220" aria-hidden="true">
+          <circle class="baan" cx="110" cy="110" r="96"></circle>
+          <circle class="lopend" id="ring" cx="110" cy="110" r="96"></circle>
+        </svg>
+        <div class="cijfers">
+          <div class="tijd" id="tijd" role="timer" aria-live="off">05:00</div>
+          <div class="onder" id="onder">nog te gaan</div>
+        </div>
+      </div>
+
+      <div class="knoppen">
+        <button class="knop primair groot" id="startKnop" type="button">▶ Start</button>
+        <button class="knop groot" id="resetKnop" type="button">↺ Opnieuw</button>
+        <button class="knop" id="minKnop" type="button">− 1 min</button>
+        <button class="knop" id="plusKnop" type="button">+ 1 min</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="kaart instellingen" aria-label="Instellingen">
+    <div class="titelrij"><h2>Hoe lang?</h2><span class="klein">Klik op een tijd of vul zelf iets in.</span></div>
+    <div class="rij">
+      <div class="tijden" id="tijden"></div>
+      <div class="veld"><label for="eigen">Eigen tijd (min)</label><input id="eigen" type="number" min="1" max="120" step="1" placeholder="bijv. 7"></div>
+    </div>
+
+    <div class="titelrij" style="margin-top:20px;"><h2>Wat doet de klok?</h2></div>
+    <div class="rij">
+      <div class="seg" id="modusSeg">
+        <button type="button" data-modus="afteller" class="aan">Aftellen</button>
+        <button type="button" data-modus="stopwatch">Stopwatch</button>
+      </div>
+      <button class="chip aan" type="button" id="geluidChip"><span class="bol"></span>Geluid aan het eind</button>
+      <button class="chip aan" type="button" id="kleurChip"><span class="bol"></span>Kleur bij de laatste minuut</button>
+    </div>
+    <p class="klein" style="margin-top:12px; color:var(--muted); font-size:13.5px;">Met de spatiebalk start en pauzeer je. Met Escape stop je het grote scherm.</p>
+  </section>
+
+  <details class="uitleg">
+    <summary>Waarom een timer op het digibord (voor de leerkracht)</summary>
+    <p>Een timer maakt zichtbaar hoeveel tijd er nog is. Dat scheelt mij tien keer per les de vraag "hoe lang nog?" en het helpt kinderen om zelf hun werk te verdelen. Vooral bij stil lezen, bij een werkmoment of bij een opruimmoment werkt het rustgevend, omdat iedereen hetzelfde ziet.</p>
+    <h3>Waar ik op gelet heb</h3>
+    <ul>
+      <li><b>Rustig, niet spannend.</b> De ring loopt gelijkmatig leeg en er staat geen wegtikkende animatie omheen. Pas in de laatste minuut verandert de kleur, en dat kun je uitzetten. Voor kinderen die snel gespannen raken, is een aftellende klok anders eerder een stressmachine dan een hulpmiddel.</li>
+      <li><b>De opdracht staat erboven.</b> Zo weet iedereen niet alleen hoe lang, maar ook waarvoor. Dat is precies wat een duidelijke opdracht doet: het doel zichtbaar houden.</li>
+      <li><b>Het geluid is zacht en kort.</b> Drie korte tonen, geen alarm. Je kunt het uitzetten.</li>
+      <li><b>Een stopwatch erbij.</b> Handig als je juist wilt meten hoe lang iets duurt, bijvoorbeeld hoe lang de klas erover doet om stil te zijn, of hoe lang een leerling over een leestekst deed.</li>
+    </ul>
+    <h3>Hoe ik hem gebruik</h3>
+    <ul>
+      <li>Bij het flitsen en herhaald lezen zet ik hem op tien of vijftien minuten, zodat de oefentijd echt oefentijd blijft. In mijn onderzoek noteer ik die tijd in het logboek, want zonder logboek weet je achteraf niet of een aanpak niet werkte of niet is uitgevoerd.</li>
+      <li>Bij zelfstandig werken zet ik de opdracht erboven, zodat kinderen die even wegdromen zelf kunnen terugkijken wat er ook alweer moest.</li>
+      <li>Met "Alleen de klok" verdwijnt alles eromheen, zodat het digibord niet vol staat met knoppen.</li>
+    </ul>
+  </details>
+
+  <footer class="voet">Timer · onderdeel van <a href="index.html">Lesmateriaal Blink</a> · spatiebalk is start en pauze</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const BEWAAR = "blink-timer";
+const VOORKEUR = [1, 2, 3, 5, 10, 15, 20, 30];
+
+let staat = { minuten: 5, modus: "afteller", geluid: true, kleur: true, digibord: false, opdracht: "" };
+try { const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}"); Object.keys(staat).forEach((k) => { if (k in b) staat[k] = b[k]; }); } catch (e) {}
+const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
+
+const OMTREK = 2 * Math.PI * 96;
+$("ring").style.strokeDasharray = OMTREK;
+
+let totaalMs = staat.minuten * 60000;
+let restMs = totaalMs;
+let loopt = false;
+let klaar = false;
+let eindTijd = 0;     // afteller: wanneer is het afgelopen
+let startTijd = 0;    // stopwatch: wanneer is hij begonnen
+let tikker = null;
+
+function tekstVanMs(ms) {
+  // aftellen rondt omhoog (5,0 min blijft 05:00), de stopwatch rondt af
+  const rond = staat.modus === "afteller" ? Math.ceil : Math.floor;
+  const heel = Math.max(0, rond(ms / 1000));
+  const u = Math.floor(heel / 3600);
+  const m = Math.floor((heel % 3600) / 60);
+  const s = heel % 60;
+  const twee = (n) => String(n).padStart(2, "0");
+  return u ? `${u}:${twee(m)}:${twee(s)}` : `${twee(m)}:${twee(s)}`;
+}
+
+function teken() {
+  const afteller = staat.modus === "afteller";
+  $("tijd").textContent = tekstVanMs(afteller ? restMs : restMs);
+  $("onder").textContent = afteller ? (klaar ? "de tijd is om" : "nog te gaan") : "gelopen tijd";
+
+  // bij de afteller loopt de ring leeg, bij de stopwatch vult hij elke minuut
+  const deel = afteller
+    ? (totaalMs ? Math.max(0, Math.min(1, restMs / totaalMs)) : 0)
+    : (restMs % 60000) / 60000;
+  $("ring").style.strokeDashoffset = OMTREK * (1 - deel);
+
+  document.body.classList.toggle("bijna", staat.kleur && afteller && !klaar && restMs <= 60000 && restMs > 10000);
+  document.body.classList.toggle("laatste", staat.kleur && afteller && !klaar && restMs <= 10000);
+  document.body.classList.toggle("klaar", klaar);
+  $("startKnop").textContent = loopt ? "⏸ Pauze" : (restMs === totaalMs || klaar ? "▶ Start" : "▶ Verder");
+}
+
+function piep() {
+  if (!staat.geluid) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [0, .28, .56].forEach((vertraging, i) => {
+      const osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.value = i === 2 ? 660 : 528;
+      gain.gain.setValueAtTime(0, ctx.currentTime + vertraging);
+      gain.gain.linearRampToValueAtTime(.16, ctx.currentTime + vertraging + .02);
+      gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + vertraging + .22);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(ctx.currentTime + vertraging); osc.stop(ctx.currentTime + vertraging + .24);
+    });
+    setTimeout(() => ctx.close(), 1400);
+  } catch (e) {}
+}
+
+// De klok rekent met echte tijdstippen. Zo loopt hij door als het tabblad
+// even niet vooraan staat, en klopt hij ook na een tijdje nog precies.
+function tik() {
+  if (!loopt) return;
+  if (staat.modus === "afteller") {
+    restMs = eindTijd - Date.now();
+    if (restMs <= 0) { restMs = 0; stopTikker(); loopt = false; klaar = true; piep(); }
+  } else {
+    restMs = Date.now() - startTijd;
+  }
+  teken();
+}
+function stopTikker() { if (tikker) { clearInterval(tikker); tikker = null; } }
+
+function startStop() {
+  if (loopt) {
+    loopt = false;
+    restMs = staat.modus === "afteller" ? Math.max(0, eindTijd - Date.now()) : Date.now() - startTijd;
+    stopTikker(); teken(); return;
+  }
+  if (staat.modus === "afteller") {
+    if (restMs <= 0) restMs = totaalMs;
+    eindTijd = Date.now() + restMs;
+  } else {
+    startTijd = Date.now() - restMs;
+  }
+  loopt = true; klaar = false;
+  stopTikker();
+  tikker = setInterval(tik, 100);
+  tik();
+}
+function opnieuw() {
+  loopt = false; klaar = false; stopTikker();
+  restMs = staat.modus === "afteller" ? totaalMs : 0;
+  teken();
+}
+function zetMinuten(m) {
+  staat.minuten = Math.max(1, Math.min(120, Math.round(m)));
+  totaalMs = staat.minuten * 60000;
+  [...document.querySelectorAll("#tijden button")].forEach((b) => b.classList.toggle("aan", Number(b.dataset.min) === staat.minuten));
+  $("eigen").value = VOORKEUR.includes(staat.minuten) ? "" : staat.minuten;
+  bewaar(); opnieuw();
+}
+
+$("tijden").innerHTML = VOORKEUR.map((m) => `<button type="button" data-min="${m}">${m} min</button>`).join("");
+$("tijden").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-min]"); if (!b) return;
+  zetMinuten(Number(b.dataset.min));
+});
+$("eigen").addEventListener("change", () => { if ($("eigen").value) zetMinuten(Number($("eigen").value)); });
+$("startKnop").addEventListener("click", startStop);
+$("resetKnop").addEventListener("click", opnieuw);
+function verzetTijd(ms) {
+  if (staat.modus === "stopwatch") return;
+  restMs = Math.max(0, restMs + ms);
+  totaalMs = Math.max(totaalMs, restMs);
+  if (loopt) eindTijd = Date.now() + restMs;
+  if (restMs > 0) klaar = false;
+  teken();
+}
+$("plusKnop").addEventListener("click", () => verzetTijd(60000));
+$("minKnop").addEventListener("click", () => verzetTijd(-60000));
+$("modusSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-modus]"); if (!b) return;
+  staat.modus = b.dataset.modus;
+  [...document.querySelectorAll("#modusSeg button")].forEach((x) => x.classList.toggle("aan", x.dataset.modus === staat.modus));
+  bewaar(); opnieuw();
+});
+[["geluidChip", "geluid"], ["kleurChip", "kleur"]].forEach(([id, sleutel]) => {
+  $(id).addEventListener("click", () => { staat[sleutel] = !staat[sleutel]; $(id).classList.toggle("aan", staat[sleutel]); bewaar(); teken(); });
+});
+$("opdracht").addEventListener("input", () => { staat.opdracht = $("opdracht").value; bewaar(); });
+$("digibordKnop").addEventListener("click", () => {
+  staat.digibord = !staat.digibord;
+  document.body.classList.toggle("digibord", staat.digibord);
+  $("digibordKnop").textContent = staat.digibord ? "☀️ Gewoon" : "🌙 Digibord";
+  bewaar();
+});
+$("alleenKnop").addEventListener("click", () => document.body.classList.toggle("alleenklok"));
+$("schermKnop").addEventListener("click", () => {
+  if (document.fullscreenElement) document.exitFullscreen();
+  else document.documentElement.requestFullscreen?.();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.target.tagName === "INPUT") return;
+  if (e.code === "Space") { e.preventDefault(); startStop(); }
+  if (e.key === "Escape") document.body.classList.remove("alleenklok");
+  if (e.key === "r" || e.key === "R") opnieuw();
+});
+
+/* opstarten */
+$("opdracht").value = staat.opdracht;
+[...document.querySelectorAll("#modusSeg button")].forEach((x) => x.classList.toggle("aan", x.dataset.modus === staat.modus));
+$("geluidChip").classList.toggle("aan", staat.geluid);
+$("kleurChip").classList.toggle("aan", staat.kleur);
+if (staat.digibord) { document.body.classList.add("digibord"); $("digibordKnop").textContent = "☀️ Gewoon"; }
+zetMinuten(staat.minuten);
+</script>
+</body>
+</html>
