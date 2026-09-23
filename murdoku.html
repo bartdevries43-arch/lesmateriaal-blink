@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Murdoku · Lesmateriaal Blink</title>
+<meta name="description" content="Maak zelf detective-logicapuzzels: los met de aanwijzingen drie kruistabellen op en ontdek wie de dader is. Elke zaak heeft precies één oplossing. Met antwoordblad en herhaalcode.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1220px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .vlak{display:grid; grid-template-columns:minmax(300px,.8fr) minmax(0,1.2fr); gap:18px; margin-top:18px; align-items:start;}
+  @media (max-width:980px){ .vlak{grid-template-columns:minmax(0,1fr);} }
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:18px;}
+
+  .groep{margin-bottom:18px;}
+  .groep:last-child{margin-bottom:0;}
+  .groep h2{font-size:17px; margin-bottom:10px;}
+  .groep .klein{font-size:13px; color:var(--muted); margin:-6px 0 10px;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .velden{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px;}
+  .veld label{display:block; font-size:12.5px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; color:var(--muted); margin-bottom:4px;}
+  .veld input, .veld select{width:100%; font:inherit; font-size:15px; padding:10px 12px; border:1px solid var(--line-2); border-radius:13px; background:#fff; color:var(--ink);}
+  .knoppen{display:flex; flex-wrap:wrap; gap:9px; margin-top:6px;}
+  .knop{font:inherit; font-size:15px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:15px; padding:12px 17px; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent;}
+  .melding{font-size:14px; color:#b45309; margin-top:8px; min-height:20px;}
+
+  /* Het werkblad */
+  .bladvak{padding:0; overflow:hidden;}
+  .blad{background:#fff; padding:26px 30px 34px; font-size:16px;}
+  .bladkop{display:flex; align-items:flex-end; gap:16px; border-bottom:2px solid #e6e9f5; padding-bottom:12px; margin-bottom:18px; flex-wrap:wrap;}
+  .bladkop h2{font-size:24px;}
+  .bladkop .regels{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:#5b647f;}
+  .bladkop .regels span{display:inline-block; min-width:140px; border-bottom:1.5px dotted #b8c0d8; padding-bottom:2px;}
+  .opgaven{display:grid; gap:13px 24px;}
+  .opg{padding:8px 4px 10px; border-bottom:1px dotted #dfe3f0; break-inside:avoid;}
+  .opg .nr{font-size:12px; color:#9aa3bd; margin-right:6px;}
+  .opg .vraag{font-weight:700; line-height:1.45;}
+  .opg .lijn{display:inline-block; border-bottom:1.5px solid #c9cfe3; min-width:76px; height:1.15em; vertical-align:-2px;}
+  .opg .antwoord{font-weight:800; color:var(--accent); font-variant-numeric:tabular-nums; margin-top:3px;}
+  .opg .hint{font-size:12.5px; color:#8b93ad; margin-top:3px;}
+
+  .bladvoet{margin-top:22px; font-size:12px; color:#9aa3bd; display:flex; justify-content:space-between; gap:12px;}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .bron{font-size:13.5px; line-height:1.5; color:#4b5563; padding-left:22px; text-indent:-22px; margin-top:6px;}
+  .bron a{color:var(--accent); word-break:break-word;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  @media print{
+    body{background:#fff;}
+    .app{max-width:none; padding:0;}
+    .kop, .instellingen, details.uitleg, .voet{display:none;}
+    .bladvak{box-shadow:none; border:none; padding:0;}
+    .blad{padding:0; font-size:15px;}
+    .paginabreak{break-before:page;}
+    @page{size:A4 portrait; margin:14mm;}
+  }
+
+  /* Een zaak */
+  .zaak{break-inside:avoid; padding-bottom:6px;}
+  .zaak h3{font-size:1.32em; margin-bottom:6px; display:flex; align-items:baseline; gap:9px; flex-wrap:wrap;}
+  .zaak h3 .nr{font-size:.62em; letter-spacing:1.2px; text-transform:uppercase; color:#fff;
+    background:linear-gradient(120deg,var(--accent),#3b5bdb); border-radius:999px; padding:4px 11px;}
+  .zaak .verhaal{font-size:.95em; line-height:1.5; color:#39435a; margin-bottom:12px; max-width:62em;}
+  .kolom2{display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.15fr); gap:18px 26px; align-items:start;}
+  @media (max-width:760px){ .kolom2{grid-template-columns:minmax(0,1fr);} }
+  .zaak h4{font-size:.92em; letter-spacing:.7px; text-transform:uppercase; color:var(--muted); margin-bottom:6px;}
+  .zaak h5{font-size:.82em; letter-spacing:.5px; text-transform:uppercase; color:var(--muted); margin-bottom:5px;}
+  ol.aanwijzingen{margin:0 0 0 1.15em; padding:0;}
+  ol.aanwijzingen li{font-size:.95em; line-height:1.55; margin-bottom:5px; padding-left:3px;}
+  .zaak .tip{font-size:.82em; line-height:1.45; color:#5b647f; background:#f6f7fd;
+    border:1px solid #e4e7f4; border-radius:11px; padding:9px 11px; margin-top:11px;}
+  .tabellen{display:flex; flex-direction:column; gap:14px;}
+  .tabelvak{break-inside:avoid;}
+
+  table.kruis{border-collapse:collapse;}
+  table.kruis th, table.kruis td{border:1px solid #c3cadf; padding:0;}
+  table.kruis th.hoek{border:none;}
+  table.kruis th.kolomkop{width:2.2em; vertical-align:bottom; padding:4px 2px 6px; text-align:center; font-weight:700;}
+  table.kruis th.kolomkop .em{display:block; font-size:1.05em; line-height:1.2; margin-bottom:4px;}
+  table.kruis th.kolomkop .lb{display:inline-block; writing-mode:vertical-rl; transform:rotate(180deg);
+    font-size:.62em; font-weight:700; color:#5b647f; white-space:nowrap; letter-spacing:.2px;}
+  table.kruis th.zij{text-align:left; font-weight:700; font-size:.78em; padding:4px 8px 4px 5px; white-space:nowrap;}
+  table.kruis th.zij .em{font-size:1.15em;}
+  table.kruis td{width:2.5em; height:2.1em; text-align:center; vertical-align:middle; font-size:1.05em;}
+  table.kruis td .ja{color:#16a34a;}
+  table.kruis td .nee{color:#b9c0d4;}
+
+  .zaak .dader{margin-top:12px; font-weight:800; font-size:1.02em;}
+  .zaak .dader .lijn{display:inline-block; border-bottom:2px solid var(--accent); min-width:8em; height:1.1em; vertical-align:-3px;}
+  .zaak .dader .ja{color:#16a34a;}
+  .zaak .oplossing{font-size:.88em; color:#5b647f; margin-top:3px; line-height:1.5;}
+  .zaken{display:flex; flex-direction:column; gap:26px;}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="kop">
+    <span class="logo" aria-hidden="true">🔎</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · puzzels</div>
+      <h1>Murdoku</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="printKnop" type="button">🖨 Afdrukken</button>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <div class="vlak">
+    <section class="kaart instellingen" aria-label="Instellingen">
+      <div class="groep">
+        <h2>Hoe moeilijk?</h2>
+        <div class="seg" id="niveauSeg">
+          <button type="button" data-niveau="1">makkelijk</button>
+          <button type="button" data-niveau="2" class="aan">gemiddeld</button>
+          <button type="button" data-niveau="3">pittig</button>
+        </div>
+        <p class="klein" style="margin-top:8px;">Makkelijk en gemiddeld hebben drie verdachten, pittig heeft er vier. Hoe moeilijker, hoe minder aanwijzingen die het antwoord meteen weggeven.</p>
+      </div>
+
+      <div class="groep">
+        <h2>Het blad</h2>
+        <div class="velden">
+          <div class="veld"><label for="titel">Titel</label><input id="titel" type="text" value="Murdoku" maxlength="40"></div>
+          <div class="veld"><label for="aantal">Aantal zaken</label><input id="aantal" type="number" min="1" max="8" step="1" value="2"></div>
+          <div class="veld"><label for="grootte">Lettergrootte</label>
+            <select id="grootte"><option value="14">gewoon</option><option value="16" selected>groot</option><option value="18">extra groot</option></select></div>
+          <div class="veld"><label for="code">Herhaalcode</label><input id="code" type="text" maxlength="8" placeholder="bijv. 4821"></div>
+        </div>
+        <div class="chips" style="margin-top:10px;">
+          <button class="chip aan" type="button" id="tipChip"><span class="bol"></span>Uitleg bij de tabellen</button>
+          <button class="chip aan" type="button" id="antwoordChip"><span class="bol"></span>Antwoordblad erbij</button>
+          <button class="chip aan" type="button" id="naamChip"><span class="bol"></span>Regel voor naam en datum</button>
+        </div>
+      </div>
+
+      <div class="knoppen">
+        <button class="knop primair" id="maakKnop" type="button">Maak nieuwe zaken</button>
+        <button class="knop" id="printKnop2" type="button">🖨 Afdrukken</button>
+      </div>
+      <p class="melding" id="melding"></p>
+    </section>
+
+    <section class="kaart bladvak" aria-label="Zaken">
+      <div class="blad" id="blad"></div>
+    </section>
+  </div>
+
+  <details class="uitleg">
+    <summary>Waarom murdoku (voor de leerkracht)</summary>
+    <p>Een murdoku is een detectivepuzzel. De kinderen lezen een verhaaltje en een rij aanwijzingen, en vullen daarmee drie kruistabellen in met vinkjes en kruisjes. Aan het eind weten ze wie het gedaan heeft. Elke zaak die deze pagina maakt is gecontroleerd op precies één oplossing.</p>
+    <h3>Wat het vraagt van kinderen</h3>
+    <ul>
+      <li><b>Nauwkeurig lezen.</b> Eén woordje verschil, zoals "niet" of "ook niet", verandert de hele zaak.</li>
+      <li><b>Informatie combineren.</b> Bij begrijpend lezen moet een lezer de losse stukjes tekst aan elkaar verbinden en informatie afleiden die er niet letterlijk staat (Swart &amp; Stoep, 2022). Precies dat gebeurt hier: uit "de persoon met de zaklamp was in de aula" en "Daan was niet in de aula" volgt iets over Daan wat nergens staat.</li>
+      <li><b>Systematisch werken.</b> Wie zomaar wat invult, komt er niet. Wie een vinkje zet en daarna de hele rij en kolom wegstreept, wel.</li>
+    </ul>
+    <h3>Wat het niet doet</h3>
+    <p>Kinderen worden er niet in het algemeen slimmer van. Onderzoek naar breintraining laat zien dat je vooral beter wordt in de oefening zelf, en dat die winst nauwelijks overdraagt naar andere taken of naar schoolresultaten (Simons et al., 2016). Ik gebruik de murdoku als leeswerk met een puzzel eromheen, als werk voor kinderen die klaar zijn en als iets wat samen opgelost mag worden.</p>
+    <h3>Hoe het blad werkt</h3>
+    <ul>
+      <li>Drie niveaus. Makkelijk en gemiddeld hebben drie verdachten, pittig heeft er vier.</li>
+      <li>Hoe moeilijker het niveau, hoe minder aanwijzingen die meteen iets weggeven. Op pittig staat er hoogstens één aanwijzing in die direct zegt waar iemand was.</li>
+      <li>De pagina zoekt zelf de kortste set aanwijzingen die nog precies één oplossing geeft. Er staat dus nooit een overbodige aanwijzing bij.</li>
+      <li>Elke zaak komt op een eigen pagina als je print. Het antwoordblad staat achteraan.</li>
+      <li>Met een <b>herhaalcode</b> krijg je precies dezelfde zaken terug. Handig als je ze nog een keer wilt printen of de hele klas dezelfde zaak wilt geven.</li>
+    </ul>
+    <h3>Bronnen</h3>
+    <p class="bron">Simons, D. J., Boot, W. R., Charness, N., Gathercole, S. E., Chabris, C. F., Hambrick, D. Z., &amp; Stine-Morrow, E. A. L. (2016). Do "brain-training" programs work? <i>Psychological Science in the Public Interest, 17</i>(3), 103-186. <a href="https://doi.org/10.1177/1529100616661983">https://doi.org/10.1177/1529100616661983</a></p>
+    <p class="bron">Swart, N., &amp; Stoep, J. (2022, 29 maart). <i>Begrijpend lezen: samenhang tussen kennis, vaardigheden en context</i>. Onderwijskennis.nl. Geraadpleegd op 23 september 2026, van <a href="https://www.onderwijskennis.nl/kennisbank/begrijpend-lezen-samenhang-tussen-kennis-vaardigheden-en-context">https://www.onderwijskennis.nl/kennisbank/begrijpend-lezen-samenhang-tussen-kennis-vaardigheden-en-context</a></p>
+  </details>
+
+  <footer class="voet">Murdoku · onderdeel van <a href="index.html">Lesmateriaal Blink</a> · groep 6, 7 en 8</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const BEWAAR = "blink-murdoku";
+
+let staat = { niveau: 2, titel: "Murdoku", aantal: 2, grootte: 16, code: "",
+  tip: true, antwoord: true, naam: true };
+try { const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}"); Object.keys(staat).forEach((k) => { if (k in b) staat[k] = b[k]; }); } catch (e) {}
+const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
+
+/* ---- toeval met een code ---- */
+function zaadje(tekst) {
+  let h = 2166136261;
+  for (let i = 0; i < tekst.length; i++) { h ^= tekst.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+function maakRandom(zaad) {
+  let a = zaad >>> 0;
+  return function () {
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const tussen = (r, van, tot) => van + Math.floor(r() * (tot - van + 1));
+function schud(r, lijst) {
+  const l = [...lijst];
+  for (let i = l.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [l[i], l[j]] = [l[j], l[i]]; }
+  return l;
+}
+const pak = (r, lijst, hoeveel) => schud(r, lijst).slice(0, hoeveel);
+const hoofdletter = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+
+/* ================= de bouwstenen ================= */
+const NAMEN = [
+  ["James", "🧑🏿"], ["Fatima", "🧕🏽"], ["Sanne", "👧🏻"], ["Mohammed", "🧑🏾"], ["Lisa", "👧🏼"],
+  ["Chen", "🧑🏻"], ["Amara", "👩🏿"], ["Daan", "🧑🏼"], ["Yusuf", "🧑🏽"], ["Aisha", "👧🏾"],
+  ["Liam", "🧑🏻"], ["Sami", "🧑🏽"], ["Noor", "👧🏽"], ["Bo", "🧑🏼"], ["Kwame", "🧑🏿"],
+  ["Emma", "👧🏻"], ["Rayan", "🧑🏽"], ["Iris", "👧🏼"], ["Ayla", "👧🏽"], ["Milan", "🧑🏻"],
+];
+const PLAATSEN = [
+  ["sporthal", "in de", "uit de", "🏐"], ["bibliotheek", "in de", "uit de", "📚"],
+  ["kantine", "in de", "uit de", "🍽️"], ["gymzaal", "in de", "uit de", "🤸"],
+  ["schoolplein", "op het", "van het", "🏫"], ["klaslokaal", "in het", "uit het", "📒"],
+  ["fietsenstalling", "in de", "uit de", "🚲"], ["aula", "in de", "uit de", "🎭"],
+  ["mediatheek", "in de", "uit de", "💻"], ["kleedkamer", "in de", "uit de", "🚿"],
+  ["keuken", "in de", "uit de", "🍳"], ["speelplaats", "op de", "van de", "🛝"],
+  ["podium", "op het", "van het", "🎤"], ["teamkamer", "in de", "uit de", "☕"],
+  ["gang", "op de", "uit de", "🚪"], ["schooltuin", "in de", "uit de", "🌻"],
+];
+const VOORWERPEN = [
+  ["zonnebril", "de", "🕶️"], ["paraplu", "de", "☂️"], ["pet", "de", "🧢"], ["rugzak", "de", "🎒"],
+  ["koptelefoon", "de", "🎧"], ["skateboard", "het", "🛹"], ["sleutel", "de", "🔑"],
+  ["zaklamp", "de", "🔦"], ["handschoen", "de", "🧤"], ["voetbal", "de", "⚽"],
+  ["knuffel", "de", "🧸"], ["step", "de", "🛴"], ["sjaal", "de", "🧣"], ["tas", "de", "👜"],
+  ["waterfles", "de", "🥤"], ["verrekijker", "de", "🔭"], ["fluitje", "het", "🎺"],
+  ["stopwatch", "de", "⏱️"], ["plattegrond", "de", "🗺️"], ["schrift", "het", "📓"],
+];
+const ZAKEN = [
+  ["gouden beker", "de", "🏆"], ["laptop", "de", "💻"], ["telefoon", "de", "📱"],
+  ["traktatie", "de", "🧁"], ["sleutelbos", "de", "🔑"], ["geldkistje", "het", "💰"],
+  ["tablet", "de", "📱"], ["microfoon", "de", "🎤"], ["taart", "de", "🎂"], ["trofee", "de", "🥇"],
+];
+const VERHAALSTART = [
+  "Er is iets verdwenen op school.", "Er klopt iets niet op school.",
+  "Er is iets vreemds gebeurd tijdens de pauze.", "Er is die middag iets weggehaald.",
+];
+
+/* ================= permutaties ================= */
+function permutaties(n) {
+  if (n === 1) return [[0]];
+  const uit = [];
+  for (const kleiner of permutaties(n - 1)) {
+    for (let i = 0; i <= kleiner.length; i++) {
+      uit.push([...kleiner.slice(0, i), n - 1, ...kleiner.slice(i)]);
+    }
+  }
+  return uit;
+}
+
+/* ================= een zaak maken ================= */
+function maakZaak(r, niveau) {
+  const n = niveau === 3 ? 4 : 3;
+  const personen = pak(r, NAMEN, n).map(([naam, emoji]) => ({ naam, emoji }));
+  const plaatsen = pak(r, PLAATSEN, n).map(([naam, waar, vanaf, emoji]) => ({ naam, waar, vanaf, emoji }));
+  const voorwerpen = pak(r, VOORWERPEN, n).map(([naam, lid, emoji]) => ({ naam, lid, emoji }));
+  const [buitNaam, buitLid, buitEmoji] = ZAKEN[Math.floor(r() * ZAKEN.length)];
+
+  // de oplossing: persoon i hoort bij plaats aSol[i] en voorwerp bSol[i]
+  const perms = permutaties(n);
+  const aSol = perms[Math.floor(r() * perms.length)];
+  const bSol = perms[Math.floor(r() * perms.length)];
+
+  const P = (i) => personen[i].naam;
+  const PL = (j) => `${plaatsen[j].waar} ${plaatsen[j].naam}`;
+  const VW = (k) => `${voorwerpen[k].lid} ${voorwerpen[k].naam}`;
+
+  // alle ware aanwijzingen, per soort
+  const zwak = [], sterk = [];
+  for (let i = 0; i < n; i++) {
+    for (let j = 0; j < n; j++) {
+      if (aSol[i] !== j) zwak.push({ tekst: `${P(i)} was niet ${PL(j)}.`, test: (a) => a[i] !== j });
+      else sterk.push({ tekst: `${P(i)} was ${PL(j)}.`, test: (a) => a[i] === j });
+    }
+    for (let k = 0; k < n; k++) {
+      if (bSol[i] !== k) zwak.push({ tekst: `${P(i)} had ${VW(k)} niet bij zich.`, test: (a, b) => b[i] !== k });
+      else sterk.push({ tekst: `${P(i)} had ${VW(k)} bij zich.`, test: (a, b) => b[i] === k });
+    }
+  }
+  for (let k = 0; k < n; k++) {
+    for (let j = 0; j < n; j++) {
+      const klopt = aSol[bSol.indexOf(k)] === j;
+      if (klopt) {
+        sterk.push({ tekst: `De persoon met ${VW(k)} was ${PL(j)}.`, test: (a, b) => a[b.indexOf(k)] === j });
+        sterk.push({ tekst: `De persoon ${PL(j)} had ${VW(k)} bij zich.`, test: (a, b) => b[a.indexOf(j)] === k });
+      } else {
+        zwak.push({ tekst: `De persoon met ${VW(k)} was niet ${PL(j)}.`, test: (a, b) => a[b.indexOf(k)] !== j });
+      }
+    }
+  }
+  // dubbele ontkenningen, die maken het juist leuker om te puzzelen.
+  // Op het makkelijkste niveau laat ik ze weg, want ze lezen lastiger.
+  for (let i = 0; niveau > 1 && i < n; i++) {
+    const nietPlaats = [...Array(n).keys()].filter((j) => j !== aSol[i]);
+    const nietVoorwerp = [...Array(n).keys()].filter((k) => k !== bSol[i]);
+    if (nietPlaats.length >= 2) {
+      const [x, y] = nietPlaats;
+      zwak.push({ tekst: `${P(i)} was niet ${PL(x)} en ook niet ${PL(y)}.`, test: (a) => a[i] !== x && a[i] !== y });
+    }
+    if (nietVoorwerp.length >= 2) {
+      const [x, y] = nietVoorwerp;
+      zwak.push({ tekst: `${P(i)} had ${VW(x)} niet bij zich en ${VW(y)} ook niet.`, test: (a, b) => b[i] !== x && b[i] !== y });
+    }
+  }
+
+  // hoeveel sterke aanwijzingen mogen er in?
+  const maxSterk = niveau === 1 ? 3 : niveau === 2 ? 2 : 1;
+
+  // oplossingen tellen die bij een set aanwijzingen passen
+  const telt = (set) => {
+    let aantal = 0, laatste = null;
+    for (const a of perms) for (const b of perms) {
+      if (set.every((c) => c.test(a, b))) { aantal++; laatste = [a, b]; if (aantal > 1) return { aantal, laatste }; }
+    }
+    return { aantal, laatste };
+  };
+
+  // opbouwen: eerst een paar sterke, dan zwakke erbij tot het uniek is
+  const volgorde = [...schud(r, sterk).slice(0, maxSterk), ...schud(r, zwak)];
+  const gekozen = [];
+  for (const c of volgorde) {
+    if (gekozen.some((g) => g.tekst === c.tekst)) continue;
+    gekozen.push(c);
+    if (telt(gekozen).aantal === 1) break;
+  }
+  if (telt(gekozen).aantal !== 1) return null;
+
+  // uitdunnen: wat weg kan, gaat weg
+  for (let i = gekozen.length - 1; i >= 0; i--) {
+    const zonder = gekozen.filter((_, j) => j !== i);
+    if (zonder.length && telt(zonder).aantal === 1) gekozen.splice(i, 1);
+  }
+
+  // de plaats delict en dus de dader
+  const plaatsDelict = Math.floor(r() * n);
+  const dader = aSol.indexOf(plaatsDelict);
+  const slot = `${hoofdletter(buitLid)} ${buitNaam} verdween ${plaatsen[plaatsDelict].vanaf} ${plaatsen[plaatsDelict].naam}.`;
+
+  const verhaal = `${VERHAALSTART[Math.floor(r() * VERHAALSTART.length)]} ${hoofdletter(buitLid)} ${buitNaam} is weg. ` +
+    `${n === 3 ? "Drie" : "Vier"} kinderen waren in de buurt. Ieder was op een andere plek en had één ding bij zich. ` +
+    `Eén van hen heeft het gedaan.`;
+
+  return {
+    personen, plaatsen, voorwerpen, n, verhaal, buit: { naam: buitNaam, lid: buitLid, emoji: buitEmoji },
+    aanwijzingen: schud(r, gekozen).map((c) => c.tekst).concat([slot]),
+    aSol, bSol, dader, plaatsDelict,
+    sleutel: personen.map((p) => p.naam).join("") + aSol.join("") + bSol.join(""),
+  };
+}
+
+/* ================= tekenen ================= */
+function kruistabel(rijen, kolommen, vinkje, metAntwoord) {
+  let uit = '<table class="kruis"><tr><th class="hoek"></th>';
+  for (const k of kolommen) uit += `<th class="kolomkop"><span class="em">${k.emoji}</span><span class="lb">${hoofdletter(k.naam)}</span></th>`;
+  uit += "</tr>";
+  rijen.forEach((rij, i) => {
+    uit += `<tr><th class="zij"><span class="em">${rij.emoji}</span> ${hoofdletter(rij.naam)}</th>`;
+    kolommen.forEach((_, j) => {
+      const goed = vinkje(i, j);
+      uit += `<td>${metAntwoord ? (goed ? '<b class="ja">✓</b>' : '<span class="nee">✗</span>') : ""}</td>`;
+    });
+    uit += "</tr>";
+  });
+  return uit + "</table>";
+}
+
+function zaakHtml(z, nummer, metAntwoord) {
+  const t1 = kruistabel(z.personen, z.plaatsen, (i, j) => z.aSol[i] === j, metAntwoord);
+  const t2 = kruistabel(z.personen, z.voorwerpen, (i, k) => z.bSol[i] === k, metAntwoord);
+  const t3 = kruistabel(z.plaatsen, z.voorwerpen, (j, k) => z.bSol[z.aSol.indexOf(j)] === k, metAntwoord);
+  const oplossing = z.personen.map((p, i) =>
+    `${p.naam} was ${z.plaatsen[z.aSol[i]].waar} ${z.plaatsen[z.aSol[i]].naam} met ${z.voorwerpen[z.bSol[i]].lid} ${z.voorwerpen[z.bSol[i]].naam}`).join(". ") + ".";
+
+  return `
+  <article class="zaak">
+    <h3><span class="nr">Zaak ${nummer}</span> ${z.buit.emoji} ${hoofdletter(z.buit.lid)} verdwenen ${z.buit.naam}</h3>
+    <p class="verhaal">${z.verhaal}</p>
+    <div class="kolom2">
+      <div>
+        <h4>Aanwijzingen</h4>
+        <ol class="aanwijzingen">${z.aanwijzingen.map((a) => `<li>${a}</li>`).join("")}</ol>
+        ${staat.tip && !metAntwoord ? '<p class="tip">Zet een <b>✓</b> als iets zeker klopt en een <b>✗</b> als het zeker niet kan. Streep een rij en een kolom weg zodra je een ✓ zet.</p>' : ""}
+      </div>
+      <div class="tabellen">
+        <div class="tabelvak"><h5>Wie was waar?</h5>${t1}</div>
+        <div class="tabelvak"><h5>Wie had wat bij zich?</h5>${t2}</div>
+        <div class="tabelvak"><h5>Wat lag waar?</h5>${t3}</div>
+      </div>
+    </div>
+    <p class="dader">Wie heeft het gedaan? ${metAntwoord
+      ? `<b class="ja">${z.personen[z.dader].naam}</b>`
+      : '<span class="lijn"></span>'}</p>
+    ${metAntwoord ? `<p class="oplossing">${oplossing}</p>` : ""}
+  </article>`;
+}
+
+function maakBlad() {
+  $("melding").textContent = "";
+  const code = staat.code.trim() || String(Math.floor(1000 + Math.random() * 9000));
+  $("code").value = code; staat.code = code; bewaar();
+  const r = maakRandom(zaadje(code + "|" + staat.niveau + "|" + staat.aantal));
+
+  const zaken = [], gezien = new Set();
+  let pogingen = 0;
+  while (zaken.length < staat.aantal && pogingen < staat.aantal * 40) {
+    pogingen++;
+    const z = maakZaak(r, staat.niveau);
+    if (!z || gezien.has(z.sleutel)) continue;
+    gezien.add(z.sleutel); zaken.push(z);
+  }
+  if (!zaken.length) { $("melding").textContent = "Het maken lukte niet. Probeer het nog een keer."; return; }
+  if (zaken.length < staat.aantal) $("melding").textContent = `Er zijn ${zaken.length} zaken gemaakt in plaats van ${staat.aantal}.`;
+
+  const naamregel = staat.naam ? `<div class="regels"><div>Naam <span></span></div><div>Datum <span></span></div></div>` : "";
+  let html = `
+    <div class="bladkop"><h2>${staat.titel || "Murdoku"}</h2>${naamregel}</div>
+    <div class="zaken" style="font-size:${staat.grootte}px;">
+      ${zaken.map((z, i) => zaakHtml(z, i + 1, false)).join('<div class="paginabreak"></div>')}
+    </div>
+    <div class="bladvoet"><span>Lesmateriaal Blink · murdoku</span><span>code ${code}</span></div>`;
+  if (staat.antwoord) {
+    html += `
+      <div class="paginabreak"></div>
+      <div class="bladkop" style="margin-top:22px;"><h2>Antwoorden · ${staat.titel || "Murdoku"}</h2></div>
+      <div class="zaken" style="font-size:${staat.grootte}px;">
+        ${zaken.map((z, i) => zaakHtml(z, i + 1, true)).join("")}
+      </div>
+      <div class="bladvoet"><span>Lesmateriaal Blink · antwoordblad</span><span>code ${code}</span></div>`;
+  }
+  $("blad").innerHTML = html;
+}
+
+/* ---- knoppen ---- */
+$("niveauSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-niveau]"); if (!b) return;
+  staat.niveau = Number(b.dataset.niveau);
+  [...document.querySelectorAll("#niveauSeg button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.niveau) === staat.niveau));
+  bewaar();
+});
+[["tipChip", "tip"], ["antwoordChip", "antwoord"], ["naamChip", "naam"]].forEach(([id, sleutel]) => {
+  $(id).addEventListener("click", () => { staat[sleutel] = !staat[sleutel]; $(id).classList.toggle("aan", staat[sleutel]); bewaar(); });
+});
+["titel", "aantal", "grootte", "code"].forEach((id) => {
+  $(id).addEventListener("change", () => {
+    staat[id] = ["aantal", "grootte"].includes(id) ? Number($(id).value) : $(id).value;
+    bewaar();
+  });
+});
+$("maakKnop").addEventListener("click", () => { staat.code = ""; $("code").value = ""; maakBlad(); });
+$("printKnop").addEventListener("click", () => window.print());
+$("printKnop2").addEventListener("click", () => window.print());
+
+[...document.querySelectorAll("#niveauSeg button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.niveau) === staat.niveau));
+$("titel").value = staat.titel; $("aantal").value = staat.aantal;
+$("grootte").value = staat.grootte; $("code").value = staat.code;
+[["tipChip", "tip"], ["antwoordChip", "antwoord"], ["naamChip", "naam"]]
+  .forEach(([id, sleutel]) => $(id).classList.toggle("aan", staat[sleutel]));
+maakBlad();
+
+</script>
+</body>
+</html>
