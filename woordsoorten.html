@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Woordsoorten en zinsdelen · Lesmateriaal Blink</title>
+<meta name="description" content="Werkblad voor woordsoorten benoemen en zinnen ontleden. De zinnen worden zelf gemaakt, dus het antwoord klopt altijd. Met hulpkaart, antwoordblad en herhaalcode.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1220px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .vlak{display:grid; grid-template-columns:minmax(300px,.8fr) minmax(0,1.2fr); gap:18px; margin-top:18px; align-items:start;}
+  @media (max-width:980px){ .vlak{grid-template-columns:minmax(0,1fr);} }
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:18px;}
+
+  .groep{margin-bottom:18px;}
+  .groep:last-child{margin-bottom:0;}
+  .groep h2{font-size:17px; margin-bottom:10px;}
+  .groep .klein{font-size:13px; color:var(--muted); margin:-6px 0 10px;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .velden{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px;}
+  .veld label{display:block; font-size:12.5px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; color:var(--muted); margin-bottom:4px;}
+  .veld input, .veld select{width:100%; font:inherit; font-size:15px; padding:10px 12px; border:1px solid var(--line-2); border-radius:13px; background:#fff; color:var(--ink);}
+  .knoppen{display:flex; flex-wrap:wrap; gap:9px; margin-top:6px;}
+  .knop{font:inherit; font-size:15px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:15px; padding:12px 17px; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent;}
+  .melding{font-size:14px; color:#b45309; margin-top:8px; min-height:20px;}
+
+  /* Het werkblad */
+  .bladvak{padding:0; overflow:hidden;}
+  .blad{background:#fff; padding:26px 30px 34px; font-size:16px;}
+  .bladkop{display:flex; align-items:flex-end; gap:16px; border-bottom:2px solid #e6e9f5; padding-bottom:12px; margin-bottom:18px; flex-wrap:wrap;}
+  .bladkop h2{font-size:24px;}
+  .bladkop .regels{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:#5b647f;}
+  .bladkop .regels span{display:inline-block; min-width:140px; border-bottom:1.5px dotted #b8c0d8; padding-bottom:2px;}
+  .opgaven{display:grid; gap:13px 24px;}
+  .opg{padding:8px 4px 10px; border-bottom:1px dotted #dfe3f0; break-inside:avoid;}
+  .opg .nr{font-size:12px; color:#9aa3bd; margin-right:6px;}
+  .opg .vraag{font-weight:700; line-height:1.45;}
+  .opg .lijn{display:inline-block; border-bottom:1.5px solid #c9cfe3; min-width:76px; height:1.15em; vertical-align:-2px;}
+  .opg .antwoord{font-weight:800; color:var(--accent); font-variant-numeric:tabular-nums; margin-top:3px;}
+  .opg .hint{font-size:12.5px; color:#8b93ad; margin-top:3px;}
+
+  .bladvoet{margin-top:22px; font-size:12px; color:#9aa3bd; display:flex; justify-content:space-between; gap:12px;}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .bron{font-size:13.5px; line-height:1.5; color:#4b5563; padding-left:22px; text-indent:-22px; margin-top:6px;}
+  .bron a{color:var(--accent); word-break:break-word;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  @media print{
+    body{background:#fff;}
+    .app{max-width:none; padding:0;}
+    .kop, .instellingen, details.uitleg, .voet{display:none;}
+    .bladvak{box-shadow:none; border:none; padding:0;}
+    .blad{padding:0; font-size:15px;}
+    .paginabreak{break-before:page;}
+    @page{size:A4 portrait; margin:14mm;}
+  }
+
+  /* Taalblad */
+  .opgaven{gap:15px 26px;}
+  .opg{padding:9px 4px 11px;}
+  .opg .zin{font-weight:700; line-height:1.5;}
+  .opg .zin u{text-decoration:none; border-bottom:2.5px solid var(--accent); padding-bottom:1px;}
+  .opg .vraag2{font-size:.93em; color:#39435a; margin-top:5px; line-height:1.7;}
+  .opg .vraag2 b{color:var(--ink);}
+  .opg .lijn{display:inline-block; border-bottom:1.5px solid #c9cfe3; min-width:9em; height:1.15em; vertical-align:-3px;}
+  .opg .lijn.breed{min-width:16em;}
+  .opg .antwoord{color:var(--accent); font-weight:800;}
+
+  .hulp{border:1.5px solid #dfe3f0; border-radius:14px; padding:12px 15px 13px; margin-bottom:18px; break-inside:avoid;}
+  .hulp h3{font-size:14px; letter-spacing:.5px; text-transform:uppercase; color:var(--muted); margin-bottom:8px;}
+  table.hulptabel{border-collapse:collapse; width:100%;}
+  table.hulptabel th{text-align:left; font-weight:800; font-size:.86em; padding:3px 12px 3px 0; white-space:nowrap; vertical-align:top;}
+  table.hulptabel td{font-size:.86em; color:#5b647f; padding:3px 12px 3px 0; vertical-align:top;}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="kop">
+    <span class="logo" aria-hidden="true">✏️</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · taal</div>
+      <h1>Woordsoorten en zinsdelen</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="printKnop" type="button">🖨 Afdrukken</button>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <div class="vlak">
+    <section class="kaart instellingen" aria-label="Instellingen">
+      <div class="groep">
+        <h2>Wat oefenen we?</h2>
+        <div class="chips" id="oefening">
+          <button class="chip aan" type="button" data-oefening="soort"><span class="bol"></span>Welk soort woord is dit?</button>
+          <button class="chip" type="button" data-oefening="zoek"><span class="bol"></span>Zoek alle woorden van één soort</button>
+          <button class="chip" type="button" data-oefening="deel"><span class="bol"></span>Zin ontleden</button>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Welke woordsoorten?</h2>
+        <div class="chips" id="soorten">
+          <button class="chip aan" type="button" data-soort="lidwoord"><span class="bol"></span>lidwoord</button>
+          <button class="chip aan" type="button" data-soort="zelfstandig"><span class="bol"></span>zelfstandig naamwoord</button>
+          <button class="chip aan" type="button" data-soort="werkwoord"><span class="bol"></span>werkwoord</button>
+          <button class="chip aan" type="button" data-soort="bijvoeglijk"><span class="bol"></span>bijvoeglijk naamwoord</button>
+          <button class="chip" type="button" data-soort="voorzetsel"><span class="bol"></span>voorzetsel</button>
+          <button class="chip" type="button" data-soort="voornaamwoord"><span class="bol"></span>voornaamwoord</button>
+          <button class="chip" type="button" data-soort="telwoord"><span class="bol"></span>telwoord</button>
+          <button class="chip" type="button" data-soort="bijwoord"><span class="bol"></span>bijwoord</button>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Welke zinsdelen?</h2>
+        <p class="klein">Alleen nodig bij "Zin ontleden".</p>
+        <div class="chips" id="delen">
+          <button class="chip aan" type="button" data-deel="onderwerp"><span class="bol"></span>onderwerp</button>
+          <button class="chip aan" type="button" data-deel="persoonsvorm"><span class="bol"></span>persoonsvorm</button>
+          <button class="chip" type="button" data-deel="lijdend"><span class="bol"></span>lijdend voorwerp</button>
+          <button class="chip" type="button" data-deel="bepaling"><span class="bol"></span>bijwoordelijke bepaling</button>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Het blad</h2>
+        <div class="velden">
+          <div class="veld"><label for="titel">Titel</label><input id="titel" type="text" value="Woordsoorten" maxlength="40"></div>
+          <div class="veld"><label for="aantal">Aantal zinnen</label><input id="aantal" type="number" min="4" max="40" step="1" value="12"></div>
+          <div class="veld"><label for="kolommen">Kolommen</label>
+            <select id="kolommen"><option value="1" selected>1</option><option value="2">2</option></select></div>
+          <div class="veld"><label for="grootte">Lettergrootte</label>
+            <select id="grootte"><option value="14">gewoon</option><option value="16" selected>groot</option><option value="19">extra groot</option></select></div>
+          <div class="veld"><label for="code">Herhaalcode</label><input id="code" type="text" maxlength="8" placeholder="bijv. 4821"></div>
+        </div>
+        <div class="chips" style="margin-top:10px;">
+          <button class="chip aan" type="button" id="hulpChip"><span class="bol"></span>Hulpkaart op het blad</button>
+          <button class="chip aan" type="button" id="antwoordChip"><span class="bol"></span>Antwoordblad erbij</button>
+          <button class="chip aan" type="button" id="naamChip"><span class="bol"></span>Regel voor naam en datum</button>
+        </div>
+      </div>
+
+      <div class="knoppen">
+        <button class="knop primair" id="maakKnop" type="button">Maak het werkblad</button>
+        <button class="knop" id="printKnop2" type="button">🖨 Afdrukken</button>
+      </div>
+      <p class="melding" id="melding"></p>
+    </section>
+
+    <section class="kaart bladvak" aria-label="Werkblad">
+      <div class="blad" id="blad"></div>
+    </section>
+  </div>
+
+  <details class="uitleg">
+    <summary>Hoe dit werkblad in elkaar zit (voor de leerkracht)</summary>
+    <p>De zinnen op dit blad komen niet uit een tekst die ik heb ontleed. Ze worden andersom gemaakt: de app zet zelf een zin in elkaar uit losse bouwstenen, en weet daardoor van elk woord precies wat het is. Een lidwoord staat als lidwoord in de bouwstenen, dus het antwoord kan niet fout zijn. Dat is de reden dat ik het zo heb gebouwd: bij taal is automatisch ontleden juist heel foutgevoelig.</p>
+    <h3>Wat er in de zinnen zit</h3>
+    <ul>
+      <li>Alle naamwoorden staan met hun eigen lidwoord in de lijst, dus je krijgt nooit "de boek".</li>
+      <li>Het bijvoeglijk naamwoord past zich aan: "het kleine huis", maar "een klein huis". Die regel zit erin.</li>
+      <li>Werkwoorden staan voluit opgeslagen, in de vorm bij hij en bij wij. Zo krijg je geen zelfverzonnen vervoegingen.</li>
+      <li>Bij "zin ontleden" vraagt de app alleen naar een bijwoordelijke bepaling als er precies één in de zin staat.</li>
+    </ul>
+    <h3>Drie soorten opgaven</h3>
+    <ul>
+      <li><b>Welk soort woord is dit?</b> Eén woord is onderstreept en het kind schrijft op wat het is.</li>
+      <li><b>Zoek alle woorden van één soort.</b> Het kind schrijft bijvoorbeeld alle zelfstandige naamwoorden uit de zin op.</li>
+      <li><b>Zin ontleden.</b> Vragen naar het onderwerp, de persoonsvorm, het lijdend voorwerp of de bijwoordelijke bepaling.</li>
+    </ul>
+    <h3>Hoe ik het gebruik</h3>
+    <ul>
+      <li>Begin met twee of drie woordsoorten aan en de hulpkaart erbij. Zet de hulpkaart uit zodra het gaat.</li>
+      <li>Met een <b>herhaalcode</b> krijgt de hele klas hetzelfde blad, of print je hetzelfde blad later nog een keer.</li>
+      <li>Jezelf iets laten ophalen werkt beter dan het nog een keer uitgelegd krijgen. Kort en vaak oefenen met terugkijken op wat fout ging is een van de sterkst onderbouwde manieren van oefenen (Dunlosky et al., 2013).</li>
+    </ul>
+    <h3>Bronnen</h3>
+    <p class="bron">Dunlosky, J., Rawson, K. A., Marsh, E. J., Nathan, M. J., &amp; Willingham, D. T. (2013). Improving students' learning with effective learning techniques: Promising directions from cognitive and educational psychology. <i>Psychological Science in the Public Interest, 14</i>(1), 4-58. <a href="https://doi.org/10.1177/1529100612453266">https://doi.org/10.1177/1529100612453266</a></p>
+    <p class="bron">SLO. (2025). <i>Definitieve conceptkerndoelen Nederlands: Herziene versie 2025</i>. Geraadpleegd op 23 september 2026, van <a href="https://www.slo.nl/thema/meer/actualisatie-kerndoelen-examenprogramma/actualisatie-kerndoelen/definitieve-conceptkerndoelen-nederlands/">https://www.slo.nl/thema/meer/actualisatie-kerndoelen-examenprogramma/actualisatie-kerndoelen/definitieve-conceptkerndoelen-nederlands/</a></p>
+  </details>
+
+  <footer class="voet">Woordsoorten en zinsdelen · onderdeel van <a href="index.html">Lesmateriaal Blink</a> · groep 5 tot en met 8</footer>
+</div>
+
+<script>
+/* ---- de woorden waarmee ik zinnen bouw ----
+   Ik sla alles voluit op (enkelvoud, meervoud, lidwoord, verbogen vorm),
+   zodat de zinnen altijd kloppen en ik niets hoef af te leiden. */
+
+const PERSONEN = [
+  { ev: "meester", mv: "meesters", lid: "de" }, { ev: "juf", mv: "juffen", lid: "de" },
+  { ev: "jongen", mv: "jongens", lid: "de" }, { ev: "meisje", mv: "meisjes", lid: "het" },
+  { ev: "bakker", mv: "bakkers", lid: "de" }, { ev: "buurman", mv: "buurmannen", lid: "de" },
+  { ev: "kok", mv: "koks", lid: "de" }, { ev: "schilder", mv: "schilders", lid: "de" },
+  { ev: "kapper", mv: "kappers", lid: "de" }, { ev: "boer", mv: "boeren", lid: "de" },
+];
+const DIEREN = [
+  { ev: "hond", mv: "honden", lid: "de", acties: ["rent", "slaapt", "loopt", "springt", "wacht", "zwemt"] },
+  { ev: "kat", mv: "katten", lid: "de", acties: ["rent", "slaapt", "loopt", "springt", "wacht"] },
+  { ev: "muis", mv: "muizen", lid: "de", acties: ["rent", "slaapt", "loopt", "springt", "wacht"] },
+  { ev: "vogel", mv: "vogels", lid: "de", acties: ["slaapt", "springt", "wacht", "zingt"] },
+  { ev: "paard", mv: "paarden", lid: "het", acties: ["rent", "slaapt", "loopt", "springt", "wacht"] },
+  { ev: "konijn", mv: "konijnen", lid: "het", acties: ["rent", "slaapt", "loopt", "springt", "wacht"] },
+  { ev: "kip", mv: "kippen", lid: "de", acties: ["loopt", "slaapt", "wacht", "springt"] },
+  { ev: "vis", mv: "vissen", lid: "de", acties: ["slaapt", "wacht", "zwemt"] },
+];
+const DINGEN = [
+  { ev: "boek", mv: "boeken", lid: "het" }, { ev: "tas", mv: "tassen", lid: "de" },
+  { ev: "fiets", mv: "fietsen", lid: "de" }, { ev: "bal", mv: "ballen", lid: "de" },
+  { ev: "brief", mv: "brieven", lid: "de" }, { ev: "raam", mv: "ramen", lid: "het" },
+  { ev: "schrift", mv: "schriften", lid: "het" }, { ev: "kaart", mv: "kaarten", lid: "de" },
+  { ev: "koek", mv: "koeken", lid: "de" }, { ev: "lamp", mv: "lampen", lid: "de" },
+  { ev: "verhaal", mv: "verhalen", lid: "het" }, { ev: "potlood", mv: "potloden", lid: "het" },
+];
+const PLAATSEN = [
+  { ev: "tuin", lid: "de", vz: ["in"] },
+  { ev: "klas", lid: "de", vz: ["in", "voor", "achter"] },
+  { ev: "keuken", lid: "de", vz: ["in"] },
+  { ev: "straat", lid: "de", vz: ["in"] },
+  { ev: "school", lid: "de", vz: ["op", "bij", "naast"] },
+  { ev: "winkel", lid: "de", vz: ["in", "bij", "voor"] },
+  { ev: "park", lid: "het", vz: ["in", "bij"] },
+  { ev: "plein", lid: "het", vz: ["op", "bij"] },
+  { ev: "bos", lid: "het", vz: ["in", "bij"] },
+  { ev: "strand", lid: "het", vz: ["op", "bij"] },
+];
+// bij elk bijvoeglijk naamwoord staat waar het bij past, anders krijg je "de spannende hond"
+const BIJVOEGLIJK = [
+  { kaal: "groot", verbogen: "grote", bij: ["persoon", "dier", "ding"] },
+  { kaal: "klein", verbogen: "kleine", bij: ["persoon", "dier", "ding"] },
+  { kaal: "dik", verbogen: "dikke", bij: ["persoon", "dier", "ding"] },
+  { kaal: "snel", verbogen: "snelle", bij: ["persoon", "dier", "ding"], alleen: ["fiets"] },
+  { kaal: "oud", verbogen: "oude", bij: ["persoon", "dier", "ding"] },
+  { kaal: "nieuw", verbogen: "nieuwe", bij: ["persoon", "ding"] },
+  { kaal: "mooi", verbogen: "mooie", bij: ["persoon", "dier", "ding"] },
+  { kaal: "vies", verbogen: "vieze", bij: ["dier", "ding"] },
+  { kaal: "lief", verbogen: "lieve", bij: ["persoon", "dier"] },
+  { kaal: "stil", verbogen: "stille", bij: ["persoon", "dier"] },
+  { kaal: "warm", verbogen: "warme", bij: ["ding"], alleen: ["koek", "lamp", "tas"] },
+  { kaal: "spannend", verbogen: "spannende", bij: ["ding"], alleen: ["boek", "brief", "verhaal", "kaart", "schrift"] },
+];
+/* werkwoorden: hij = derde persoon enkelvoud, mv = meervoud en hele werkwoord */
+// bij elk werkwoord staat wat je ermee kunt doen, zodat er geen rare zinnen ontstaan
+const WW_MET_LV = [
+  { hij: "leest", mv: "lezen", voorwerpen: ["boek", "brief", "verhaal", "kaart", "schrift"] },
+  { hij: "schrijft", mv: "schrijven", voorwerpen: ["brief", "verhaal", "kaart"] },
+  { hij: "tekent", mv: "tekenen", voorwerpen: ["kaart", "fiets", "bal", "lamp"] },
+  { hij: "koopt", mv: "kopen", voorwerpen: ["boek", "tas", "fiets", "bal", "koek", "lamp", "schrift", "potlood", "kaart"] },
+  { hij: "pakt", mv: "pakken", voorwerpen: ["boek", "tas", "bal", "koek", "schrift", "potlood", "brief", "kaart"] },
+  { hij: "zoekt", mv: "zoeken", voorwerpen: ["boek", "tas", "fiets", "bal", "potlood", "brief", "kaart", "schrift"] },
+  { hij: "vindt", mv: "vinden", voorwerpen: ["boek", "tas", "bal", "potlood", "brief", "kaart"] },
+  { hij: "draagt", mv: "dragen", voorwerpen: ["tas", "bal", "boek", "schrift", "lamp"] },
+  { hij: "wast", mv: "wassen", voorwerpen: ["fiets", "raam", "tas"] },
+  { hij: "eet", mv: "eten", voorwerpen: ["koek"] },
+  { hij: "maakt", mv: "maken", voorwerpen: ["koek", "kaart", "verhaal", "lamp"] },
+  { hij: "verft", mv: "verven", voorwerpen: ["raam", "fiets", "lamp"] },
+];
+const dingMet = (naam) => DINGEN.find((d) => d.ev === naam);
+const WW_ZONDER_LV = [
+  { hij: "rent", mv: "rennen" }, { hij: "slaapt", mv: "slapen" }, { hij: "loopt", mv: "lopen" },
+  { hij: "springt", mv: "springen" }, { hij: "wacht", mv: "wachten" }, { hij: "fietst", mv: "fietsen" },
+  { hij: "zwemt", mv: "zwemmen" }, { hij: "lacht", mv: "lachen" }, { hij: "zingt", mv: "zingen" },
+];
+const VOORNAAMWOORDEN = [
+  { woord: "hij", meervoud: false }, { woord: "zij", meervoud: false },
+  { woord: "wij", meervoud: true }, { woord: "zij", meervoud: true },
+];
+const TELWOORDEN = ["twee", "drie", "vier", "vijf", "zes", "zeven", "acht", "negen", "tien"];
+const BIJWOORDEN = ["vaak", "altijd", "soms", "nooit", "graag", "meteen"];
+
+const SOORTNAAM = {
+  lidwoord: "lidwoord", zelfstandig: "zelfstandig naamwoord", werkwoord: "werkwoord",
+  bijvoeglijk: "bijvoeglijk naamwoord", voorzetsel: "voorzetsel",
+  voornaamwoord: "persoonlijk voornaamwoord", telwoord: "telwoord", bijwoord: "bijwoord",
+};
+const DEELNAAM = {
+  onderwerp: { naam: "onderwerp", lid: "het" },
+  persoonsvorm: { naam: "persoonsvorm", lid: "de" },
+  lijdend: { naam: "lijdend voorwerp", lid: "het" },
+  bepaling: { naam: "bijwoordelijke bepaling", lid: "de" },
+};
+
+
+const $ = (id) => document.getElementById(id);
+const BEWAAR = "blink-woordsoorten";
+
+let staat = { oefening: ["soort"], soorten: ["lidwoord", "zelfstandig", "werkwoord", "bijvoeglijk"],
+  delen: ["onderwerp", "persoonsvorm"], titel: "Woordsoorten", aantal: 12, kolommen: 1, grootte: 16,
+  code: "", hulp: true, antwoord: true, naam: true };
+try { const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}"); Object.keys(staat).forEach((k) => { if (k in b) staat[k] = b[k]; }); } catch (e) {}
+const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
+
+function zaadje(tekst) {
+  let h = 2166136261;
+  for (let i = 0; i < tekst.length; i++) { h ^= tekst.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+function maakRandom(zaad) {
+  let a = zaad >>> 0;
+  return function () {
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const kies = (r, lijst) => lijst[Math.floor(r() * lijst.length)];
+const hoofdletter = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+
+/* een woordgroep met lidwoord en eventueel een bijvoeglijk naamwoord */
+function groep(r, zn, deel, { bepaald = true, metBn = false, wat = "ding" } = {}) {
+  const uit = [];
+  const lidwoord = bepaald ? zn.lid : "een";
+  uit.push({ tekst: lidwoord, soort: "lidwoord", deel });
+  if (metBn) {
+    // "alleen" beperkt een bijvoeglijk naamwoord binnen de dingen, niet bij personen en dieren
+    const passend = BIJVOEGLIJK.filter((b) => b.bij.includes(wat)
+      && (!b.alleen || wat !== "ding" || b.alleen.includes(zn.ev)));
+    const bn = kies(r, passend.length ? passend : BIJVOEGLIJK.filter((b) => b.bij.includes(wat) && !b.alleen));
+    // na "een" bij een het-woord blijft het bijvoeglijk naamwoord onverbogen
+    const vorm = (!bepaald && zn.lid === "het") ? bn.kaal : bn.verbogen;
+    uit.push({ tekst: vorm, soort: "bijvoeglijk", deel });
+  }
+  uit.push({ tekst: zn.ev, soort: "zelfstandig", deel });
+  return uit;
+}
+function plaatsGroep(r, deel) {
+  const pl = kies(r, PLAATSEN);
+  return [
+    { tekst: kies(r, pl.vz), soort: "voorzetsel", deel },
+    { tekst: pl.lid, soort: "lidwoord", deel },
+    { tekst: pl.ev, soort: "zelfstandig", deel },
+  ];
+}
+
+const SJABLONEN = [
+  // De meester leest het spannende boek in de klas.
+  (r) => {
+    const ww = kies(r, WW_MET_LV);
+    return [
+      ...groep(r, kies(r, PERSONEN), "onderwerp", { metBn: r() < .35, wat: "persoon" }),
+      { tekst: ww.hij, soort: "werkwoord", deel: "persoonsvorm" },
+      ...groep(r, dingMet(kies(r, ww.voorwerpen)), "lijdend", { bepaald: r() < .5, metBn: r() < .6 }),
+      ...plaatsGroep(r, "bepaling"),
+    ];
+  },
+  // De kleine hond rent in de tuin.
+  (r) => {
+    const dier = kies(r, DIEREN);
+    const actie = kies(r, dier.acties);
+    const ww = WW_ZONDER_LV.find((w) => w.hij === actie);
+    return [
+      ...groep(r, dier, "onderwerp", { metBn: r() < .6, wat: "dier" }),
+      { tekst: ww.hij, soort: "werkwoord", deel: "persoonsvorm" },
+      ...plaatsGroep(r, "bepaling"),
+    ];
+  },
+  // Hij pakt drie boeken.
+  (r) => {
+    const vnw = kies(r, VOORNAAMWOORDEN);
+    const ww = kies(r, WW_MET_LV);
+    const zn = dingMet(kies(r, ww.voorwerpen));
+    return [
+      { tekst: vnw.woord, soort: "voornaamwoord", deel: "onderwerp" },
+      { tekst: vnw.meervoud ? ww.mv : ww.hij, soort: "werkwoord", deel: "persoonsvorm" },
+      { tekst: kies(r, TELWOORDEN), soort: "telwoord", deel: "lijdend" },
+      { tekst: zn.mv, soort: "zelfstandig", deel: "lijdend" },
+    ];
+  },
+  // De juf leest vaak een mooi verhaal.
+  (r) => {
+    const ww = kies(r, WW_MET_LV);
+    return [
+      ...groep(r, kies(r, PERSONEN), "onderwerp", { wat: "persoon" }),
+      { tekst: ww.hij, soort: "werkwoord", deel: "persoonsvorm" },
+      { tekst: kies(r, BIJWOORDEN), soort: "bijwoord", deel: "bepaling" },
+      ...groep(r, dingMet(kies(r, ww.voorwerpen)), "lijdend", { bepaald: r() < .4, metBn: r() < .7 }),
+    ];
+  },
+  // De vieze kat slaapt soms op het strand.
+  (r) => {
+    const dier = kies(r, DIEREN);
+    const actie = kies(r, dier.acties);
+    const ww = WW_ZONDER_LV.find((w) => w.hij === actie);
+    return [
+      ...groep(r, dier, "onderwerp", { metBn: true, wat: "dier" }),
+      { tekst: ww.hij, soort: "werkwoord", deel: "persoonsvorm" },
+      { tekst: kies(r, BIJWOORDEN), soort: "bijwoord", deel: "bepaling" },
+      ...plaatsGroep(r, "bepaling2"),
+    ];
+  },
+];
+
+function maakZin(r) {
+  const woorden = kies(r, SJABLONEN)(r);
+  const tekst = woorden.map((w, i) => (i === 0 ? hoofdletter(w.tekst) : w.tekst)).join(" ") + ".";
+  return { woorden, tekst };
+}
+
+/* ---- de opgaven ---- */
+function maakOpgave(r, welke) {
+  for (let poging = 0; poging < 60; poging++) {
+    const zin = maakZin(r);
+
+    if (welke === "soort") {
+      const kandidaten = zin.woorden.map((w, i) => ({ ...w, i })).filter((w) => staat.soorten.includes(w.soort));
+      if (!kandidaten.length) continue;
+      const doel = kies(r, kandidaten);
+      return {
+        sleutel: "s" + zin.tekst + doel.i,
+        zin: zinHtml(zin, doel.i),
+        vraag: `Wat voor soort woord is <b>${doel.tekst}</b>?`,
+        antwoord: SOORTNAAM[doel.soort],
+      };
+    }
+
+    if (welke === "zoek") {
+      const soort = kies(r, staat.soorten);
+      const raak = zin.woorden.filter((w) => w.soort === soort);
+      if (raak.length < 1) continue;
+      return {
+        sleutel: "z" + zin.tekst + soort,
+        zin: zinHtml(zin, -1),
+        vraag: `Schrijf alle woorden op die een <b>${SOORTNAAM[soort]}</b> zijn.`,
+        antwoord: raak.map((w) => w.tekst).join(", "),
+        breed: true,
+      };
+    }
+
+    // zinsdeel
+    const aanwezig = staat.delen.filter((d) => zin.woorden.some((w) => w.deel === d));
+    if (!aanwezig.length) continue;
+    const deel = kies(r, aanwezig);
+    // alleen vragen naar een bepaling als er precies één in de zin staat
+    if (deel === "bepaling" && zin.woorden.some((w) => w.deel === "bepaling2")) continue;
+    const index = zin.woorden.findIndex((w) => w.deel === deel);
+    const stukken = zin.woorden.filter((w) => w.deel === deel).map((w) => w.tekst);
+    // staat het zinsdeel vooraan, dan krijgt het antwoord een hoofdletter
+    const antwoord = index === 0 ? hoofdletter(stukken.join(" ")) : stukken.join(" ");
+    return {
+      sleutel: "d" + zin.tekst + deel,
+      zin: zinHtml(zin, -1),
+      vraag: `Wat is ${DEELNAAM[deel].lid} <b>${DEELNAAM[deel].naam}</b>?`,
+      antwoord,
+    };
+  }
+  return null;
+}
+
+function zinHtml(zin, markeer) {
+  return zin.woorden.map((w, i) => {
+    const t = i === 0 ? hoofdletter(w.tekst) : w.tekst;
+    return i === markeer ? `<u>${t}</u>` : t;
+  }).join(" ") + ".";
+}
+
+const HULP = [
+  ["lidwoord", "de, het, een", "staat voor een zelfstandig naamwoord"],
+  ["zelfstandig naamwoord", "hond, boek, school", "je kunt er de, het of een voor zetten"],
+  ["werkwoord", "leest, rent, koopt", "het zegt wat er gebeurt"],
+  ["bijvoeglijk naamwoord", "grote, vieze, nieuwe", "het zegt hoe iets is"],
+  ["voorzetsel", "in, op, naast, bij", "het zegt waar iets is"],
+  ["persoonlijk voornaamwoord", "ik, jij, hij, wij", "het staat in plaats van een naam"],
+  ["telwoord", "twee, drie, tien", "het zegt hoeveel"],
+  ["bijwoord", "vaak, altijd, nooit", "het zegt iets over het werkwoord"],
+];
+function hulpHtml() {
+  const tonen = HULP.filter(([naam]) => Object.values(SOORTNAAM).includes(naam)
+    ? staat.soorten.some((s) => SOORTNAAM[s] === naam) : false);
+  const rijen = (staat.oefening.includes("deel") && !staat.oefening.some((o) => o !== "deel"))
+    ? [["het onderwerp", "De meester leest.", "wie of wat doet het?"],
+       ["de persoonsvorm", "De meester leest.", "zet de zin in een andere tijd, dat woord verandert"],
+       ["het lijdend voorwerp", "Hij pakt het boek.", "wie of wat + gezegde + onderwerp"],
+       ["de bijwoordelijke bepaling", "Hij leest in de klas.", "waar, wanneer of hoe"]]
+    : tonen;
+  if (!rijen.length) return "";
+  return `<div class="hulp"><h3>Hulpkaart</h3><table class="hulptabel">
+    ${rijen.map(([a, b, c]) => `<tr><th>${a}</th><td><i>${b}</i></td><td>${c}</td></tr>`).join("")}
+  </table></div>`;
+}
+
+function maakBlad() {
+  if (!staat.oefening.length) { $("melding").textContent = "Kies eerst wat je wilt oefenen."; return; }
+  if (staat.oefening.some((o) => o !== "deel") && !staat.soorten.length) {
+    $("melding").textContent = "Kies eerst minstens één woordsoort."; return;
+  }
+  if (staat.oefening.includes("deel") && !staat.delen.length) {
+    $("melding").textContent = "Kies eerst minstens één zinsdeel."; return;
+  }
+  $("melding").textContent = "";
+  const code = staat.code.trim() || String(Math.floor(1000 + Math.random() * 9000));
+  $("code").value = code; staat.code = code; bewaar();
+  const r = maakRandom(zaadje(code + "|" + staat.oefening.join(",") + "|" + staat.soorten.join(",") + "|" + staat.delen.join(",") + "|" + staat.aantal));
+
+  const opgaven = [], gezien = new Set();
+  for (let i = 0; i < staat.aantal; i++) {
+    const welke = staat.oefening[i % staat.oefening.length];
+    let o = null;
+    for (let p = 0; p < 40; p++) {
+      o = maakOpgave(r, welke);
+      if (o && !gezien.has(o.sleutel)) break;
+    }
+    if (!o) continue;
+    gezien.add(o.sleutel); opgaven.push(o);
+  }
+  if (!opgaven.length) { $("melding").textContent = "Deze combinatie levert geen zinnen op. Kies er een woordsoort bij."; return; }
+
+  const naamregel = staat.naam ? `<div class="regels"><div>Naam <span></span></div><div>Datum <span></span></div></div>` : "";
+  const kolomcss = `grid-template-columns:repeat(${staat.kolommen},minmax(0,1fr)); font-size:${staat.grootte}px;`;
+  const rij = (o, i, a) => `
+    <div class="opg">
+      <div class="zin"><span class="nr">${i + 1}.</span>${o.zin}</div>
+      <div class="vraag2">${o.vraag} ${a ? `<b class="antwoord">${o.antwoord}</b>` : `<span class="lijn${o.breed ? " breed" : ""}"></span>`}</div>
+    </div>`;
+
+  let html = `
+    <div class="bladkop"><h2>${staat.titel || "Woordsoorten"}</h2>${naamregel}</div>
+    ${staat.hulp ? hulpHtml() : ""}
+    <div class="opgaven" style="${kolomcss}">${opgaven.map((o, i) => rij(o, i, false)).join("")}</div>
+    <div class="bladvoet"><span>Lesmateriaal Blink · taal</span><span>code ${code}</span></div>`;
+  if (staat.antwoord) {
+    html += `
+      <div class="paginabreak"></div>
+      <div class="bladkop" style="margin-top:22px;"><h2>Antwoorden · ${staat.titel || "Woordsoorten"}</h2></div>
+      <div class="opgaven" style="${kolomcss}">${opgaven.map((o, i) => rij(o, i, true)).join("")}</div>
+      <div class="bladvoet"><span>Lesmateriaal Blink · antwoordblad</span><span>code ${code}</span></div>`;
+  }
+  $("blad").innerHTML = html;
+}
+
+/* ---- knoppen ---- */
+["oefening", "soorten", "delen"].forEach((sleutel) => {
+  const data = sleutel === "oefening" ? "oefening" : sleutel === "soorten" ? "soort" : "deel";
+  $(sleutel).addEventListener("click", (e) => {
+    const b = e.target.closest("[data-" + data + "]"); if (!b) return;
+    const w = b.dataset[data];
+    staat[sleutel] = staat[sleutel].includes(w) ? staat[sleutel].filter((x) => x !== w) : [...staat[sleutel], w];
+    b.classList.toggle("aan", staat[sleutel].includes(w));
+    bewaar();
+  });
+});
+[["hulpChip", "hulp"], ["antwoordChip", "antwoord"], ["naamChip", "naam"]].forEach(([id, sleutel]) => {
+  $(id).addEventListener("click", () => { staat[sleutel] = !staat[sleutel]; $(id).classList.toggle("aan", staat[sleutel]); bewaar(); });
+});
+["titel", "aantal", "kolommen", "grootte", "code"].forEach((id) => {
+  $(id).addEventListener("change", () => {
+    staat[id] = ["aantal", "kolommen", "grootte"].includes(id) ? Number($(id).value) : $(id).value;
+    bewaar();
+  });
+});
+$("maakKnop").addEventListener("click", () => { staat.code = ""; $("code").value = ""; maakBlad(); });
+$("printKnop").addEventListener("click", () => window.print());
+$("printKnop2").addEventListener("click", () => window.print());
+
+[["oefening", "oefening"], ["soorten", "soort"], ["delen", "deel"]].forEach(([sleutel, data]) => {
+  [...document.querySelectorAll("#" + sleutel + " [data-" + data + "]")]
+    .forEach((b) => b.classList.toggle("aan", staat[sleutel].includes(b.dataset[data])));
+});
+$("titel").value = staat.titel; $("aantal").value = staat.aantal;
+$("kolommen").value = staat.kolommen; $("grootte").value = staat.grootte; $("code").value = staat.code;
+[["hulpChip", "hulp"], ["antwoordChip", "antwoord"], ["naamChip", "naam"]]
+  .forEach(([id, sleutel]) => $(id).classList.toggle("aan", staat[sleutel]));
+maakBlad();
+
+</script>
+</body>
+</html>

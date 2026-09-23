@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spelling · Lesmateriaal Blink</title>
+<meta name="description" content="Werkblad voor spelling: verdubbelen en verlengen, d of t aan het eind, verkleinwoorden, meervoud met apostrof, ei of ij, au of ou, en werkwoordspelling. Met hulpkaart, antwoordblad en herhaalcode.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1220px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .vlak{display:grid; grid-template-columns:minmax(300px,.8fr) minmax(0,1.2fr); gap:18px; margin-top:18px; align-items:start;}
+  @media (max-width:980px){ .vlak{grid-template-columns:minmax(0,1fr);} }
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:18px;}
+
+  .groep{margin-bottom:18px;}
+  .groep:last-child{margin-bottom:0;}
+  .groep h2{font-size:17px; margin-bottom:10px;}
+  .groep .klein{font-size:13px; color:var(--muted); margin:-6px 0 10px;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .velden{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px;}
+  .veld label{display:block; font-size:12.5px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; color:var(--muted); margin-bottom:4px;}
+  .veld input, .veld select{width:100%; font:inherit; font-size:15px; padding:10px 12px; border:1px solid var(--line-2); border-radius:13px; background:#fff; color:var(--ink);}
+  .knoppen{display:flex; flex-wrap:wrap; gap:9px; margin-top:6px;}
+  .knop{font:inherit; font-size:15px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:15px; padding:12px 17px; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent;}
+  .melding{font-size:14px; color:#b45309; margin-top:8px; min-height:20px;}
+
+  /* Het werkblad */
+  .bladvak{padding:0; overflow:hidden;}
+  .blad{background:#fff; padding:26px 30px 34px; font-size:16px;}
+  .bladkop{display:flex; align-items:flex-end; gap:16px; border-bottom:2px solid #e6e9f5; padding-bottom:12px; margin-bottom:18px; flex-wrap:wrap;}
+  .bladkop h2{font-size:24px;}
+  .bladkop .regels{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:#5b647f;}
+  .bladkop .regels span{display:inline-block; min-width:140px; border-bottom:1.5px dotted #b8c0d8; padding-bottom:2px;}
+  .opgaven{display:grid; gap:13px 24px;}
+  .opg{padding:8px 4px 10px; border-bottom:1px dotted #dfe3f0; break-inside:avoid;}
+  .opg .nr{font-size:12px; color:#9aa3bd; margin-right:6px;}
+  .opg .vraag{font-weight:700; line-height:1.45;}
+  .opg .lijn{display:inline-block; border-bottom:1.5px solid #c9cfe3; min-width:76px; height:1.15em; vertical-align:-2px;}
+  .opg .antwoord{font-weight:800; color:var(--accent); font-variant-numeric:tabular-nums; margin-top:3px;}
+  .opg .hint{font-size:12.5px; color:#8b93ad; margin-top:3px;}
+
+  .bladvoet{margin-top:22px; font-size:12px; color:#9aa3bd; display:flex; justify-content:space-between; gap:12px;}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .bron{font-size:13.5px; line-height:1.5; color:#4b5563; padding-left:22px; text-indent:-22px; margin-top:6px;}
+  .bron a{color:var(--accent); word-break:break-word;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  @media print{
+    body{background:#fff;}
+    .app{max-width:none; padding:0;}
+    .kop, .instellingen, details.uitleg, .voet{display:none;}
+    .bladvak{box-shadow:none; border:none; padding:0;}
+    .blad{padding:0; font-size:15px;}
+    .paginabreak{break-before:page;}
+    @page{size:A4 portrait; margin:14mm;}
+  }
+
+  /* Spellingblad */
+  .opgaven{gap:13px 26px;}
+  .opg{padding:8px 4px 10px;}
+  .opg .vraag{font-weight:700; line-height:1.6;}
+  .opg .extra{font-size:.8em; color:#9aa3bd; margin-top:2px;}
+  .opg .gat{display:inline-block; border-bottom:2px solid #c9cfe3; min-width:1.6em; height:1.15em; vertical-align:-3px;}
+  .opg .gat.breed{min-width:6em;}
+  .opg .pijl{color:#b8c0d8; margin:0 .2em;}
+  .opg .antwoord{color:var(--accent); font-weight:800; margin-left:.4em;}
+
+  .hulp{border:1.5px solid #dfe3f0; border-radius:14px; padding:12px 15px 13px; margin-bottom:18px; break-inside:avoid;}
+  .hulp h3{font-size:14px; letter-spacing:.5px; text-transform:uppercase; color:var(--muted); margin-bottom:8px;}
+  table.hulptabel{border-collapse:collapse; width:100%;}
+  table.hulptabel th{text-align:left; font-weight:800; font-size:.85em; padding:4px 14px 4px 0; white-space:nowrap; vertical-align:top;}
+  table.hulptabel td{font-size:.85em; color:#5b647f; padding:4px 0; vertical-align:top; line-height:1.45;}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="kop">
+    <span class="logo" aria-hidden="true">🔤</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · taal</div>
+      <h1>Spelling</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="printKnop" type="button">🖨 Afdrukken</button>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <div class="vlak">
+    <section class="kaart instellingen" aria-label="Instellingen">
+      <div class="groep">
+        <h2>Woorden langer maken</h2>
+        <div class="chips" id="onderdelen">
+          <button class="chip aan" type="button" data-onderdeel="verdubbel"><span class="bol"></span>Dubbel of niet (pot · poot)</button>
+          <button class="chip aan" type="button" data-onderdeel="dt"><span class="bol"></span>d of t aan het eind</button>
+          <button class="chip" type="button" data-onderdeel="verkleinwoord"><span class="bol"></span>Verkleinwoorden</button>
+          <button class="chip" type="button" data-onderdeel="meervoudS"><span class="bol"></span>Meervoud met 's</button>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Welk woord is goed?</h2>
+        <p class="klein">Twee woorden naast elkaar, het foute mag doorgestreept.</p>
+        <div class="chips" id="dictees">
+          <button class="chip aan" type="button" data-dictee="eiij"><span class="bol"></span>ei of ij</button>
+          <button class="chip" type="button" data-dictee="auou"><span class="bol"></span>au of ou</button>
+          <button class="chip" type="button" data-dictee="iglijk"><span class="bol"></span>-ig of -lijk</button>
+          <button class="chip" type="button" data-dictee="cht"><span class="bol"></span>woorden met -cht</button>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Werkwoordspelling</h2>
+        <div class="chips" id="ww">
+          <button class="chip" type="button" data-ww="ik"><span class="bol"></span>ik + stam</button>
+          <button class="chip" type="button" data-ww="jij"><span class="bol"></span>jij + stam en t</button>
+          <button class="chip" type="button" data-ww="hij"><span class="bol"></span>hij + stam en t</button>
+          <button class="chip" type="button" data-ww="verleden"><span class="bol"></span>verleden tijd</button>
+          <button class="chip" type="button" data-ww="vd"><span class="bol"></span>voltooid deelwoord</button>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Het blad</h2>
+        <div class="velden">
+          <div class="veld"><label for="titel">Titel</label><input id="titel" type="text" value="Spelling" maxlength="40"></div>
+          <div class="veld"><label for="aantal">Aantal opgaven</label><input id="aantal" type="number" min="4" max="60" step="1" value="20"></div>
+          <div class="veld"><label for="kolommen">Kolommen</label>
+            <select id="kolommen"><option value="1">1</option><option value="2" selected>2</option><option value="3">3</option></select></div>
+          <div class="veld"><label for="grootte">Lettergrootte</label>
+            <select id="grootte"><option value="14">gewoon</option><option value="16" selected>groot</option><option value="19">extra groot</option></select></div>
+          <div class="veld"><label for="code">Herhaalcode</label><input id="code" type="text" maxlength="8" placeholder="bijv. 4821"></div>
+        </div>
+        <div class="chips" style="margin-top:10px;">
+          <button class="chip aan" type="button" id="hulpChip"><span class="bol"></span>Hulpkaart met de regels</button>
+          <button class="chip aan" type="button" id="antwoordChip"><span class="bol"></span>Antwoordblad erbij</button>
+          <button class="chip aan" type="button" id="naamChip"><span class="bol"></span>Regel voor naam en datum</button>
+        </div>
+      </div>
+
+      <div class="knoppen">
+        <button class="knop primair" id="maakKnop" type="button">Maak het werkblad</button>
+        <button class="knop" id="printKnop2" type="button">🖨 Afdrukken</button>
+      </div>
+      <p class="melding" id="melding"></p>
+    </section>
+
+    <section class="kaart bladvak" aria-label="Werkblad">
+      <div class="blad" id="blad"></div>
+    </section>
+  </div>
+
+  <details class="uitleg">
+    <summary>Hoe dit werkblad in elkaar zit (voor de leerkracht)</summary>
+    <p>Alle woorden en alle werkwoordsvormen staan voluit in de app. Er wordt niets uitgerekend met een spellingregel. Dat is bewust: juist bij spelling zit de uitzondering in bijna elke regel, en een app die zelf "antwoordde" of "geantwoord" probeert af te leiden, gaat een keer de mist in. Door alles op te schrijven weet ik zeker dat het antwoordblad klopt.</p>
+    <h3>Wat erin zit</h3>
+    <ul>
+      <li><b>Woorden langer maken.</b> Dubbel of niet (pot wordt potten, poot wordt poten), d of t aan het eind, verkleinwoorden en meervoud met een apostrof. Bij d of t staat de langere vorm erbij als steun.</li>
+      <li><b>Welk woord is goed?</b> Twee woorden naast elkaar, één goed en één fout, voor ei of ij, au of ou, -ig of -lijk en woorden met -cht. Het foute woord mag doorgestreept.</li>
+      <li><b>Werkwoordspelling.</b> Ik, jij en hij in de tegenwoordige tijd, de verleden tijd en het voltooid deelwoord. Er zitten zwakke werkwoorden met -te en met -de in, en sterke werkwoorden die van klank veranderen. Ook de klassieke instinkers staan erin: hij wordt, hij vindt, hij antwoordde.</li>
+    </ul>
+    <h3>Hoe ik het gebruik</h3>
+    <ul>
+      <li>Eén categorie tegelijk aanzetten werkt het beste. Zet je er vijf aan, dan springt het kind heen en weer tussen regels en gaat het oefenen verloren.</li>
+      <li>De hulpkaart bovenaan past zich aan: er staan alleen regels op van de categorieën die je hebt aangezet. Zet hem uit zodra het gaat.</li>
+      <li>Kort en vaak oefenen, en jezelf laten ophalen wat je weet, horen bij de sterkst onderbouwde manieren van oefenen (Dunlosky et al., 2013).</li>
+      <li>Met een <b>herhaalcode</b> krijg je precies hetzelfde blad terug. Zo kun je hetzelfde blad na twee weken nog een keer geven en vergelijken.</li>
+    </ul>
+    <h3>Bronnen</h3>
+    <p class="bron">Dunlosky, J., Rawson, K. A., Marsh, E. J., Nathan, M. J., &amp; Willingham, D. T. (2013). Improving students' learning with effective learning techniques: Promising directions from cognitive and educational psychology. <i>Psychological Science in the Public Interest, 14</i>(1), 4-58. <a href="https://doi.org/10.1177/1529100612453266">https://doi.org/10.1177/1529100612453266</a></p>
+    <p class="bron">SLO. (2025). <i>Definitieve conceptkerndoelen Nederlands: Herziene versie 2025</i>. Geraadpleegd op 23 september 2026, van <a href="https://www.slo.nl/thema/meer/actualisatie-kerndoelen-examenprogramma/actualisatie-kerndoelen/definitieve-conceptkerndoelen-nederlands/">https://www.slo.nl/thema/meer/actualisatie-kerndoelen-examenprogramma/actualisatie-kerndoelen/definitieve-conceptkerndoelen-nederlands/</a></p>
+  </details>
+
+  <footer class="voet">Spelling · onderdeel van <a href="index.html">Lesmateriaal Blink</a> · groep 4 tot en met 8</footer>
+</div>
+
+<script>
+/* Alle vormen staan voluit in de lijsten. Ik leid niets af met regels,
+   want juist bij spelling gaat afleiden bijna altijd een keer mis. */
+
+const CATEGORIEEN = {
+  verdubbel: {
+    naam: "Kort of lang: dubbel of niet",
+    regel: "Hoor je één korte klank, dan verdubbel je de medeklinker: pot wordt potten. Hoor je een lange klank, dan niet: poot wordt poten.",
+    paren: [["pot", "potten"], ["poot", "poten"], ["bal", "ballen"], ["baal", "balen"],
+      ["man", "mannen"], ["maan", "manen"], ["bom", "bommen"], ["boom", "bomen"],
+      ["kar", "karren"], ["vel", "vellen"],
+      ["zon", "zonnen"], ["zoon", "zonen"], ["tak", "takken"], ["taak", "taken"],
+      ["mus", "mussen"], ["muur", "muren"], ["rat", "ratten"], ["boot", "boten"],
+      ["bot", "botten"], ["kip", "kippen"], ["stok", "stokken"],
+      ["haas", "hazen"], ["das", "dassen"], ["neus", "neuzen"], ["vis", "vissen"]],
+  },
+  dt: {
+    naam: "d of t aan het eind",
+    regel: "Maak het woord langer. Hoor je een d, dan schrijf je een d: honden, dus hond.",
+    paren: [["hond", "honden"], ["hand", "handen"], ["mand", "manden"], ["bord", "borden"],
+      ["paard", "paarden"], ["woord", "woorden"], ["hoed", "hoeden"], ["brood", "broden"],
+      ["vriend", "vrienden"], ["wind", "winden"], ["kind", "kinderen"], ["land", "landen"],
+      ["bed", "bedden"], ["rood", "rode"], ["goud", "gouden"], ["hout", "houten"]],
+  },
+  verkleinwoord: {
+    naam: "Verkleinwoorden",
+    regel: "Je plakt -je, -tje, -pje of -etje achter het woord. Welke het is, hoor je.",
+    paren: [["boom", "boompje"], ["huis", "huisje"], ["kraan", "kraantje"], ["bloem", "bloempje"],
+      ["tafel", "tafeltje"], ["boek", "boekje"], ["bal", "balletje"], ["ring", "ringetje"],
+      ["stoel", "stoeltje"], ["raam", "raampje"], ["kar", "karretje"], ["deur", "deurtje"],
+      ["ster", "sterretje"], ["arm", "armpje"], ["bel", "belletje"], ["trein", "treintje"]],
+  },
+  meervoudS: {
+    naam: "Meervoud met 's",
+    regel: "Eindigt het woord op a, o, u, i of y, dan krijgt het meervoud een apostrof: opa wordt opa's.",
+    paren: [["opa", "opa's"], ["foto", "foto's"], ["auto", "auto's"], ["paraplu", "paraplu's"],
+      ["oma", "oma's"], ["piano", "piano's"], ["radio", "radio's"], ["baby", "baby's"],
+      ["menu", "menu's"], ["taxi", "taxi's"]],
+  },
+};
+
+/* voor het dictee en voor "kies het goede woord" */
+const DICTEE = {
+  eiij: { naam: "ei of ij", regel: "Je moet deze woorden uit je hoofd leren.",
+    woorden: [["trein", "trijn"], ["klein", "klijn"], ["geit", "gijt"], ["plein", "plijn"],
+      ["eiland", "ijland"], ["tijd", "teid"], ["vijf", "veif"], ["prijs", "preis"],
+      ["kijken", "keiken"], ["schrijven", "schreiven"], ["blijven", "bleiven"], ["wijn", "wein"]] },
+  auou: { naam: "au of ou", regel: "Je moet deze woorden uit je hoofd leren.",
+    woorden: [["blauw", "blouw"], ["pauw", "pouw"], ["kabouter", "kabauter"], ["saus", "sous"],
+      ["flauw", "flouw"], ["koud", "kaud"], ["oud", "aud"], ["hout", "haut"],
+      ["goud", "gaud"], ["zout", "zaut"], ["schouder", "schauder"], ["vrouw", "vrauw"]] },
+  iglijk: { naam: "-ig of -lijk", regel: "Je hoort meestal -uk, maar je schrijft -ig of -lijk.",
+    woorden: [["gezellig", "gezellijk"], ["vrolijk", "vrolig"], ["moeilijk", "moeilig"],
+      ["rustig", "rustlijk"], ["eerlijk", "eerlig"], ["grappig", "grappelijk"],
+      ["lelijk", "lelig"], ["geduldig", "geduldlijk"], ["duidelijk", "duidelig"], ["prettig", "prettelijk"]] },
+  cht: { naam: "woorden met -cht", regel: "Na een korte klank hoor je -cht en dan schrijf je ook -cht.",
+    woorden: [["nacht", "nagt"], ["gezicht", "gezigt"], ["zacht", "zagt"], ["vlucht", "vlugt"],
+      ["kracht", "kragt"], ["gericht", "gerigt"], ["dochter", "dogter"], ["wachten", "wagten"]] },
+};
+
+/* werkwoorden, alle vormen voluit */
+const WERKWOORDEN = [
+  { hele: "werken", ik: "werk", jij: "werkt", hij: "werkt", verleden: "werkte", verledenMv: "werkten", vd: "gewerkt", soort: "kofschip" },
+  { hele: "fietsen", ik: "fiets", jij: "fietst", hij: "fietst", verleden: "fietste", verledenMv: "fietsten", vd: "gefietst", soort: "kofschip" },
+  { hele: "praten", ik: "praat", jij: "praat", hij: "praat", verleden: "praatte", verledenMv: "praatten", vd: "gepraat", soort: "kofschip" },
+  { hele: "koken", ik: "kook", jij: "kookt", hij: "kookt", verleden: "kookte", verledenMv: "kookten", vd: "gekookt", soort: "kofschip" },
+  { hele: "blaffen", ik: "blaf", jij: "blaft", hij: "blaft", verleden: "blafte", verledenMv: "blaften", vd: "geblaft", soort: "kofschip" },
+  { hele: "stoppen", ik: "stop", jij: "stopt", hij: "stopt", verleden: "stopte", verledenMv: "stopten", vd: "gestopt", soort: "kofschip" },
+  { hele: "lachen", ik: "lach", jij: "lacht", hij: "lacht", verleden: "lachte", verledenMv: "lachten", vd: "gelachen", soort: "kofschip" },
+  { hele: "missen", ik: "mis", jij: "mist", hij: "mist", verleden: "miste", verledenMv: "misten", vd: "gemist", soort: "kofschip" },
+  { hele: "spelen", ik: "speel", jij: "speelt", hij: "speelt", verleden: "speelde", verledenMv: "speelden", vd: "gespeeld", soort: "zacht" },
+  { hele: "leren", ik: "leer", jij: "leert", hij: "leert", verleden: "leerde", verledenMv: "leerden", vd: "geleerd", soort: "zacht" },
+  { hele: "wonen", ik: "woon", jij: "woont", hij: "woont", verleden: "woonde", verledenMv: "woonden", vd: "gewoond", soort: "zacht" },
+  { hele: "bellen", ik: "bel", jij: "belt", hij: "belt", verleden: "belde", verledenMv: "belden", vd: "gebeld", soort: "zacht" },
+  { hele: "tekenen", ik: "teken", jij: "tekent", hij: "tekent", verleden: "tekende", verledenMv: "tekenden", vd: "getekend", soort: "zacht" },
+  { hele: "voetballen", ik: "voetbal", jij: "voetbalt", hij: "voetbalt", verleden: "voetbalde", verledenMv: "voetbalden", vd: "gevoetbald", soort: "zacht" },
+  { hele: "antwoorden", ik: "antwoord", jij: "antwoordt", hij: "antwoordt", verleden: "antwoordde", verledenMv: "antwoordden", vd: "geantwoord", soort: "zacht" },
+  { hele: "branden", ik: "brand", jij: "brandt", hij: "brandt", verleden: "brandde", verledenMv: "brandden", vd: "gebrand", soort: "zacht" },
+  { hele: "vinden", ik: "vind", jij: "vindt", hij: "vindt", verleden: "vond", verledenMv: "vonden", vd: "gevonden", soort: "sterk" },
+  { hele: "worden", ik: "word", jij: "wordt", hij: "wordt", verleden: "werd", verledenMv: "werden", vd: "geworden", soort: "sterk" },
+  { hele: "lopen", ik: "loop", jij: "loopt", hij: "loopt", verleden: "liep", verledenMv: "liepen", vd: "gelopen", soort: "sterk" },
+  { hele: "lezen", ik: "lees", jij: "leest", hij: "leest", verleden: "las", verledenMv: "lazen", vd: "gelezen", soort: "sterk" },
+  { hele: "schrijven", ik: "schrijf", jij: "schrijft", hij: "schrijft", verleden: "schreef", verledenMv: "schreven", vd: "geschreven", soort: "sterk" },
+  { hele: "zwemmen", ik: "zwem", jij: "zwemt", hij: "zwemt", verleden: "zwom", verledenMv: "zwommen", vd: "gezwommen", soort: "sterk" },
+  { hele: "drinken", ik: "drink", jij: "drinkt", hij: "drinkt", verleden: "dronk", verledenMv: "dronken", vd: "gedronken", soort: "sterk" },
+  { hele: "kijken", ik: "kijk", jij: "kijkt", hij: "kijkt", verleden: "keek", verledenMv: "keken", vd: "gekeken", soort: "sterk" },
+];
+
+
+const $ = (id) => document.getElementById(id);
+const BEWAAR = "blink-spelling";
+
+let staat = { onderdelen: ["verdubbel", "dt"], dictees: ["eiij"], ww: [],
+  titel: "Spelling", aantal: 20, kolommen: 2, grootte: 16, code: "",
+  hulp: true, antwoord: true, naam: true };
+try { const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}"); Object.keys(staat).forEach((k) => { if (k in b) staat[k] = b[k]; }); } catch (e) {}
+const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
+
+function zaadje(tekst) {
+  let h = 2166136261;
+  for (let i = 0; i < tekst.length; i++) { h ^= tekst.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+function maakRandom(zaad) {
+  let a = zaad >>> 0;
+  return function () {
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const kies = (r, lijst) => lijst[Math.floor(r() * lijst.length)];
+
+const WW_VRAAG = {
+  ik: { vraag: "ik", sleutel: "ik" },
+  hij: { vraag: "hij", sleutel: "hij" },
+  jij: { vraag: "jij", sleutel: "jij" },
+  verleden: { vraag: "gisteren: hij", sleutel: "verleden" },
+  vd: { vraag: "hij heeft", sleutel: "vd" },
+};
+
+function maakOpgave(r, welke) {
+  // spellingcategorie: van grondwoord naar de langere vorm
+  if (CATEGORIEEN[welke]) {
+    const cat = CATEGORIEEN[welke];
+    const [basis, lang] = kies(r, cat.paren);
+    if (welke === "dt") {
+      const letter = basis.slice(-1);
+      return { sleutel: welke + basis,
+        vraag: `${basis.slice(0, -1)}<span class="gat"></span>`,
+        extra: `(${lang})`, antwoord: `${basis} (${letter})` };
+    }
+    const vraagwoord = { verdubbel: "meervoud", meervoudS: "meervoud", verkleinwoord: "verkleinwoord" }[welke];
+    return { sleutel: welke + basis, vraag: `${basis} <span class="pijl">→</span>`,
+      extra: vraagwoord, antwoord: lang };
+  }
+
+  // dictee of kies het goede woord
+  if (DICTEE[welke]) {
+    const groep = DICTEE[welke];
+    const [goed, fout] = kies(r, groep.woorden);
+    const eersteGoed = r() < .5;
+    return { sleutel: welke + goed,
+      vraag: eersteGoed ? `<b>${goed}</b> &nbsp;of&nbsp; <b>${fout}</b>` : `<b>${fout}</b> &nbsp;of&nbsp; <b>${goed}</b>`,
+      extra: "streep het foute woord door", antwoord: goed };
+  }
+
+  // werkwoordspelling
+  const ww = kies(r, WERKWOORDEN);
+  const vorm = WW_VRAAG[welke];
+  const woord = ww[vorm.sleutel];
+  return { sleutel: "w" + welke + ww.hele,
+    vraag: `${vorm.vraag} <span class="gat breed"></span>`,
+    extra: `(${ww.hele})`, antwoord: woord };
+}
+
+function hulpHtml() {
+  const stukken = [];
+  Object.keys(CATEGORIEEN).forEach((k) => {
+    if (staat.onderdelen.includes(k)) stukken.push([CATEGORIEEN[k].naam, CATEGORIEEN[k].regel]);
+  });
+  Object.keys(DICTEE).forEach((k) => {
+    if (staat.dictees.includes(k)) stukken.push([DICTEE[k].naam, DICTEE[k].regel]);
+  });
+  if (staat.ww.length) {
+    stukken.push(["Tegenwoordige tijd", "ik: de stam. jij en hij: de stam + t. Staat jij achter het werkwoord, dan valt de t weg."]);
+    if (staat.ww.includes("verleden")) {
+      stukken.push(["Verleden tijd", "'t kofschip: eindigt de stam op t, k, f, s, ch of p, dan -te. Anders -de."]);
+    }
+    if (staat.ww.includes("vd")) {
+      stukken.push(["Voltooid deelwoord", "ge + stam + t of d. Ook hier helpt 't kofschip. Let op: sterke werkwoorden veranderen van klank."]);
+    }
+  }
+  if (!stukken.length) return "";
+  return `<div class="hulp"><h3>Hulpkaart</h3><table class="hulptabel">
+    ${stukken.map(([a, b]) => `<tr><th>${a}</th><td>${b}</td></tr>`).join("")}</table></div>`;
+}
+
+function maakBlad() {
+  const alles = [...staat.onderdelen, ...staat.dictees, ...staat.ww];
+  if (!alles.length) { $("melding").textContent = "Kies eerst minstens één onderdeel."; return; }
+  $("melding").textContent = "";
+  const code = staat.code.trim() || String(Math.floor(1000 + Math.random() * 9000));
+  $("code").value = code; staat.code = code; bewaar();
+  const r = maakRandom(zaadje(code + "|" + alles.join(",") + "|" + staat.aantal));
+
+  const opgaven = [], gezien = new Set();
+  for (let i = 0; i < staat.aantal; i++) {
+    const welke = alles[i % alles.length];
+    let o = maakOpgave(r, welke);
+    for (let p = 0; p < 60 && gezien.has(o.sleutel); p++) o = maakOpgave(r, welke);
+    gezien.add(o.sleutel); opgaven.push(o);
+  }
+
+  const naamregel = staat.naam ? `<div class="regels"><div>Naam <span></span></div><div>Datum <span></span></div></div>` : "";
+  const kolomcss = `grid-template-columns:repeat(${staat.kolommen},minmax(0,1fr)); font-size:${staat.grootte}px;`;
+  const rij = (o, i, a) => `
+    <div class="opg">
+      <div class="vraag"><span class="nr">${i + 1}.</span>${o.vraag}
+        ${a ? `<b class="antwoord">${o.antwoord}</b>` : ""}</div>
+      ${o.extra ? `<div class="extra">${o.extra}</div>` : ""}
+    </div>`;
+
+  let html = `
+    <div class="bladkop"><h2>${staat.titel || "Spelling"}</h2>${naamregel}</div>
+    ${staat.hulp ? hulpHtml() : ""}
+    <div class="opgaven" style="${kolomcss}">${opgaven.map((o, i) => rij(o, i, false)).join("")}</div>
+    <div class="bladvoet"><span>Lesmateriaal Blink · spelling</span><span>code ${code}</span></div>`;
+  if (staat.antwoord) {
+    html += `
+      <div class="paginabreak"></div>
+      <div class="bladkop" style="margin-top:22px;"><h2>Antwoorden · ${staat.titel || "Spelling"}</h2></div>
+      <div class="opgaven" style="${kolomcss}">${opgaven.map((o, i) => rij(o, i, true)).join("")}</div>
+      <div class="bladvoet"><span>Lesmateriaal Blink · antwoordblad</span><span>code ${code}</span></div>`;
+  }
+  $("blad").innerHTML = html;
+}
+
+[["onderdelen", "onderdeel"], ["dictees", "dictee"], ["ww", "ww"]].forEach(([sleutel, data]) => {
+  $(sleutel).addEventListener("click", (e) => {
+    const b = e.target.closest("[data-" + data + "]"); if (!b) return;
+    const w = b.dataset[data];
+    staat[sleutel] = staat[sleutel].includes(w) ? staat[sleutel].filter((x) => x !== w) : [...staat[sleutel], w];
+    b.classList.toggle("aan", staat[sleutel].includes(w)); bewaar();
+  });
+});
+[["hulpChip", "hulp"], ["antwoordChip", "antwoord"], ["naamChip", "naam"]].forEach(([id, sleutel]) => {
+  $(id).addEventListener("click", () => { staat[sleutel] = !staat[sleutel]; $(id).classList.toggle("aan", staat[sleutel]); bewaar(); });
+});
+["titel", "aantal", "kolommen", "grootte", "code"].forEach((id) => {
+  $(id).addEventListener("change", () => {
+    staat[id] = ["aantal", "kolommen", "grootte"].includes(id) ? Number($(id).value) : $(id).value;
+    bewaar();
+  });
+});
+$("maakKnop").addEventListener("click", () => { staat.code = ""; $("code").value = ""; maakBlad(); });
+$("printKnop").addEventListener("click", () => window.print());
+$("printKnop2").addEventListener("click", () => window.print());
+
+[["onderdelen", "onderdeel"], ["dictees", "dictee"], ["ww", "ww"]].forEach(([sleutel, data]) => {
+  [...document.querySelectorAll("#" + sleutel + " [data-" + data + "]")]
+    .forEach((b) => b.classList.toggle("aan", staat[sleutel].includes(b.dataset[data])));
+});
+$("titel").value = staat.titel; $("aantal").value = staat.aantal;
+$("kolommen").value = staat.kolommen; $("grootte").value = staat.grootte; $("code").value = staat.code;
+[["hulpChip", "hulp"], ["antwoordChip", "antwoord"], ["naamChip", "naam"]]
+  .forEach(([id, sleutel]) => $(id).classList.toggle("aan", staat[sleutel]));
+maakBlad();
+
+</script>
+</body>
+</html>
