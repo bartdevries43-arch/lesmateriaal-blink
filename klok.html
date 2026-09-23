@@ -357,10 +357,10 @@ function boogPad(vanMinuut, totMinuut, straal) {
 
 // De vier tijdvakken, met hun plek voor het woord in de hoek van het vierkant
 const VAKKEN = [
-  { van: 0,  tot: 15, kleur: "#e6f0fd", aan: "#c3ddfb", rand: "#1d4ed8", woord: "over",      hoek: [446, 40],  anker: "end" },
-  { van: 15, tot: 30, kleur: "#e4f8f3", aan: "#b9efe3", rand: "#0f766e", woord: "voor half", hoek: [446, 432], anker: "end" },
-  { van: 30, tot: 45, kleur: "#fdf3dd", aan: "#fbe3ab", rand: "#b45309", woord: "over half", hoek: [14, 432],  anker: "start" },
-  { van: 45, tot: 60, kleur: "#efeafd", aan: "#d9cffb", rand: "#6d28d9", woord: "voor",      hoek: [14, 40],   anker: "start" },
+  { van: 0,  tot: 15, kleur: "#e6f0fd", aan: "#c3ddfb", rand: "#1d4ed8", woord: "over",      hoek: [452, 22],  anker: "end" },
+  { van: 15, tot: 30, kleur: "#e4f8f3", aan: "#b9efe3", rand: "#0f766e", woord: "voor half", hoek: [452, 440], anker: "end" },
+  { van: 30, tot: 45, kleur: "#fdf3dd", aan: "#fbe3ab", rand: "#b45309", woord: "over half", hoek: [8, 440],  anker: "start" },
+  { van: 45, tot: 60, kleur: "#efeafd", aan: "#d9cffb", rand: "#6d28d9", woord: "voor",      hoek: [8, 22],   anker: "start" },
 ];
 
 function tekenPlaat() {
@@ -393,15 +393,15 @@ function tekenPlaat() {
   }
 
   for (let m = 5; m <= 60; m += 5) {
-    const [x, y] = punt(m * 6, 108);
+    const [x, y] = punt(m * 6, 214);   // buiten de klok, zodat de grote wijzer er niet doorheen loopt
     const t = maak("text", { x: x.toFixed(1), y: y.toFixed(1), "text-anchor": "middle", "dominant-baseline": "central",
-      "font-family": "Baloo 2, system-ui, sans-serif", "font-size": 21, "font-weight": 800, fill: "#0e9f9e" });
+      "font-family": "Baloo 2, system-ui, sans-serif", "font-size": 20, "font-weight": 800, fill: "#0e9f9e" });
     t.textContent = m === 60 ? "0" : m;
     vijf.appendChild(t);
   }
 
   for (let u = 1; u <= 12; u++) {
-    const [x, y] = punt(u * 30, 182);
+    const [x, y] = punt(u * 30, 105);
     const t = maak("text", { x: x.toFixed(1), y: y.toFixed(1), "text-anchor": "middle", "dominant-baseline": "central",
       "font-family": "Baloo 2, system-ui, sans-serif", "font-size": 17, "font-weight": 700, fill: "#8d93b8" });
     t.textContent = u + 12;
