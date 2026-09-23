@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Breuken · Lesmateriaal Blink</title>
+<meta name="description" content="Breuken op het digibord: breukenstroken en cirkels, zelf delen kleuren, gelijkwaardige breuken zien en breuken vergelijken.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+    --goed:#16a34a; --fout:#e2534a;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1180px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:20px; margin-top:18px;}
+
+  .strookrij{display:flex; align-items:center; gap:14px; margin-bottom:12px;}
+  .naam{font-family:"Baloo 2",system-ui,sans-serif; font-size:20px; font-weight:800; min-width:74px; text-align:right; color:var(--accent);}
+  .strook{flex:1; display:flex; gap:3px; height:clamp(38px,6vw,54px);}
+  .deel{flex:1; border-radius:8px; border:2px solid var(--line-2); background:#fff; cursor:pointer; position:relative;
+    transition:background .12s ease, border-color .12s ease;}
+  .deel.aan{background:linear-gradient(120deg,#6f67ec,#4f46e5); border-color:transparent;}
+  .deel.aan.tweede{background:linear-gradient(120deg,#2bb5b3,#0e9f9e);}
+  .deel span{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:800; color:#7b83a6;}
+  .deel.aan span{color:#fff;}
+
+  .cirkels{display:flex; flex-wrap:wrap; gap:22px; justify-content:center; align-items:center;}
+  .cirkel{width:clamp(150px,30vw,230px); height:auto;}
+  .uitslagrij{display:flex; flex-wrap:wrap; gap:12px; justify-content:center; align-items:center; margin-top:16px;}
+  .waarde{font-family:"Baloo 2",system-ui,sans-serif; font-size:clamp(1.4rem,3.4vw,2rem);}
+  .waarde.een{color:var(--accent);} .waarde.twee{color:var(--accent2);}
+  .teken{font-family:"Baloo 2",system-ui,sans-serif; font-size:clamp(1.6rem,4vw,2.4rem); color:var(--ink);}
+  .hint{text-align:center; color:var(--muted); font-size:15px; margin-top:10px;}
+
+  .rij-instel{display:flex; flex-wrap:wrap; gap:10px; align-items:center;}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+  .knop{font:inherit; font-size:15px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:15px; padding:11px 16px; cursor:pointer;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .titelrij{display:flex; align-items:baseline; gap:10px; margin-bottom:12px; flex-wrap:wrap;}
+  .titelrij h2{font-size:18px;} .titelrij .klein{font-size:13.5px; color:var(--muted);}
+  .uit{display:none !important;}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .bron{font-size:13.5px; line-height:1.5; color:#4b5563; padding-left:22px; text-indent:-22px; margin-top:6px;}
+  .bron a{color:var(--accent); word-break:break-word;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  body.digibord{background:#0f1430;}
+  body.digibord .kaart{background:#161c3d; border-color:rgba(255,255,255,.1); color:#eef1ff;}
+  body.digibord .deel{background:#1e2650; border-color:rgba(255,255,255,.18);}
+  body.digibord .deel span{color:#97a0c8;}
+  body.digibord .knop, body.digibord .chip, body.digibord .seg{background:#1e2650; color:#eef1ff; border-color:rgba(255,255,255,.18);}
+  body.digibord .chip.aan{background:rgba(129,140,248,.25); border-color:#a5b4fc;}
+  body.digibord .naam, body.digibord .waarde.een{color:#a5b4fc;} body.digibord .waarde.twee{color:#5eead4;}
+  body.digibord .hint, body.digibord .titelrij .klein, body.digibord .voet{color:#a9b2d6;}
+  body.digibord details.uitleg p, body.digibord details.uitleg li{color:#dbe2ff;}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="kop">
+    <span class="logo" aria-hidden="true">🍕</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · rekenen</div>
+      <h1>Breuken</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="digibordKnop" type="button">🌙 Digibord</button>
+      <button id="schermKnop" type="button">⛶ Volledig scherm</button>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <section class="kaart" aria-label="Breuken">
+    <div id="strokenVak">
+      <div class="strookrij"><span class="naam" id="naamEen">1/2</span><div class="strook" id="strookEen"></div></div>
+      <div class="strookrij" id="rijTwee"><span class="naam" id="naamTwee">1/3</span><div class="strook" id="strookTwee"></div></div>
+    </div>
+    <div class="cirkels uit" id="cirkelVak">
+      <svg class="cirkel" id="cirkelEen" viewBox="0 0 220 220" role="img" aria-label="breukencirkel 1"></svg>
+      <svg class="cirkel" id="cirkelTwee" viewBox="0 0 220 220" role="img" aria-label="breukencirkel 2"></svg>
+    </div>
+
+    <div class="uitslagrij">
+      <span class="waarde een" id="waardeEen">2/4</span>
+      <span class="teken" id="teken">=</span>
+      <span class="waarde twee" id="waardeTwee">1/2</span>
+    </div>
+    <p class="hint" id="hint">Klik op de delen om ze te kleuren.</p>
+  </section>
+
+  <section class="kaart" aria-label="Instellingen">
+    <div class="titelrij"><h2>In hoeveel stukken?</h2><span class="klein">Kies de noemer van elke strook.</span></div>
+    <div class="rij-instel">
+      <span class="naam" style="min-width:auto; color:var(--accent);">boven</span>
+      <div class="seg" id="noemerEen"></div>
+    </div>
+    <div class="rij-instel" style="margin-top:10px;">
+      <span class="naam" style="min-width:auto; color:var(--accent2);">onder</span>
+      <div class="seg" id="noemerTwee"></div>
+    </div>
+
+    <div class="titelrij" style="margin-top:20px;"><h2>Weergave</h2><span class="klein">Strook of cirkel, en wat je laat zien.</span></div>
+    <div class="rij-instel">
+      <div class="seg" id="vormSeg">
+        <button type="button" data-vorm="strook" class="aan">Stroken</button>
+        <button type="button" data-vorm="cirkel">Cirkels</button>
+      </div>
+      <button class="chip aan" type="button" id="tweedeChip"><span class="bol"></span>Tweede breuk erbij</button>
+      <button class="chip aan" type="button" id="waardeChip"><span class="bol"></span>Breuk in cijfers</button>
+      <button class="chip" type="button" id="nummerChip"><span class="bol"></span>Nummers in de delen</button>
+      <button class="knop" id="wisKnop" type="button">↺ Leegmaken</button>
+    </div>
+  </section>
+
+  <details class="uitleg">
+    <summary>Waarom breukenstroken (voor de leerkracht)</summary>
+    <p>Breuken zijn lastig omdat kinderen er hun kennis van hele getallen op toepassen: 1/3 lijkt groter dan 1/2, want 3 is groter dan 2. Met een strook of cirkel zien ze meteen dat dat niet klopt. Modellen zoals de strook helpen om een breuk te zien als een deel van een geheel, en om te ontdekken dat 2/4 en 1/2 evenveel zijn.</p>
+    <h3>De keuzes in deze tool</h3>
+    <ul>
+      <li><b>Twee breuken onder elkaar.</b> Zo zie je direct of ze gelijk zijn, of welke groter is. De app zet er zelf &lt;, = of &gt; bij.</li>
+      <li><b>Stroken of cirkels.</b> De strook helpt bij vergelijken, de cirkel bij verdelen van een taart of pizza.</li>
+      <li><b>Zelf klikken.</b> Kinderen kleuren de delen zelf, dat werkt beter dan alleen kijken.</li>
+      <li><b>Cijfers uit te zetten</b>, zodat de klas eerst zelf de breuk benoemt.</li>
+    </ul>
+    <p>Oefenen werkt het best als het gaat om het ontdekken van patronen en verbanden, en niet om het uit het hoofd leren van losse regels (Hickendorff, 2023).</p>
+    <h3>Bronnen</h3>
+    <p class="bron">Hickendorff, M. (2023, 4 april). <i>Aanvankelijk en gevorderd rekenen in groep 3, 4 en 5</i>. Onderwijskennis.nl. Geraadpleegd op 23 september 2026, van <a href="https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5">https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5</a></p>
+    <p class="bron">SLO. (2025). <i>Definitieve conceptkerndoelen rekenen en wiskunde: Herziene versie 2025</i>. Geraadpleegd op 23 september 2026, van <a href="https://www.slo.nl/@24175/definitieve-conceptkerndoelen-rekenen/">https://www.slo.nl/@24175/definitieve-conceptkerndoelen-rekenen/</a></p>
+  </details>
+
+  <footer class="voet">Breuken · onderdeel van <a href="index.html">Lesmateriaal Blink</a> · klik op de delen</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const NS = "http://www.w3.org/2000/svg";
+const BEWAAR = "blink-breuken";
+const NOEMERS = [2, 3, 4, 5, 6, 8, 10, 12];
+let staat = { noemerEen: 4, noemerTwee: 2, vorm: "strook", tweede: true, waarde: true, nummers: false, digibord: false };
+try {
+  const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}");
+  Object.keys(staat).forEach((k) => { if (k in b) staat[k] = b[k]; });
+} catch (e) {}
+const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
+let gekozen = { een: 2, twee: 1 };
+
+const maak = (tag, k) => { const e = document.createElementNS(NS, tag); Object.entries(k).forEach(([a, v]) => e.setAttribute(a, v)); return e; };
+const ggd = (a, b) => (b === 0 ? a : ggd(b, a % b));
+function breukTekst(teller, noemer) {
+  if (teller === 0) return "0";
+  if (teller === noemer) return "1";
+  const d = ggd(teller, noemer);
+  const eenvoud = d > 1 ? ` (= ${teller / d}/${noemer / d})` : "";
+  return `${teller}/${noemer}${eenvoud}`;
+}
+
+function tekenStroken() {
+  [["Een", staat.noemerEen], ["Twee", staat.noemerTwee]].forEach(([welke, noemer]) => {
+    const strook = $("strook" + welke);
+    strook.innerHTML = Array.from({ length: noemer }, (_, i) =>
+      `<button class="deel${welke === "Twee" ? " tweede" : ""}" type="button" data-welke="${welke.toLowerCase()}" data-i="${i}">` +
+      (staat.nummers ? `<span>${i + 1}</span>` : "") + `</button>`).join("");
+  });
+  verf();
+}
+
+function tekenCirkels() {
+  [["Een", staat.noemerEen, "#4f46e5", "een"], ["Twee", staat.noemerTwee, "#0e9f9e", "twee"]].forEach(([welke, noemer, kleur, sleutel]) => {
+    const svg = $("cirkel" + welke);
+    svg.innerHTML = "";
+    const M = 110, R = 96;
+    for (let i = 0; i < noemer; i++) {
+      const a1 = (i / noemer) * 2 * Math.PI - Math.PI / 2, a2 = ((i + 1) / noemer) * 2 * Math.PI - Math.PI / 2;
+      const x1 = M + R * Math.cos(a1), y1 = M + R * Math.sin(a1);
+      const x2 = M + R * Math.cos(a2), y2 = M + R * Math.sin(a2);
+      const groot = (a2 - a1) > Math.PI ? 1 : 0;
+      const pad = maak("path", {
+        d: `M ${M} ${M} L ${x1.toFixed(1)} ${y1.toFixed(1)} A ${R} ${R} 0 ${groot} 1 ${x2.toFixed(1)} ${y2.toFixed(1)} Z`,
+        fill: i < gekozen[sleutel] ? kleur : "#ffffff", stroke: "#c9cfe3", "stroke-width": 2, style: "cursor:pointer",
+        "data-welke": sleutel, "data-i": i,
+      });
+      svg.appendChild(pad);
+    }
+  });
+}
+
+function verf() {
+  ["een", "twee"].forEach((welke) => {
+    [...document.querySelectorAll(`.deel[data-welke="${welke}"]`)].forEach((d, i) => d.classList.toggle("aan", i < gekozen[welke]));
+  });
+}
+
+function toon() {
+  $("naamEen").textContent = `${gekozen.een}/${staat.noemerEen}`;
+  $("naamTwee").textContent = `${gekozen.twee}/${staat.noemerTwee}`;
+  $("waardeEen").textContent = breukTekst(gekozen.een, staat.noemerEen);
+  $("waardeTwee").textContent = breukTekst(gekozen.twee, staat.noemerTwee);
+  const a = gekozen.een / staat.noemerEen, b = gekozen.twee / staat.noemerTwee;
+  $("teken").textContent = Math.abs(a - b) < 1e-9 ? "=" : a > b ? ">" : "<";
+
+  $("rijTwee").classList.toggle("uit", !staat.tweede);
+  $("cirkelTwee").classList.toggle("uit", !staat.tweede);
+  $("waardeTwee").classList.toggle("uit", !staat.tweede);
+  $("teken").classList.toggle("uit", !staat.tweede);
+  document.querySelector(".uitslagrij").classList.toggle("uit", !staat.waarde);
+  $("strokenVak").classList.toggle("uit", staat.vorm !== "strook");
+  $("cirkelVak").classList.toggle("uit", staat.vorm !== "cirkel");
+  $("naamEen").classList.toggle("uit", !staat.waarde);
+  $("naamTwee").classList.toggle("uit", !staat.waarde);
+
+  if (staat.vorm === "cirkel") tekenCirkels(); else verf();
+}
+
+function klik(welke, i) {
+  const noemer = welke === "een" ? staat.noemerEen : staat.noemerTwee;
+  gekozen[welke] = gekozen[welke] === i + 1 ? i : Math.min(noemer, i + 1);
+  toon();
+}
+document.addEventListener("click", (e) => {
+  const d = e.target.closest("[data-welke][data-i]"); if (!d) return;
+  klik(d.dataset.welke, Number(d.dataset.i));
+});
+
+["Een", "Twee"].forEach((welke) => {
+  const vak = $("noemer" + welke);
+  vak.innerHTML = NOEMERS.map((n) => `<button type="button" data-noemer="${n}">${n}</button>`).join("");
+  vak.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-noemer]"); if (!b) return;
+    const n = Number(b.dataset.noemer);
+    staat["noemer" + welke] = n;
+    const sleutel = welke.toLowerCase();
+    gekozen[sleutel] = Math.min(gekozen[sleutel], n);
+    [...vak.querySelectorAll("button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.noemer) === n));
+    bewaar(); tekenStroken(); toon();
+  });
+});
+
+$("vormSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-vorm]"); if (!b) return;
+  staat.vorm = b.dataset.vorm;
+  [...document.querySelectorAll("#vormSeg button")].forEach((x) => x.classList.toggle("aan", x.dataset.vorm === staat.vorm));
+  bewaar(); toon();
+});
+[["tweedeChip", "tweede"], ["waardeChip", "waarde"], ["nummerChip", "nummers"]].forEach(([id, sleutel]) => {
+  $(id).addEventListener("click", () => {
+    staat[sleutel] = !staat[sleutel];
+    $(id).classList.toggle("aan", staat[sleutel]);
+    bewaar(); tekenStroken(); toon();
+  });
+});
+$("wisKnop").addEventListener("click", () => { gekozen = { een: 0, twee: 0 }; toon(); });
+$("digibordKnop").addEventListener("click", () => {
+  staat.digibord = !staat.digibord;
+  document.body.classList.toggle("digibord", staat.digibord);
+  $("digibordKnop").textContent = staat.digibord ? "☀️ Gewoon" : "🌙 Digibord";
+  bewaar();
+});
+$("schermKnop").addEventListener("click", () => {
+  if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen?.();
+});
+
+["Een", "Twee"].forEach((welke) => {
+  [...$("noemer" + welke).querySelectorAll("button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.noemer) === staat["noemer" + welke]));
+});
+[...document.querySelectorAll("#vormSeg button")].forEach((x) => x.classList.toggle("aan", x.dataset.vorm === staat.vorm));
+$("tweedeChip").classList.toggle("aan", staat.tweede);
+$("waardeChip").classList.toggle("aan", staat.waarde);
+$("nummerChip").classList.toggle("aan", staat.nummers);
+if (staat.digibord) { document.body.classList.add("digibord"); $("digibordKnop").textContent = "☀️ Gewoon"; }
+tekenStroken();
+toon();
+</script>
+</body>
+</html>
