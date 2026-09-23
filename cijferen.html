@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cijferend rekenen · Lesmateriaal Blink</title>
+<meta name="description" content="Werkblad voor cijferend rekenen: optellen, aftrekken, vermenigvuldigen onder elkaar en de staartdeling, met hokjes en een regel voor het onthouden. Met antwoordblad en herhaalcode.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1220px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .vlak{display:grid; grid-template-columns:minmax(300px,.8fr) minmax(0,1.2fr); gap:18px; margin-top:18px; align-items:start;}
+  @media (max-width:980px){ .vlak{grid-template-columns:minmax(0,1fr);} }
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:18px;}
+
+  .groep{margin-bottom:18px;}
+  .groep:last-child{margin-bottom:0;}
+  .groep h2{font-size:17px; margin-bottom:10px;}
+  .groep .klein{font-size:13px; color:var(--muted); margin:-6px 0 10px;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .velden{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px;}
+  .veld label{display:block; font-size:12.5px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; color:var(--muted); margin-bottom:4px;}
+  .veld input, .veld select{width:100%; font:inherit; font-size:15px; padding:10px 12px; border:1px solid var(--line-2); border-radius:13px; background:#fff; color:var(--ink);}
+  .knoppen{display:flex; flex-wrap:wrap; gap:9px; margin-top:6px;}
+  .knop{font:inherit; font-size:15px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:15px; padding:12px 17px; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent;}
+  .melding{font-size:14px; color:#b45309; margin-top:8px; min-height:20px;}
+
+  /* Het werkblad */
+  .bladvak{padding:0; overflow:hidden;}
+  .blad{background:#fff; padding:26px 30px 34px; font-size:16px;}
+  .bladkop{display:flex; align-items:flex-end; gap:16px; border-bottom:2px solid #e6e9f5; padding-bottom:12px; margin-bottom:18px; flex-wrap:wrap;}
+  .bladkop h2{font-size:24px;}
+  .bladkop .regels{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:#5b647f;}
+  .bladkop .regels span{display:inline-block; min-width:140px; border-bottom:1.5px dotted #b8c0d8; padding-bottom:2px;}
+  .opgaven{display:grid; gap:20px 26px;}
+  .opg{break-inside:avoid;}
+  .opg .nr{font-size:12px; color:#9aa3bd; display:block; margin-bottom:3px;}
+  .bladvoet{margin-top:22px; font-size:12px; color:#9aa3bd; display:flex; justify-content:space-between; gap:12px;}
+
+  /* De som onder elkaar */
+  table.som{border-collapse:collapse; font-variant-numeric:tabular-nums; font-weight:700;}
+  table.som td{width:1.35em; height:1.5em; text-align:center; padding:0; vertical-align:middle;}
+  table.som td.teken{width:1.1em; color:var(--accent); text-align:left;}
+  table.som tr.streep td{border-bottom:2px solid #55607e;}
+  table.som tr.leeg td.hok{border:1px dotted #d9dded;}
+  table.som td.antwoord{color:var(--accent);}
+  table.som tr.onthoud td{height:.95em; font-size:.62em; color:#b3bace;}
+
+  /* De staartdeling */
+  .staart{display:inline-flex; align-items:stretch; font-variant-numeric:tabular-nums; font-weight:700;}
+  .staart .deler{padding-right:7px; border-right:2px solid #55607e; display:flex; align-items:flex-start;}
+  .staart .rechts{padding-left:8px;}
+  .staart .deeltal{border-top:2px solid #55607e; padding:2px 4px 0;}
+  .staart .werk{min-height:4.6em; border-left:1px dotted #d9dded; margin-left:2px; padding-left:8px;}
+  .staart .uitkomst{color:var(--accent); padding-top:4px;}
+  .opg .kaal{font-weight:700;}
+  .opg .lijn{display:inline-block; border-bottom:1.5px solid #c9cfe3; min-width:70px; height:1.1em; vertical-align:-2px;}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .bron{font-size:13.5px; line-height:1.5; color:#4b5563; padding-left:22px; text-indent:-22px; margin-top:6px;}
+  .bron a{color:var(--accent); word-break:break-word;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  @media print{
+    body{background:#fff;}
+    .app{max-width:none; padding:0;}
+    .kop, .instellingen, details.uitleg, .voet{display:none;}
+    .bladvak{box-shadow:none; border:none; padding:0;}
+    .blad{padding:0; font-size:15px;}
+    .paginabreak{break-before:page;}
+    @page{size:A4 portrait; margin:14mm;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="kop">
+    <span class="logo" aria-hidden="true">🧾</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · rekenen</div>
+      <h1>Cijferend rekenen</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="printKnop" type="button">🖨 Afdrukken</button>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <div class="vlak">
+    <section class="kaart instellingen" aria-label="Instellingen">
+      <div class="groep">
+        <h2>Welke bewerking?</h2>
+        <div class="chips" id="soorten">
+          <button class="chip aan" type="button" data-soort="plus"><span class="bol"></span>Optellen</button>
+          <button class="chip aan" type="button" data-soort="min"><span class="bol"></span>Aftrekken</button>
+          <button class="chip" type="button" data-soort="keer"><span class="bol"></span>Vermenigvuldigen</button>
+          <button class="chip" type="button" data-soort="deel"><span class="bol"></span>Staartdeling</button>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Hoe groot?</h2>
+        <div class="seg" id="cijferSeg">
+          <button type="button" data-cijfers="2">2 cijfers</button>
+          <button type="button" data-cijfers="3" class="aan">3 cijfers</button>
+          <button type="button" data-cijfers="4">4 cijfers</button>
+          <button type="button" data-cijfers="5">5 cijfers</button>
+        </div>
+        <div class="chips" style="margin-top:10px;">
+          <button class="chip aan" type="button" id="onthoudChip"><span class="bol"></span>Met onthouden of lenen</button>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Het blad</h2>
+        <div class="velden">
+          <div class="veld"><label for="titel">Titel</label><input id="titel" type="text" value="Cijferend rekenen" maxlength="40"></div>
+          <div class="veld"><label for="aantal">Aantal sommen</label><input id="aantal" type="number" min="4" max="48" step="1" value="12"></div>
+          <div class="veld"><label for="kolommen">Kolommen</label>
+            <select id="kolommen"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option></select></div>
+          <div class="veld"><label for="grootte">Lettergrootte</label>
+            <select id="grootte"><option value="17">gewoon</option><option value="21" selected>groot</option><option value="26">extra groot</option></select></div>
+          <div class="veld"><label for="code">Herhaalcode</label><input id="code" type="text" maxlength="8" placeholder="bijv. 4821"></div>
+        </div>
+        <div class="chips" style="margin-top:10px;">
+          <button class="chip aan" type="button" id="hokChip"><span class="bol"></span>Hokjes om in te schrijven</button>
+          <button class="chip aan" type="button" id="onthoudrijChip"><span class="bol"></span>Regel voor het onthouden</button>
+          <button class="chip aan" type="button" id="antwoordChip"><span class="bol"></span>Antwoordblad erbij</button>
+          <button class="chip aan" type="button" id="naamChip"><span class="bol"></span>Regel voor naam en datum</button>
+        </div>
+      </div>
+
+      <div class="knoppen">
+        <button class="knop primair" id="maakKnop" type="button">Maak het werkblad</button>
+        <button class="knop" id="printKnop2" type="button">🖨 Afdrukken</button>
+      </div>
+      <p class="melding" id="melding"></p>
+    </section>
+
+    <section class="kaart bladvak" aria-label="Werkblad">
+      <div class="blad" id="blad"></div>
+    </section>
+  </div>
+
+  <details class="uitleg">
+    <summary>Waarom dit werkblad (voor de leerkracht)</summary>
+    <p>Cijferend rekenen is het rekenen onder elkaar: eerst de eenheden, dan de tientallen, dan de honderdtallen. Het werkt alleen als een kind snapt waarom je dat doet. Begrip van de tientallige structuur en van de plaatswaarde van cijfers is de voorwaarde om bewerkingen te begrijpen (Hickendorff, 2023). Wie dat mist, telt wel netjes kolommen op, maar ziet niet dat die 1 die je onthoudt een tiental is.</p>
+    <h3>Wat helpt volgens onderzoek</h3>
+    <ul>
+      <li><b>Netjes onder elkaar.</b> De hokjes zorgen dat de eenheden onder de eenheden staan. Dat is geen opmaak maar didactiek: veel fouten bij cijferen komen doordat cijfers verschuiven.</li>
+      <li><b>Een aparte regel voor het onthouden.</b> Zo maak je zichtbaar wat er naar de volgende kolom gaat, in plaats van dat kinderen het in hun hoofd proberen vast te houden.</li>
+      <li><b>Bouw de hulp af.</b> Een model werkt alleen als het langzaam verdwijnt (Hickendorff, 2023). Daarom kun je de hokjes en de onthoudregel los uitzetten zodra het gaat.</li>
+      <li><b>Oefen kort en vaak.</b> Minstens tien minuten per dag, gericht op patronen en relaties in plaats van stampen (Hickendorff, 2023).</li>
+    </ul>
+    <h3>Hoe het blad werkt</h3>
+    <ul>
+      <li>Vier bewerkingen: optellen, aftrekken, vermenigvuldigen en de staartdeling.</li>
+      <li>Getallen van 2 tot 5 cijfers, met of zonder onthouden of lenen.</li>
+      <li>Bij de staartdeling staat er ruimte om het tussenwerk op te schrijven. Deelsommen komen altijd zonder rest uit.</li>
+      <li>Met een <b>herhaalcode</b> krijg je precies hetzelfde blad terug.</li>
+    </ul>
+    <h3>Bronnen</h3>
+    <p class="bron">Hickendorff, M. (2023, 4 april). <i>Aanvankelijk en gevorderd rekenen in groep 3, 4 en 5</i>. Onderwijskennis.nl. Geraadpleegd op 23 september 2026, van <a href="https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5">https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5</a></p>
+    <p class="bron">Inspectie van het Onderwijs. (2024, 4 april). <i>Peil.Rekenen-Wiskunde einde basisonderwijs, speciaal basisonderwijs en speciaal onderwijs 2022-2023</i>. Geraadpleegd op 23 september 2026, van <a href="https://www.onderwijsinspectie.nl/onderwerpen/peil-onderwijs/rekenen-en-wiskunde">https://www.onderwijsinspectie.nl/onderwerpen/peil-onderwijs/rekenen-en-wiskunde</a></p>
+    <p class="bron">SLO. (2025). <i>Definitieve conceptkerndoelen rekenen en wiskunde: Herziene versie 2025</i>. Geraadpleegd op 23 september 2026, van <a href="https://www.slo.nl/@24175/definitieve-conceptkerndoelen-rekenen/">https://www.slo.nl/@24175/definitieve-conceptkerndoelen-rekenen/</a></p>
+  </details>
+
+  <footer class="voet">Cijferend rekenen · onderdeel van <a href="index.html">Lesmateriaal Blink</a> · groep 6, 7 en 8</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const BEWAAR = "blink-cijferen";
+
+let staat = { soorten: ["plus", "min"], cijfers: 3, onthoud: true,
+  titel: "Cijferend rekenen", aantal: 12, kolommen: 3, grootte: 21, code: "",
+  hok: true, onthoudrij: true, antwoord: true, naam: true };
+try { const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}"); Object.keys(staat).forEach((k) => { if (k in b) staat[k] = b[k]; }); } catch (e) {}
+const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
+
+function zaadje(tekst) {
+  let h = 2166136261;
+  for (let i = 0; i < tekst.length; i++) { h ^= tekst.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+function maakRandom(zaad) {
+  let a = zaad >>> 0;
+  return function () {
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const tussen = (r, van, tot) => van + Math.floor(r() * (tot - van + 1));
+
+/* heeft deze optelling een onthoud-stap? */
+function heeftOnthoud(a, b) {
+  while (a > 0 || b > 0) { if ((a % 10) + (b % 10) >= 10) return true; a = Math.floor(a / 10); b = Math.floor(b / 10); }
+  return false;
+}
+function heeftLenen(a, b) {
+  while (b > 0) { if ((a % 10) < (b % 10)) return true; a = Math.floor(a / 10); b = Math.floor(b / 10); }
+  return false;
+}
+const macht = (n) => Math.pow(10, n);
+
+function maakSom(r, soort) {
+  const c = staat.cijfers;
+  const min = macht(c - 1), max = macht(c) - 1;
+
+  if (soort === "plus") {
+    let a, b;
+    for (let p = 0; p < 90; p++) {
+      a = tussen(r, min, max); b = tussen(r, min, max);
+      if (heeftOnthoud(a, b) === staat.onthoud) break;
+    }
+    return { soort, a, b, teken: "+", antwoord: a + b };
+  }
+  if (soort === "min") {
+    let a, b;
+    for (let p = 0; p < 90; p++) {
+      a = tussen(r, min, max); b = tussen(r, Math.floor(min / 2), a);
+      if (b > 0 && heeftLenen(a, b) === staat.onthoud) break;
+    }
+    return { soort, a, b, teken: "−", antwoord: a - b };
+  }
+  if (soort === "keer") {
+    const a = tussen(r, min, max);
+    const b = c <= 2 ? tussen(r, 2, 9) : tussen(r, 2, c >= 4 ? 99 : 9);
+    return { soort, a, b, teken: "×", antwoord: a * b };
+  }
+  // staartdeling, altijd zonder rest
+  const deler = tussen(r, 2, c >= 4 ? 25 : 9);
+  const uitkomst = tussen(r, Math.max(11, Math.floor(min / deler)), Math.floor(max / deler));
+  return { soort, a: deler * uitkomst, b: deler, teken: ":", antwoord: uitkomst };
+}
+
+/* de som netjes onder elkaar, als tabel */
+function somTabel(o, metAntwoord) {
+  const breedte = Math.max(String(o.a).length, String(o.b).length, String(o.antwoord).length) + 1;
+  const hokjes = (tekst, klasse) => [...String(tekst).padStart(breedte, " ")]
+    .map((k) => `<td class="${klasse}">${k === " " ? "" : k}</td>`).join("");
+  const leeg = Array.from({ length: breedte }, () => `<td class="${staat.hok ? "hok" : ""}"></td>`).join("");
+  const onthoudrij = staat.onthoudrij && !metAntwoord
+    ? `<tr class="onthoud"><td class="teken"></td>${Array.from({ length: breedte }, () => "<td></td>").join("")}</tr>` : "";
+  const uitkomst = metAntwoord ? hokjes(o.antwoord, "antwoord") : leeg;
+  return `<table class="som">
+    ${onthoudrij}
+    <tr><td class="teken"></td>${hokjes(o.a, "")}</tr>
+    <tr class="streep"><td class="teken">${o.teken}</td>${hokjes(o.b, "")}</tr>
+    <tr class="${metAntwoord ? "" : "leeg"}"><td class="teken"></td>${uitkomst}</tr>
+  </table>`;
+}
+
+/* de staartdeling */
+function staartHtml(o, metAntwoord) {
+  const werkruimte = metAntwoord ? "" : `<div class="werk"></div>`;
+  return `<div class="staart">
+    <div class="deler">${o.b}</div>
+    <div class="rechts"><div class="deeltal">${o.a}</div>${werkruimte}</div>
+  </div>
+  <div class="kaal" style="margin-top:4px;">${o.a} : ${o.b} = ${metAntwoord ? `<span style="color:var(--accent)">${o.antwoord}</span>` : `<span class="lijn"></span>`}</div>`;
+}
+
+function maakBlad() {
+  if (!staat.soorten.length) { $("melding").textContent = "Kies eerst minstens één bewerking."; return; }
+  $("melding").textContent = "";
+  const code = staat.code.trim() || String(Math.floor(1000 + Math.random() * 9000));
+  $("code").value = code; staat.code = code; bewaar();
+  const r = maakRandom(zaadje(code + "|" + staat.soorten.join(",") + "|" + staat.cijfers + "|" + staat.onthoud + "|" + staat.aantal));
+
+  const sommen = [], gezien = new Set();
+  for (let i = 0; i < staat.aantal; i++) {
+    const soort = staat.soorten[i % staat.soorten.length];
+    let o = maakSom(r, soort);
+    for (let p = 0; p < 60 && gezien.has(o.soort + o.a + "_" + o.b); p++) o = maakSom(r, soort);
+    gezien.add(o.soort + o.a + "_" + o.b); sommen.push(o);
+  }
+
+  const naamregel = staat.naam ? `<div class="regels"><div>Naam <span></span></div><div>Datum <span></span></div></div>` : "";
+  const kolomcss = `grid-template-columns:repeat(${staat.kolommen},minmax(0,1fr)); font-size:${staat.grootte}px;`;
+  const rij = (o, i, metAntwoord) => `
+    <div class="opg"><span class="nr">${i + 1}.</span>
+      ${o.soort === "deel" ? staartHtml(o, metAntwoord) : somTabel(o, metAntwoord)}
+    </div>`;
+
+  let html = `
+    <div class="bladkop"><h2>${staat.titel || "Cijferend rekenen"}</h2>${naamregel}</div>
+    <div class="opgaven" style="${kolomcss}">${sommen.map((o, i) => rij(o, i, false)).join("")}</div>
+    <div class="bladvoet"><span>Lesmateriaal Blink · cijferend rekenen</span><span>code ${code}</span></div>`;
+
+  if (staat.antwoord) {
+    html += `
+      <div class="paginabreak"></div>
+      <div class="bladkop" style="margin-top:22px;"><h2>Antwoorden · ${staat.titel || "Cijferend rekenen"}</h2></div>
+      <div class="opgaven" style="${kolomcss}">${sommen.map((o, i) => rij(o, i, true)).join("")}</div>
+      <div class="bladvoet"><span>Lesmateriaal Blink · antwoordblad</span><span>code ${code}</span></div>`;
+  }
+  $("blad").innerHTML = html;
+}
+
+$("soorten").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-soort]"); if (!b) return;
+  const s = b.dataset.soort;
+  staat.soorten = staat.soorten.includes(s) ? staat.soorten.filter((x) => x !== s) : [...staat.soorten, s];
+  b.classList.toggle("aan", staat.soorten.includes(s)); bewaar();
+});
+$("cijferSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-cijfers]"); if (!b) return;
+  staat.cijfers = Number(b.dataset.cijfers);
+  [...document.querySelectorAll("#cijferSeg button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.cijfers) === staat.cijfers));
+  bewaar();
+});
+[["onthoudChip", "onthoud"], ["hokChip", "hok"],
+ ["onthoudrijChip", "onthoudrij"], ["antwoordChip", "antwoord"], ["naamChip", "naam"]].forEach(([id, sleutel]) => {
+  $(id).addEventListener("click", () => { staat[sleutel] = !staat[sleutel]; $(id).classList.toggle("aan", staat[sleutel]); bewaar(); });
+});
+["titel", "aantal", "kolommen", "grootte", "code"].forEach((id) => {
+  $(id).addEventListener("change", () => {
+    staat[id] = ["aantal", "kolommen", "grootte"].includes(id) ? Number($(id).value) : $(id).value;
+    bewaar();
+  });
+});
+$("maakKnop").addEventListener("click", () => { staat.code = ""; $("code").value = ""; maakBlad(); });
+$("printKnop").addEventListener("click", () => window.print());
+$("printKnop2").addEventListener("click", () => window.print());
+
+[...document.querySelectorAll("#soorten [data-soort]")].forEach((b) => b.classList.toggle("aan", staat.soorten.includes(b.dataset.soort)));
+[...document.querySelectorAll("#cijferSeg button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.cijfers) === staat.cijfers));
+$("titel").value = staat.titel; $("aantal").value = staat.aantal;
+$("kolommen").value = staat.kolommen; $("grootte").value = staat.grootte; $("code").value = staat.code;
+[["onthoudChip", "onthoud"], ["hokChip", "hok"],
+ ["onthoudrijChip", "onthoudrij"], ["antwoordChip", "antwoord"], ["naamChip", "naam"]]
+  .forEach(([id, sleutel]) => $(id).classList.toggle("aan", staat[sleutel]));
+maakBlad();
+</script>
+</body>
+</html>
