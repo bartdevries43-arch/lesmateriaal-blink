@@ -117,6 +117,19 @@
   table.hulptabel{border-collapse:collapse; width:100%;}
   table.hulptabel th{text-align:left; font-weight:800; font-size:.85em; padding:4px 14px 4px 0; white-space:nowrap; vertical-align:top;}
   table.hulptabel td{font-size:.85em; color:#5b647f; padding:4px 0; vertical-align:top; line-height:1.45;}
+
+  @media (max-width:620px){
+    table.hulptabel, table.hulptabel tbody, table.hulptabel tr, table.hulptabel th, table.hulptabel td{display:block; width:auto;}
+    table.hulptabel tr{padding:5px 0; border-bottom:1px dotted #e4e7f4;}
+    table.hulptabel tr:last-child{border-bottom:none;}
+    table.hulptabel th{white-space:normal; padding:0 0 1px;}
+    table.hulptabel td{padding:0 0 1px;}
+  }
+  @media print{
+    table.hulptabel, table.hulptabel tbody, table.hulptabel tr, table.hulptabel th, table.hulptabel td{display:revert;}
+    table.hulptabel{display:table;} table.hulptabel tr{display:table-row;}
+    table.hulptabel th, table.hulptabel td{display:table-cell;}
+  }
 </style>
 </head>
 <body>
