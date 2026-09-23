@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sommenmaker · Lesmateriaal Blink</title>
+<meta name="description" content="Maak in een minuut een werkblad met plus-, min-, keer- en deelsommen. Kies het getalbereik, de tafels, met of zonder brug, en print het blad met of zonder antwoordblad.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1220px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .vlak{display:grid; grid-template-columns:minmax(300px,.8fr) minmax(0,1.2fr); gap:18px; margin-top:18px; align-items:start;}
+  @media (max-width:980px){ .vlak{grid-template-columns:minmax(0,1fr);} }
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:18px;}
+
+  .groep{margin-bottom:18px;}
+  .groep:last-child{margin-bottom:0;}
+  .groep h2{font-size:17px; margin-bottom:10px;}
+  .groep .klein{font-size:13px; color:var(--muted); margin:-6px 0 10px;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .velden{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px;}
+  .veld label{display:block; font-size:12.5px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; color:var(--muted); margin-bottom:4px;}
+  .veld input, .veld select{width:100%; font:inherit; font-size:15px; padding:10px 12px; border:1px solid var(--line-2); border-radius:13px; background:#fff; color:var(--ink);}
+  .tafels{display:flex; flex-wrap:wrap; gap:7px;}
+  .tafels button{font:inherit; font-size:14.5px; font-weight:800; width:44px; height:44px; border-radius:13px; border:1px solid var(--line-2); background:#fff; color:var(--ink); cursor:pointer;}
+  .tafels button.aan{background:var(--accent2); color:#fff; border-color:transparent;}
+  .knoppen{display:flex; flex-wrap:wrap; gap:9px; margin-top:6px;}
+  .knop{font:inherit; font-size:15px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:15px; padding:12px 17px; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent;}
+  .melding{font-size:14px; color:#b45309; margin-top:8px; min-height:20px;}
+
+  /* Het werkblad */
+  .bladvak{padding:0; overflow:hidden;}
+  .blad{background:#fff; padding:26px 30px 34px; font-size:16px;}
+  .bladkop{display:flex; align-items:flex-end; gap:16px; border-bottom:2px solid #e6e9f5; padding-bottom:12px; margin-bottom:18px; flex-wrap:wrap;}
+  .bladkop h2{font-size:24px;}
+  .bladkop .regels{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:#5b647f;}
+  .bladkop .regels span{display:inline-block; min-width:140px; border-bottom:1.5px dotted #b8c0d8; padding-bottom:2px;}
+  .sommen{display:grid; gap:12px 22px;}
+  .som{display:flex; align-items:baseline; gap:8px; font-variant-numeric:tabular-nums; padding:7px 4px; border-bottom:1px dotted #dfe3f0;}
+  .som .nr{font-size:12px; color:#9aa3bd; min-width:22px;}
+  .som .opgave{font-weight:700;}
+  .som .lijn{flex:1; border-bottom:1.5px solid #c9cfe3; min-width:46px; height:1em;}
+  .antwoorden .som .lijn{border:none; font-weight:800; color:var(--accent); flex:none; min-width:46px;}
+  .bladvoet{margin-top:22px; font-size:12px; color:#9aa3bd; display:flex; justify-content:space-between; gap:12px;}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .bron{font-size:13.5px; line-height:1.5; color:#4b5563; padding-left:22px; text-indent:-22px; margin-top:6px;}
+  .bron a{color:var(--accent); word-break:break-word;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  @media print{
+    body{background:#fff;}
+    .app{max-width:none; padding:0;}
+    .kop, .instellingen, details.uitleg, .voet, .bladvak{box-shadow:none; border:none;}
+    .kop, .instellingen, details.uitleg, .voet{display:none;}
+    .bladvak{padding:0;}
+    .blad{padding:0; font-size:15px;}
+    .paginabreak{break-before:page;}
+    @page{size:A4 portrait; margin:14mm;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="kop">
+    <span class="logo" aria-hidden="true">➕</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · rekenen</div>
+      <h1>Sommenmaker</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="printKnop" type="button">🖨 Afdrukken</button>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <div class="vlak">
+    <section class="kaart instellingen" aria-label="Instellingen">
+      <div class="groep">
+        <h2>Welke sommen?</h2>
+        <div class="chips" id="bewerkingen">
+          <button class="chip aan" type="button" data-bew="plus"><span class="bol"></span>Plus</button>
+          <button class="chip" type="button" data-bew="min"><span class="bol"></span>Min</button>
+          <button class="chip" type="button" data-bew="keer"><span class="bol"></span>Keer</button>
+          <button class="chip" type="button" data-bew="deel"><span class="bol"></span>Delen</button>
+        </div>
+      </div>
+
+      <div class="groep" id="bereikGroep">
+        <h2>Tot welk getal?</h2>
+        <p class="klein">Geldt voor plus en min.</p>
+        <div class="seg" id="bereikSeg">
+          <button type="button" data-tot="10">tot 10</button>
+          <button type="button" data-tot="20" class="aan">tot 20</button>
+          <button type="button" data-tot="100">tot 100</button>
+          <button type="button" data-tot="1000">tot 1000</button>
+        </div>
+        <div class="seg" id="brugSeg" style="margin-top:8px;">
+          <button type="button" data-brug="alles" class="aan">Alles door elkaar</button>
+          <button type="button" data-brug="zonder">Zonder brug</button>
+          <button type="button" data-brug="met">Met brug</button>
+        </div>
+      </div>
+
+      <div class="groep" id="tafelGroep">
+        <h2>Tafels</h2>
+        <p class="klein">Voor keer- en deelsommen.</p>
+        <div class="tafels" id="tafels"></div>
+      </div>
+
+      <div class="groep">
+        <h2>Het blad</h2>
+        <div class="velden">
+          <div class="veld"><label for="titel">Titel</label><input id="titel" type="text" value="Sommen" maxlength="40"></div>
+          <div class="veld"><label for="aantal">Aantal sommen</label><input id="aantal" type="number" min="4" max="120" step="2" value="30"></div>
+          <div class="veld"><label for="kolommen">Kolommen</label>
+            <select id="kolommen"><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option></select></div>
+          <div class="veld"><label for="grootte">Lettergrootte</label>
+            <select id="grootte"><option value="16">gewoon</option><option value="20" selected>groot</option><option value="26">extra groot</option></select></div>
+          <div class="veld"><label for="code">Herhaalcode</label><input id="code" type="text" maxlength="8" placeholder="bijv. 4821"></div>
+        </div>
+        <div class="chips" style="margin-top:10px;">
+          <button class="chip aan" type="button" id="antwoordChip"><span class="bol"></span>Antwoordblad erbij</button>
+          <button class="chip aan" type="button" id="naamChip"><span class="bol"></span>Regel voor naam en datum</button>
+        </div>
+      </div>
+
+      <div class="knoppen">
+        <button class="knop primair" id="maakKnop" type="button">Maak het werkblad</button>
+        <button class="knop" id="printKnop2" type="button">🖨 Afdrukken</button>
+      </div>
+      <p class="melding" id="melding"></p>
+    </section>
+
+    <section class="kaart bladvak" aria-label="Werkblad">
+      <div class="blad" id="blad"></div>
+    </section>
+  </div>
+
+  <details class="uitleg">
+    <summary>Waarom deze sommenmaker zo is gemaakt (voor de leerkracht)</summary>
+    <p>Sommen maken gaat niet vanzelf vlot. Kinderen die meer oefenen, automatiseren beter. Zwakke rekenaars hebben vooral baat bij een vaste opbouw, veel herhaling en directe instructie, en het advies is om er minstens tien minuten per dag aan te besteden (Punt &amp; Schoevers, 2023).</p>
+    <h3>De keuzes in dit werkblad</h3>
+    <ul>
+      <li><b>Zelf ophalen, verspreid over de tijd.</b> Kennis uit je geheugen ophalen en oefenen dat over meerdere dagen verspreid is, horen bij de meest effectieve leertechnieken (Dunlosky et al., 2013). Een kort blad per dag werkt dus beter dan een lang blad per week.</li>
+      <li><b>Met of zonder brug.</b> Bij plus en min kun je kiezen of de sommen over het tiental heen gaan. Zo oefen je eerst wat al lukt en daarna pas de lastigere stap.</li>
+      <li><b>Tafels los te kiezen.</b> Je oefent één tafel of een paar tafels door elkaar. Delen gaat altijd zonder rest, passend bij de gekozen tafels.</li>
+      <li><b>Een herhaalcode.</b> Vul dezelfde code in en je krijgt exact hetzelfde blad terug. Handig als een kind het blad kwijt is of als je een dag later nog eens hetzelfde wilt oefenen.</li>
+      <li><b>Antwoordblad erbij</b>, zodat kinderen zelf kunnen nakijken. Feedback direct na het oefenen helpt bij het onthouden (Rosenshine, 2012).</li>
+    </ul>
+    <h3>Bronnen</h3>
+    <p class="bron">Dunlosky, J., Rawson, K. A., Marsh, E. J., Nathan, M. J., &amp; Willingham, D. T. (2013). Improving students' learning with effective learning techniques: Promising directions from cognitive and educational psychology. <i>Psychological Science in the Public Interest, 14</i>(1), 4-58. <a href="https://doi.org/10.1177/1529100612453266">https://doi.org/10.1177/1529100612453266</a></p>
+    <p class="bron">Punt, R., &amp; Schoevers, E. (2023, 17 april). <i>Wat werkt in het rekenonderwijs om leerlingen het automatiseren en memoriseren van basisbewerkingen aan te leren?</i> (VRAAG-808). Kennisrotonde. Geraadpleegd op 23 september 2026, van <a href="https://www.kennisrotonde.nl/vraag-en-antwoord/rekenen-op-de-basisschool">https://www.kennisrotonde.nl/vraag-en-antwoord/rekenen-op-de-basisschool</a></p>
+    <p class="bron">Rosenshine, B. (2012). Principles of instruction: Research-based strategies that all teachers should know. <i>American Educator, 36</i>(1), 12-19, 39.</p>
+  </details>
+
+  <footer class="voet">Sommenmaker · onderdeel van <a href="index.html">Lesmateriaal Blink</a> · zelf gemaakt, geen sommen uit een methode</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+
+/* ---------- toevalsgenerator met code, zodat hetzelfde blad terugkomt ---------- */
+function zaadje(tekst) {
+  let h = 1779033703 ^ tekst.length;
+  for (let i = 0; i < tekst.length; i++) {
+    h = Math.imul(h ^ tekst.charCodeAt(i), 3432918353);
+    h = (h << 13) | (h >>> 19);
+  }
+  return h >>> 0;
+}
+function maakRandom(zaad) {
+  let a = zaad || (Math.random() * 4294967296) >>> 0;
+  return () => {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/* ---------- instellingen ---------- */
+const staat = {
+  bewerkingen: new Set(["plus"]),
+  tot: 20,
+  brug: "alles",
+  tafels: new Set([1, 2, 5, 10]),
+  antwoordblad: true,
+  naamregel: true,
+};
+
+$("tafels").innerHTML = Array.from({ length: 12 }, (_, i) =>
+  `<button type="button" data-tafel="${i + 1}">${i + 1}</button>`).join("");
+
+function tekenKeuzes() {
+  [...document.querySelectorAll("#bewerkingen .chip")].forEach((c) => c.classList.toggle("aan", staat.bewerkingen.has(c.dataset.bew)));
+  [...document.querySelectorAll("#bereikSeg button")].forEach((b) => b.classList.toggle("aan", Number(b.dataset.tot) === staat.tot));
+  [...document.querySelectorAll("#brugSeg button")].forEach((b) => b.classList.toggle("aan", b.dataset.brug === staat.brug));
+  [...document.querySelectorAll("#tafels button")].forEach((b) => b.classList.toggle("aan", staat.tafels.has(Number(b.dataset.tafel))));
+  $("antwoordChip").classList.toggle("aan", staat.antwoordblad);
+  $("naamChip").classList.toggle("aan", staat.naamregel);
+  const rekent = staat.bewerkingen.has("keer") || staat.bewerkingen.has("deel");
+  const telt = staat.bewerkingen.has("plus") || staat.bewerkingen.has("min");
+  $("tafelGroep").style.opacity = rekent ? 1 : .45;
+  $("bereikGroep").style.opacity = telt ? 1 : .45;
+}
+
+$("bewerkingen").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-bew]"); if (!b) return;
+  const k = b.dataset.bew;
+  if (staat.bewerkingen.has(k)) staat.bewerkingen.delete(k); else staat.bewerkingen.add(k);
+  if (staat.bewerkingen.size === 0) staat.bewerkingen.add(k);
+  tekenKeuzes(); maakBlad();
+});
+$("bereikSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-tot]"); if (!b) return;
+  staat.tot = Number(b.dataset.tot); tekenKeuzes(); maakBlad();
+});
+$("brugSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-brug]"); if (!b) return;
+  staat.brug = b.dataset.brug; tekenKeuzes(); maakBlad();
+});
+$("tafels").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-tafel]"); if (!b) return;
+  const t = Number(b.dataset.tafel);
+  if (staat.tafels.has(t)) staat.tafels.delete(t); else staat.tafels.add(t);
+  if (staat.tafels.size === 0) staat.tafels.add(t);
+  tekenKeuzes(); maakBlad();
+});
+$("antwoordChip").addEventListener("click", () => { staat.antwoordblad = !staat.antwoordblad; tekenKeuzes(); maakBlad(); });
+$("naamChip").addEventListener("click", () => { staat.naamregel = !staat.naamregel; tekenKeuzes(); maakBlad(); });
+["titel", "aantal", "kolommen", "grootte", "code"].forEach((id) => $(id).addEventListener("change", maakBlad));
+$("maakKnop").addEventListener("click", () => { $("code").value = ""; maakBlad(); });
+$("printKnop").addEventListener("click", () => window.print());
+$("printKnop2").addEventListener("click", () => window.print());
+
+/* ---------- sommen maken ---------- */
+function heelGetal(random, van, tot) { return van + Math.floor(random() * (tot - van + 1)); }
+
+function maakSom(random, soort) {
+  if (soort === "plus" || soort === "min") {
+    const tot = staat.tot;
+    for (let poging = 0; poging < 60; poging++) {
+      const a = heelGetal(random, 1, tot);
+      const b = heelGetal(random, 1, tot - (soort === "plus" ? a : 0));
+      if (b < 1) continue;
+      if (soort === "plus") {
+        const brug = Math.floor(a / 10) !== Math.floor((a + b) / 10) && (a % 10) + (b % 10) >= 10;
+        if (staat.brug === "zonder" && brug) continue;
+        if (staat.brug === "met" && !brug) continue;
+        return { vraag: `${a} + ${b} =`, antwoord: a + b };
+      }
+      const groot = Math.max(a, b), klein = Math.min(a, b);
+      if (klein === 0) continue;
+      const brug = (groot % 10) < (klein % 10);
+      if (staat.brug === "zonder" && brug) continue;
+      if (staat.brug === "met" && !brug) continue;
+      return { vraag: `${groot} − ${klein} =`, antwoord: groot - klein };
+    }
+    const a = heelGetal(random, 1, staat.tot), b = heelGetal(random, 1, Math.max(1, staat.tot - a));
+    return soort === "plus" ? { vraag: `${a} + ${b} =`, antwoord: a + b } : { vraag: `${a + b} − ${b} =`, antwoord: a };
+  }
+
+  const tafelLijst = [...staat.tafels];
+  const tafel = tafelLijst[Math.floor(random() * tafelLijst.length)];
+  const mee = heelGetal(random, 1, 10);
+  if (soort === "keer") return { vraag: `${tafel} × ${mee} =`, antwoord: tafel * mee };
+  return { vraag: `${tafel * mee} : ${tafel} =`, antwoord: mee };
+}
+
+function maakBlad() {
+  const aantal = Math.max(4, Math.min(120, Number($("aantal").value) || 30));
+  $("aantal").value = aantal;
+  const kolommen = Number($("kolommen").value);
+  const grootte = Number($("grootte").value);
+  const titel = ($("titel").value || "Sommen").trim();
+  let code = $("code").value.trim();
+  if (!code) { code = String(Math.floor(1000 + Math.random() * 9000)); $("code").value = code; }
+  const random = maakRandom(zaadje(code + "|" + [...staat.bewerkingen].sort().join(",") + "|" + staat.tot + "|" + staat.brug + "|" + [...staat.tafels].sort((a, b) => a - b).join(",") + "|" + aantal));
+
+  const soorten = [...staat.bewerkingen];
+  const sommen = [], gezien = new Set();
+  for (let i = 0; i < aantal; i++) {
+    const soort = soorten[i % soorten.length];
+    let som = maakSom(random, soort);
+    for (let poging = 0; poging < 80 && gezien.has(som.vraag); poging++) som = maakSom(random, soort);  // geen dubbele sommen
+    gezien.add(som.vraag);
+    sommen.push(som);
+  }
+
+  const regels = staat.naamregel
+    ? `<div class="regels"><span>naam</span><span>datum</span></div>` : "";
+  const lijst = (metAntwoord) => `<div class="sommen${metAntwoord ? " antwoorden" : ""}" style="grid-template-columns:repeat(${kolommen},minmax(0,1fr)); font-size:${metAntwoord ? Math.max(15, grootte - 4) : grootte}px;">` +
+    sommen.map((s, i) => `<div class="som"><span class="nr">${i + 1}.</span><span class="opgave">${s.vraag}</span>` +
+      (metAntwoord ? `<span class="lijn">${s.antwoord}</span>` : `<span class="lijn"></span>`) + `</div>`).join("") + `</div>`;
+
+  $("blad").innerHTML =
+    `<div class="bladkop"><h2>${titel}</h2>${regels}</div>` +
+    lijst(false) +
+    `<div class="bladvoet"><span>Lesmateriaal Blink · sommenmaker</span><span>code ${code}</span></div>` +
+    (staat.antwoordblad
+      ? `<div class="paginabreak" style="margin-top:34px;"><div class="bladkop"><h2>${titel} · antwoorden</h2></div>${lijst(true)}` +
+        `<div class="bladvoet"><span>Lesmateriaal Blink · antwoordblad</span><span>code ${code}</span></div></div>`
+      : "");
+
+  const soortNaam = { plus: "plus", min: "min", keer: "keer", deel: "deel" };
+  $("melding").textContent = `${aantal} sommen (${[...staat.bewerkingen].map((s) => soortNaam[s]).join(", ")}). Zelfde blad terug? Vul code ${code} in.`;
+}
+
+tekenKeuzes();
+maakBlad();
+</script>
+</body>
+</html>
