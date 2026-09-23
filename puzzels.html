@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Breinbrekers · Lesmateriaal Blink</title>
+<meta name="description" content="Maak een puzzelblad met sudoku's, codekrakers, rekenkrakers, magische vierkanten, getallenrijen en woordzoekers. Met antwoordblad en een code om hetzelfde blad terug te krijgen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1220px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .vlak{display:grid; grid-template-columns:minmax(300px,.8fr) minmax(0,1.2fr); gap:18px; margin-top:18px; align-items:start;}
+  @media (max-width:980px){ .vlak{grid-template-columns:minmax(0,1fr);} }
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:18px;}
+
+  .groep{margin-bottom:18px;}
+  .groep:last-child{margin-bottom:0;}
+  .groep h2{font-size:17px; margin-bottom:10px;}
+  .groep .klein{font-size:13px; color:var(--muted); margin:-6px 0 10px;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .velden{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px;}
+  .veld label{display:block; font-size:12.5px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; color:var(--muted); margin-bottom:4px;}
+  .veld input, .veld select{width:100%; font:inherit; font-size:15px; padding:10px 12px; border:1px solid var(--line-2); border-radius:13px; background:#fff; color:var(--ink);}
+  .knoppen{display:flex; flex-wrap:wrap; gap:9px; margin-top:6px;}
+  .knop{font:inherit; font-size:15px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:15px; padding:12px 17px; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent;}
+  .melding{font-size:14px; color:#b45309; margin-top:8px; min-height:20px;}
+
+  /* Het werkblad */
+  .bladvak{padding:0; overflow:hidden;}
+  .blad{background:#fff; padding:26px 30px 34px; font-size:16px;}
+  .bladkop{display:flex; align-items:flex-end; gap:16px; border-bottom:2px solid #e6e9f5; padding-bottom:12px; margin-bottom:18px; flex-wrap:wrap;}
+  .bladkop h2{font-size:24px;}
+  .bladkop .regels{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:#5b647f;}
+  .bladkop .regels span{display:inline-block; min-width:140px; border-bottom:1.5px dotted #b8c0d8; padding-bottom:2px;}
+  .opgaven{display:grid; gap:13px 24px;}
+  .opg{padding:8px 4px 10px; border-bottom:1px dotted #dfe3f0; break-inside:avoid;}
+  .opg .nr{font-size:12px; color:#9aa3bd; margin-right:6px;}
+  .opg .vraag{font-weight:700; line-height:1.45;}
+  .opg .lijn{display:inline-block; border-bottom:1.5px solid #c9cfe3; min-width:76px; height:1.15em; vertical-align:-2px;}
+  .opg .antwoord{font-weight:800; color:var(--accent); font-variant-numeric:tabular-nums; margin-top:3px;}
+  .opg .hint{font-size:12.5px; color:#8b93ad; margin-top:3px;}
+
+  .bladvoet{margin-top:22px; font-size:12px; color:#9aa3bd; display:flex; justify-content:space-between; gap:12px;}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .bron{font-size:13.5px; line-height:1.5; color:#4b5563; padding-left:22px; text-indent:-22px; margin-top:6px;}
+  .bron a{color:var(--accent); word-break:break-word;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  @media print{
+    body{background:#fff;}
+    .app{max-width:none; padding:0;}
+    .kop, .instellingen, details.uitleg, .voet{display:none;}
+    .bladvak{box-shadow:none; border:none; padding:0;}
+    .blad{padding:0; font-size:15px;}
+    .paginabreak{break-before:page;}
+    @page{size:A4 portrait; margin:14mm;}
+  }
+
+  /* Puzzels */
+  .opgaven{gap:22px 26px;}
+  .opg{padding:10px 4px 14px;}
+  .opg .vraag{margin-bottom:7px;}
+  .opg .antwoord{font-weight:800; color:var(--accent); margin-top:6px;}
+  .opg .hint{font-size:12.5px; color:#8b93ad; margin-top:5px;}
+  .opg .lijn{display:inline-block; border-bottom:2px solid var(--accent); min-width:2.4em; text-align:center; font-weight:800;}
+
+  table.rooster{border-collapse:collapse; font-variant-numeric:tabular-nums;}
+  table.rooster td{width:1.75em; height:1.75em; text-align:center; vertical-align:middle;
+    border:1px solid #c3cadf; font-weight:700; padding:0;}
+  table.rooster td.gegeven{background:#f2f4fc;}
+  table.rooster td.vul{color:var(--accent);}
+  table.rooster tr td.blokR{border-right:2.2px solid #55607e;}
+  table.rooster tr.blokO td{border-bottom:2.2px solid #55607e;}
+  table.rooster{border:2.2px solid #55607e;}
+
+  table.magisch td{width:2.1em; height:2.1em; font-size:1.05em;}
+  .magischsom{font-size:.86em; color:#5b647f; margin-top:5px;}
+
+  .sleutel{display:flex; flex-wrap:wrap; gap:3px 7px; margin:6px 0 8px; font-size:.78em; color:#5b647f;}
+  .sleutel span{white-space:nowrap;}
+  .code{font-weight:800; letter-spacing:.06em; font-variant-numeric:tabular-nums; line-height:2.1;}
+  .code b{font-weight:800;}
+  .code .vak{display:inline-block; min-width:1.5em; border-bottom:2px solid #c9cfe3; margin:0 .12em; text-align:center;}
+  .code .spatie{display:inline-block; width:1em;}
+
+  .kraker{font-size:1.15em; line-height:1.9;}
+  .kraker .regel{white-space:nowrap;}
+
+  .rij{font-weight:700; font-size:1.05em; letter-spacing:.04em;}
+  .rij .vak{display:inline-block; min-width:2.1em; border-bottom:2px solid #c9cfe3; margin:0 .14em; text-align:center;}
+
+  table.zoeker{border-collapse:collapse; font-family:"Baloo 2",system-ui,sans-serif;}
+  table.zoeker td{width:1.5em; height:1.5em; text-align:center; font-size:.92em; font-weight:700; letter-spacing:0; padding:0;}
+  table.zoeker td.raak{color:var(--accent); text-decoration:underline;}
+  .woordlijst{display:flex; flex-wrap:wrap; gap:5px 10px; margin-top:7px; font-size:.84em; font-weight:700; color:#3a4a6b;}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="kop">
+    <span class="logo" aria-hidden="true">🧩</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · puzzels</div>
+      <h1>Breinbrekers</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="printKnop" type="button">🖨 Afdrukken</button>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <div class="vlak">
+    <section class="kaart instellingen" aria-label="Instellingen">
+      <div class="groep">
+        <h2>Welke puzzels?</h2>
+        <div class="chips" id="soorten">
+          <button class="chip aan" type="button" data-soort="sudoku"><span class="bol"></span>Sudoku</button>
+          <button class="chip aan" type="button" data-soort="codekraker"><span class="bol"></span>Codekraker</button>
+          <button class="chip aan" type="button" data-soort="rekenkraker"><span class="bol"></span>Rekenkraker</button>
+          <button class="chip" type="button" data-soort="magisch"><span class="bol"></span>Magisch vierkant</button>
+          <button class="chip" type="button" data-soort="getallenrij"><span class="bol"></span>Getallenrij</button>
+          <button class="chip" type="button" data-soort="woordzoeker"><span class="bol"></span>Woordzoeker</button>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Hoe moeilijk?</h2>
+        <div class="seg" id="niveauSeg">
+          <button type="button" data-niveau="1">makkelijk</button>
+          <button type="button" data-niveau="2" class="aan">gemiddeld</button>
+          <button type="button" data-niveau="3">pittig</button>
+        </div>
+        <p class="klein" style="margin-top:8px;">Makkelijk is sudoku 4 bij 4, pittig is 9 bij 9. Bij pittig staan er ook woorden achterstevoren in de woordzoeker.</p>
+      </div>
+
+      <div class="groep">
+        <h2>Het blad</h2>
+        <div class="velden">
+          <div class="veld"><label for="titel">Titel</label><input id="titel" type="text" value="Breinbrekers" maxlength="40"></div>
+          <div class="veld"><label for="aantal">Aantal puzzels</label><input id="aantal" type="number" min="1" max="20" step="1" value="6"></div>
+          <div class="veld"><label for="kolommen">Kolommen</label>
+            <select id="kolommen"><option value="1">1</option><option value="2" selected>2</option></select></div>
+          <div class="veld"><label for="grootte">Lettergrootte</label>
+            <select id="grootte"><option value="14">gewoon</option><option value="16" selected>groot</option><option value="19">extra groot</option></select></div>
+          <div class="veld"><label for="code">Herhaalcode</label><input id="code" type="text" maxlength="8" placeholder="bijv. 4821"></div>
+        </div>
+        <div class="chips" style="margin-top:10px;">
+          <button class="chip aan" type="button" id="sleutelChip"><span class="bol"></span>Lettersleutel bij de codekraker</button>
+          <button class="chip aan" type="button" id="antwoordChip"><span class="bol"></span>Antwoordblad erbij</button>
+          <button class="chip aan" type="button" id="naamChip"><span class="bol"></span>Regel voor naam en datum</button>
+        </div>
+      </div>
+
+      <div class="knoppen">
+        <button class="knop primair" id="maakKnop" type="button">Maak het puzzelblad</button>
+        <button class="knop" id="printKnop2" type="button">🖨 Afdrukken</button>
+      </div>
+      <p class="melding" id="melding"></p>
+    </section>
+
+    <section class="kaart bladvak" aria-label="Puzzelblad">
+      <div class="blad" id="blad"></div>
+    </section>
+  </div>
+
+  <details class="uitleg">
+    <summary>Waarom puzzels (voor de leerkracht)</summary>
+    <p>Puzzels zijn leuk, en dat is al een reden. Maar ik zet ze bewust in als werk voor kinderen die klaar zijn, als dagstart of als moment waarop de klas even stil en geconcentreerd bezig is. Het is belangrijk om eerlijk te blijven over wat puzzels wel en niet doen.</p>
+    <h3>Wat puzzels wel doen</h3>
+    <ul>
+      <li><b>Oefenen wat er al in zit.</b> Een rekenkraker en een getallenrij zijn gewoon rekenen in een ander jasje. Jezelf iets laten uitzoeken werkt beter dan het opnieuw uitgelegd krijgen (Dunlosky et al., 2013).</li>
+      <li><b>Patronen zoeken.</b> Bij de getallenrij en het magisch vierkant gaat het om verbanden zien. Dat is precies waar oefenen volgens onderzoek op gericht moet zijn, in plaats van op stampen (Hickendorff, 2023).</li>
+      <li><b>Woorden lezen zonder dat het lezen lijkt.</b> De codekraker en de woordzoeker vragen letter voor letter kijken. Voor kinderen die lezen zwaar vinden, is dat een laagdrempelige manier om toch met letters bezig te zijn.</li>
+    </ul>
+    <h3>Wat puzzels niet doen</h3>
+    <p>Puzzels maken kinderen niet slimmer in het algemeen. Onderzoek naar breintraining laat zien dat mensen beter worden in de oefening zelf, maar dat die winst nauwelijks overdraagt naar andere taken of naar schoolresultaten (Simons et al., 2016). Ik gebruik puzzels daarom als extra werk en als plezier, niet als vervanging van de les.</p>
+    <h3>Hoe het blad werkt</h3>
+    <ul>
+      <li>Zes soorten puzzels, los aan en uit te zetten: sudoku, codekraker, rekenkraker, magisch vierkant, getallenrij en woordzoeker.</li>
+      <li>Drie niveaus. De sudoku's worden gecontroleerd op één oplossing, dus er is altijd precies één goed antwoord.</li>
+      <li>Het antwoordblad staat op een eigen pagina.</li>
+      <li>Met een <b>herhaalcode</b> krijg je precies hetzelfde blad terug. Handig als je het nog een keer wilt printen of de hele klas hetzelfde blad wilt geven.</li>
+    </ul>
+    <h3>Bronnen</h3>
+    <p class="bron">Dunlosky, J., Rawson, K. A., Marsh, E. J., Nathan, M. J., &amp; Willingham, D. T. (2013). Improving students' learning with effective learning techniques: Promising directions from cognitive and educational psychology. <i>Psychological Science in the Public Interest, 14</i>(1), 4-58. <a href="https://doi.org/10.1177/1529100612453266">https://doi.org/10.1177/1529100612453266</a></p>
+    <p class="bron">Hickendorff, M. (2023, 4 april). <i>Aanvankelijk en gevorderd rekenen in groep 3, 4 en 5</i>. Onderwijskennis.nl. Geraadpleegd op 23 september 2026, van <a href="https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5">https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5</a></p>
+    <p class="bron">Simons, D. J., Boot, W. R., Charness, N., Gathercole, S. E., Chabris, C. F., Hambrick, D. Z., &amp; Stine-Morrow, E. A. L. (2016). Do "brain-training" programs work? <i>Psychological Science in the Public Interest, 17</i>(3), 103-186. <a href="https://doi.org/10.1177/1529100616661983">https://doi.org/10.1177/1529100616661983</a></p>
+  </details>
+
+  <footer class="voet">Breinbrekers · onderdeel van <a href="index.html">Lesmateriaal Blink</a> · groep 4 tot en met 8</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const BEWAAR = "blink-puzzels";
+
+let staat = { soorten: ["sudoku", "codekraker", "rekenkraker"], niveau: 2,
+  titel: "Breinbrekers", aantal: 6, kolommen: 2, grootte: 16, code: "",
+  sleutel: true, antwoord: true, naam: true };
+try { const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}"); Object.keys(staat).forEach((k) => { if (k in b) staat[k] = b[k]; }); } catch (e) {}
+const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
+
+/* ---- toeval met een code ---- */
+function zaadje(tekst) {
+  let h = 2166136261;
+  for (let i = 0; i < tekst.length; i++) { h ^= tekst.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+function maakRandom(zaad) {
+  let a = zaad >>> 0;
+  return function () {
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+const tussen = (r, van, tot) => van + Math.floor(r() * (tot - van + 1));
+const kies = (r, lijst) => lijst[Math.floor(r() * lijst.length)];
+function schud(r, lijst) {
+  const l = [...lijst];
+  for (let i = l.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [l[i], l[j]] = [l[j], l[i]]; }
+  return l;
+}
+
+/* ================= SUDOKU ================= */
+const VORM = { 4: [2, 2], 6: [2, 3], 9: [3, 3] };   // [rijen per blok, kolommen per blok]
+
+function magHier(bord, n, pos, waarde) {
+  const [br, bc] = VORM[n];
+  const rij = Math.floor(pos / n), kol = pos % n;
+  for (let i = 0; i < n; i++) {
+    if (bord[rij * n + i] === waarde) return false;
+    if (bord[i * n + kol] === waarde) return false;
+  }
+  const r0 = Math.floor(rij / br) * br, k0 = Math.floor(kol / bc) * bc;
+  for (let i = 0; i < br; i++) for (let j = 0; j < bc; j++) {
+    if (bord[(r0 + i) * n + (k0 + j)] === waarde) return false;
+  }
+  return true;
+}
+function vulBord(bord, n, r, pos = 0) {
+  if (pos === n * n) return true;
+  if (bord[pos]) return vulBord(bord, n, r, pos + 1);
+  for (const w of schud(r, Array.from({ length: n }, (_, i) => i + 1))) {
+    if (magHier(bord, n, pos, w)) {
+      bord[pos] = w;
+      if (vulBord(bord, n, r, pos + 1)) return true;
+      bord[pos] = 0;
+    }
+  }
+  return false;
+}
+function telOplossingen(bord, n, grens = 2) {
+  const pos = bord.indexOf(0);
+  if (pos === -1) return 1;
+  let totaal = 0;
+  for (let w = 1; w <= n; w++) {
+    if (magHier(bord, n, pos, w)) {
+      bord[pos] = w;
+      totaal += telOplossingen(bord, n, grens);
+      bord[pos] = 0;
+      if (totaal >= grens) return totaal;
+    }
+  }
+  return totaal;
+}
+function maakSudoku(r, n, weghalen) {
+  const vol = new Array(n * n).fill(0);
+  vulBord(vol, n, r);
+  const puzzel = [...vol];
+  let weg = 0;
+  for (const pos of schud(r, Array.from({ length: n * n }, (_, i) => i))) {
+    if (weg >= weghalen) break;
+    const bewaard = puzzel[pos];
+    puzzel[pos] = 0;
+    if (telOplossingen([...puzzel], n) !== 1) puzzel[pos] = bewaard;
+    else weg++;
+  }
+  return { puzzel, vol, n };
+}
+function roosterHtml(bord, vol, n, metAntwoord, klasse) {
+  const [br, bc] = VORM[n];
+  let uit = `<table class="rooster ${klasse || ""}">`;
+  for (let rij = 0; rij < n; rij++) {
+    uit += `<tr class="${(rij + 1) % br === 0 && rij < n - 1 ? "blokO" : ""}">`;
+    for (let kol = 0; kol < n; kol++) {
+      const i = rij * n + kol;
+      const rand = (kol + 1) % bc === 0 && kol < n - 1 ? "blokR" : "";
+      if (bord[i]) uit += `<td class="gegeven ${rand}">${bord[i]}</td>`;
+      else uit += `<td class="${rand} ${metAntwoord ? "vul" : ""}">${metAntwoord ? vol[i] : ""}</td>`;
+    }
+    uit += "</tr>";
+  }
+  return uit + "</table>";
+}
+
+/* ================= MAGISCH VIERKANT ================= */
+const BASIS = [[8, 1, 6], [3, 5, 7], [4, 9, 2]];
+function draai(v) { return v[0].map((_, i) => v.map((rij) => rij[i]).reverse()); }
+function spiegel(v) { return v.map((rij) => [...rij].reverse()); }
+function maakMagisch(r, niveau) {
+  let v = BASIS.map((rij) => [...rij]);
+  for (let i = 0, n = tussen(r, 0, 3); i < n; i++) v = draai(v);
+  if (r() < .5) v = spiegel(v);
+  const keer = niveau === 3 ? kies(r, [2, 3]) : 1;
+  const erbij = niveau === 1 ? tussen(r, 0, 4) : tussen(r, 0, 20);
+  v = v.map((rij) => rij.map((w) => w * keer + erbij));
+  const som = v[0][0] + v[0][1] + v[0][2];
+  const leeg = niveau === 1 ? 3 : niveau === 2 ? 4 : 5;
+  const open = new Set(schud(r, Array.from({ length: 9 }, (_, i) => i)).slice(0, leeg));
+  return { vol: v, open, som };
+}
+function magischHtml(o, metAntwoord) {
+  let uit = '<table class="rooster magisch">';
+  for (let rij = 0; rij < 3; rij++) {
+    uit += "<tr>";
+    for (let kol = 0; kol < 3; kol++) {
+      const i = rij * 3 + kol;
+      const w = o.vol[rij][kol];
+      if (!o.open.has(i)) uit += `<td class="gegeven">${w}</td>`;
+      else uit += `<td class="${metAntwoord ? "vul" : ""}">${metAntwoord ? w : ""}</td>`;
+    }
+    uit += "</tr>";
+  }
+  return uit + `</table><div class="magischsom">Elke rij, elke kolom en allebei de diagonalen zijn samen <b>${o.som}</b>.</div>`;
+}
+
+/* ================= CODEKRAKER ================= */
+const WOORDEN = ["zomer", "regen", "fiets", "boek", "vogel", "school", "koffie", "winter", "bloem", "strand",
+  "wolk", "trein", "muziek", "zwemmen", "tafel", "raam", "brood", "sleutel", "kaars", "vriend",
+  "lente", "herfst", "avond", "morgen", "tuin", "stoel", "lamp", "deur", "berg", "rivier",
+  "appel", "banaan", "kaas", "melk", "water", "zand", "blad", "boom", "gras", "steen"];
+const ZINNEN = ["de zon schijnt", "wij gaan lezen", "het is stil", "morgen vrij", "tot straks",
+  "goed gedaan", "veel plezier", "kom maar", "fijne dag", "tot ziens"];
+function maakCode(r, niveau) {
+  const tekst = niveau === 3 ? kies(r, ZINNEN)
+    : niveau === 2 ? kies(r, WOORDEN) + " " + kies(r, WOORDEN)
+    : kies(r, WOORDEN);
+  const cijfers = [...tekst].map((k) => (k === " " ? "/" : String(k.charCodeAt(0) - 96)));
+  return { tekst, cijfers };
+}
+function codeHtml(o, metAntwoord) {
+  const stukken = o.cijfers.map((c, i) => {
+    if (c === "/") return '<span class="spatie">/</span>';
+    const letter = o.tekst[i].toUpperCase();
+    return `<span class="code"><b>${c}</b><span class="vak">${metAntwoord ? letter : ""}</span></span>`;
+  }).join(" ");
+  return `<div class="code">${stukken}</div>`;
+}
+function sleutelHtml() {
+  const letters = "abcdefghijklmnopqrstuvwxyz".toUpperCase().split("");
+  return `<div class="sleutel">${letters.map((l, i) => `<span>${l}=${i + 1}</span>`).join("")}</div>`;
+}
+
+/* ================= REKENKRAKER ================= */
+const FIGUREN = [["🍎", "🍌", "🍐"], ["🐢", "🐝", "🐟"], ["⭐", "🌙", "☀️"], ["🚗", "🚲", "🚌"], ["🎈", "🎁", "🎨"]];
+function maakRekenkraker(r, niveau) {
+  const [A, B, C] = kies(r, FIGUREN);
+  const top = niveau === 1 ? 6 : niveau === 2 ? 10 : 12;
+  const a = tussen(r, 2, top);
+  const b = tussen(r, 2, top);
+  const c = tussen(r, 1, Math.max(1, b - 1));
+  const vraag = niveau === 3 ? { tekst: `${A} + ${B} × ${C}`, uit: a + b * c } : { tekst: `${A} + ${B} + ${C}`, uit: a + b + c };
+  return {
+    regels: [`${A} + ${A} + ${A} = ${3 * a}`, `${A} + ${B} = ${a + b}`, `${B} − ${C} = ${b - c}`],
+    vraag: vraag.tekst, uit: vraag.uit,
+    oplossing: `${A} = ${a}, ${B} = ${b}, ${C} = ${c}, dus ${vraag.tekst} = ${vraag.uit}`,
+  };
+}
+
+/* ================= GETALLENRIJ ================= */
+function maakRij(r, niveau) {
+  const soorten = niveau === 1 ? ["plus", "min"] : niveau === 2 ? ["plus", "min", "keer", "groei"] : ["keer", "groei", "wissel", "plus"];
+  const soort = kies(r, soorten);
+  let start, stap, rij = [], regel = "";
+  if (soort === "plus") { start = tussen(r, 1, 20); stap = tussen(r, 2, 9); rij = [0,1,2,3,4,5,6].map((i) => start + i * stap); regel = `telkens + ${stap}`; }
+  else if (soort === "min") { stap = tussen(r, 2, 9); start = tussen(r, 40, 90); rij = [0,1,2,3,4,5,6].map((i) => start - i * stap); regel = `telkens − ${stap}`; }
+  else if (soort === "keer") { stap = tussen(r, 2, 3); start = tussen(r, 1, 4); rij = [0,1,2,3,4,5,6].map((i) => start * Math.pow(stap, i)); regel = `telkens × ${stap}`; }
+  else if (soort === "groei") { start = tussen(r, 1, 6); const d0 = tussen(r, 1, 3); let w = start, d = d0; rij = [w]; for (let i = 0; i < 6; i++) { w += d; d++; rij.push(w); } regel = `het verschil wordt steeds 1 groter (begin + ${d0})`; }
+  else { start = tussen(r, 5, 20); const op = tussen(r, 3, 9), af = tussen(r, 1, op - 1); let w = start; rij = [w]; for (let i = 0; i < 6; i++) { w += i % 2 === 0 ? op : -af; rij.push(w); } regel = `om en om + ${op} en − ${af}`; }
+  const tonen = niveau === 3 ? 4 : 5;
+  const vragen = niveau === 3 ? 2 : 1;
+  return { rij, tonen, vragen, regel };
+}
+function rijHtml(o, metAntwoord) {
+  const stukken = o.rij.slice(0, o.tonen + o.vragen).map((w, i) =>
+    i < o.tonen ? `<span>${w}</span>` : `<span class="vak">${metAntwoord ? w : ""}</span>`);
+  return `<div class="rij">${stukken.join(" ,  ")} , …</div>` +
+    (metAntwoord ? `<div class="antwoord">${o.regel}</div>` : "");
+}
+
+/* ================= WOORDZOEKER ================= */
+const THEMAS = {
+  school: ["POTLOOD", "SCHRIFT", "GUM", "BOEK", "TAFEL", "STOEL", "KRIJT", "LEZEN", "REKENEN", "PLEIN"],
+  natuur: ["BOOM", "BLAD", "WOLK", "REGEN", "ZON", "BLOEM", "GRAS", "BERG", "RIVIER", "STRAND"],
+  dieren: ["HOND", "KAT", "PAARD", "VOGEL", "VIS", "MUIS", "KOE", "SCHAAP", "KIP", "BEER"],
+  eten: ["BROOD", "KAAS", "MELK", "APPEL", "BANAAN", "SOEP", "RIJST", "EI", "BOTER", "PEER"],
+};
+const RICHTINGEN = [[0, 1], [1, 0], [1, 1], [1, -1]];
+function maakZoeker(r, niveau) {
+  const maat = niveau === 1 ? 9 : niveau === 2 ? 11 : 13;
+  const hoeveel = niveau === 1 ? 5 : niveau === 2 ? 7 : 9;
+  const thema = kies(r, Object.keys(THEMAS));
+  const woorden = schud(r, THEMAS[thema]).filter((w) => w.length <= maat).slice(0, hoeveel);
+  const grid = Array.from({ length: maat }, () => new Array(maat).fill(""));
+  const raak = Array.from({ length: maat }, () => new Array(maat).fill(false));
+  const geplaatst = [];
+  for (const woord of woorden) {
+    let gelukt = false;
+    for (let poging = 0; poging < 220 && !gelukt; poging++) {
+      const [dr, dk] = kies(r, RICHTINGEN);
+      const omgekeerd = niveau === 3 && r() < .35;
+      const letters = omgekeerd ? [...woord].reverse() : [...woord];
+      const rij = tussen(r, 0, maat - 1), kol = tussen(r, 0, maat - 1);
+      const eindR = rij + dr * (letters.length - 1), eindK = kol + dk * (letters.length - 1);
+      if (eindR < 0 || eindR >= maat || eindK < 0 || eindK >= maat) continue;
+      let past = true;
+      for (let i = 0; i < letters.length; i++) {
+        const c = grid[rij + dr * i][kol + dk * i];
+        if (c && c !== letters[i]) { past = false; break; }
+      }
+      if (!past) continue;
+      for (let i = 0; i < letters.length; i++) { grid[rij + dr * i][kol + dk * i] = letters[i]; raak[rij + dr * i][kol + dk * i] = true; }
+      geplaatst.push(woord); gelukt = true;
+    }
+  }
+  const alfabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  for (let i = 0; i < maat; i++) for (let j = 0; j < maat; j++) {
+    if (!grid[i][j]) grid[i][j] = alfabet[Math.floor(r() * 26)];
+  }
+  return { grid, raak, woorden: geplaatst, thema, maat };
+}
+function zoekerHtml(o, metAntwoord) {
+  let uit = '<table class="zoeker">';
+  for (let i = 0; i < o.maat; i++) {
+    uit += "<tr>";
+    for (let j = 0; j < o.maat; j++) {
+      uit += `<td class="${metAntwoord && o.raak[i][j] ? "raak" : ""}">${o.grid[i][j]}</td>`;
+    }
+    uit += "</tr>";
+  }
+  uit += "</table>";
+  uit += `<div class="woordlijst">${o.woorden.map((w) => `<span>${w}</span>`).join("")}</div>`;
+  return uit;
+}
+
+/* ================= het blad ================= */
+function maakPuzzel(r, soort) {
+  const n = staat.niveau;
+  if (soort === "sudoku") {
+    const maat = n === 1 ? 4 : n === 2 ? 6 : 9;
+    const weg = n === 1 ? 7 : n === 2 ? 18 : 45;
+    const o = maakSudoku(r, maat, weg);
+    return { titel: `Sudoku ${maat} bij ${maat}`,
+      opdracht: `Elk cijfer van 1 tot en met ${maat} komt één keer voor in elke rij, elke kolom en elk blok.`,
+      html: (a) => roosterHtml(o.puzzel, o.vol, maat, a), sleutel: o.vol.join("") + o.puzzel.join("") };
+  }
+  if (soort === "magisch") {
+    const o = maakMagisch(r, n);
+    return { titel: "Magisch vierkant", opdracht: "Vul de lege vakjes in.",
+      html: (a) => magischHtml(o, a), sleutel: "m" + o.vol.flat().join("-") + [...o.open].join("") };
+  }
+  if (soort === "codekraker") {
+    const o = maakCode(r, n);
+    return { titel: "Codekraker", opdracht: "Elk cijfer is een letter. A is 1, B is 2, en zo verder. Welk woord staat er?",
+      html: (a) => codeHtml(o, a), sleutel: "c" + o.tekst };
+  }
+  if (soort === "rekenkraker") {
+    const o = maakRekenkraker(r, n);
+    return { titel: "Rekenkraker", opdracht: "Zoek uit hoeveel elk plaatje waard is.",
+      html: (a) => `<div class="kraker">${o.regels.map((g) => `<div class="regel">${g}</div>`).join("")}
+        <div class="regel" style="margin-top:6px;">${o.vraag} = <span class="lijn">${a ? o.uit : ""}</span></div></div>
+        ${a ? `<div class="antwoord">${o.oplossing}</div>` : ""}`,
+      sleutel: "k" + o.regels.join("|") };
+  }
+  if (soort === "getallenrij") {
+    const o = maakRij(r, n);
+    return { titel: "Welk getal komt er?", opdracht: "Kijk goed naar het patroon en vul de rij aan.",
+      html: (a) => rijHtml(o, a), sleutel: "r" + o.rij.join("-") };
+  }
+  const o = maakZoeker(r, n);
+  return { titel: "Woordzoeker", opdracht: `Zoek de ${o.woorden.length} woorden. Ze staan horizontaal, verticaal en schuin.`,
+    html: (a) => zoekerHtml(o, a), sleutel: "z" + o.woorden.join("-") };
+}
+
+function maakBlad() {
+  if (!staat.soorten.length) { $("melding").textContent = "Kies eerst minstens één soort puzzel."; return; }
+  $("melding").textContent = "";
+  const code = staat.code.trim() || String(Math.floor(1000 + Math.random() * 9000));
+  $("code").value = code; staat.code = code; bewaar();
+  const r = maakRandom(zaadje(code + "|" + staat.soorten.join(",") + "|" + staat.niveau + "|" + staat.aantal));
+
+  const puzzels = [], gezien = new Set();
+  for (let i = 0; i < staat.aantal; i++) {
+    const soort = staat.soorten[i % staat.soorten.length];
+    let o = maakPuzzel(r, soort);
+    for (let p = 0; p < 25 && gezien.has(o.sleutel); p++) o = maakPuzzel(r, soort);
+    gezien.add(o.sleutel); puzzels.push(o);
+  }
+
+  const naamregel = staat.naam ? `<div class="regels"><div>Naam <span></span></div><div>Datum <span></span></div></div>` : "";
+  const kolomcss = `grid-template-columns:repeat(${staat.kolommen},minmax(0,1fr)); font-size:${staat.grootte}px;`;
+  const heeftCode = puzzels.some((p) => p.titel === "Codekraker");
+  const rij = (o, i, a) => `
+    <div class="opg">
+      <div class="vraag"><span class="nr">${i + 1}.</span><b>${o.titel}</b> · ${o.opdracht}</div>
+      ${o.html(a)}
+    </div>`;
+
+  let html = `
+    <div class="bladkop"><h2>${staat.titel || "Breinbrekers"}</h2>${naamregel}</div>
+    ${heeftCode && staat.sleutel ? sleutelHtml() : ""}
+    <div class="opgaven" style="${kolomcss}">${puzzels.map((o, i) => rij(o, i, false)).join("")}</div>
+    <div class="bladvoet"><span>Lesmateriaal Blink · breinbrekers</span><span>code ${code}</span></div>`;
+  if (staat.antwoord) {
+    html += `
+      <div class="paginabreak"></div>
+      <div class="bladkop" style="margin-top:22px;"><h2>Antwoorden · ${staat.titel || "Breinbrekers"}</h2></div>
+      <div class="opgaven" style="${kolomcss}">${puzzels.map((o, i) => rij(o, i, true)).join("")}</div>
+      <div class="bladvoet"><span>Lesmateriaal Blink · antwoordblad</span><span>code ${code}</span></div>`;
+  }
+  $("blad").innerHTML = html;
+}
+
+/* ---- knoppen ---- */
+$("soorten").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-soort]"); if (!b) return;
+  const s = b.dataset.soort;
+  staat.soorten = staat.soorten.includes(s) ? staat.soorten.filter((x) => x !== s) : [...staat.soorten, s];
+  b.classList.toggle("aan", staat.soorten.includes(s)); bewaar();
+});
+$("niveauSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-niveau]"); if (!b) return;
+  staat.niveau = Number(b.dataset.niveau);
+  [...document.querySelectorAll("#niveauSeg button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.niveau) === staat.niveau));
+  bewaar();
+});
+[["sleutelChip", "sleutel"], ["antwoordChip", "antwoord"], ["naamChip", "naam"]].forEach(([id, sleutel]) => {
+  $(id).addEventListener("click", () => { staat[sleutel] = !staat[sleutel]; $(id).classList.toggle("aan", staat[sleutel]); bewaar(); });
+});
+["titel", "aantal", "kolommen", "grootte", "code"].forEach((id) => {
+  $(id).addEventListener("change", () => {
+    staat[id] = ["aantal", "kolommen", "grootte"].includes(id) ? Number($(id).value) : $(id).value;
+    bewaar();
+  });
+});
+$("maakKnop").addEventListener("click", () => { staat.code = ""; $("code").value = ""; maakBlad(); });
+$("printKnop").addEventListener("click", () => window.print());
+$("printKnop2").addEventListener("click", () => window.print());
+
+[...document.querySelectorAll("#soorten [data-soort]")].forEach((b) => b.classList.toggle("aan", staat.soorten.includes(b.dataset.soort)));
+[...document.querySelectorAll("#niveauSeg button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.niveau) === staat.niveau));
+$("titel").value = staat.titel; $("aantal").value = staat.aantal;
+$("kolommen").value = staat.kolommen; $("grootte").value = staat.grootte; $("code").value = staat.code;
+[["sleutelChip", "sleutel"], ["antwoordChip", "antwoord"], ["naamChip", "naam"]]
+  .forEach(([id, sleutel]) => $(id).classList.toggle("aan", staat[sleutel]));
+maakBlad();
+
+</script>
+</body>
+</html>
