@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Getallenlijn · Lesmateriaal Blink</title>
+<meta name="description" content="Getallenlijn voor op het digibord: lege of gevulde lijn, zelf getallen plaatsen, sprongen maken bij plus en min, en een werkblad printen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+    --goed:#16a34a; --fout:#e2534a;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1180px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:20px; margin-top:18px;}
+  svg.lijn{width:100%; height:auto; display:block; touch-action:manipulation;}
+
+  .opdrachtbalk{display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between; margin-bottom:12px;}
+  .opdracht{font-family:"Baloo 2",system-ui,sans-serif; font-size:clamp(1.3rem,3.2vw,2rem);}
+  .melding{font-weight:800; font-size:16px; min-height:24px; text-align:center; margin-top:10px;}
+  .melding.goed{color:var(--goed);} .melding.fout{color:var(--fout);}
+
+  .rij-instel{display:flex; flex-wrap:wrap; gap:10px; align-items:center;}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+  .knop{font:inherit; font-size:15px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:15px; padding:11px 16px; cursor:pointer;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent;}
+  .titelrij{display:flex; align-items:baseline; gap:10px; margin-bottom:12px; flex-wrap:wrap;}
+  .titelrij h2{font-size:18px;} .titelrij .klein{font-size:13.5px; color:var(--muted);}
+  .veld{display:inline-flex; align-items:center; gap:8px; font-size:14.5px; font-weight:700;}
+  .veld input{width:92px; font:inherit; font-size:15px; padding:9px 11px; border:1px solid var(--line-2); border-radius:13px;}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .bron{font-size:13.5px; line-height:1.5; color:#4b5563; padding-left:22px; text-indent:-22px; margin-top:6px;}
+  .bron a{color:var(--accent); word-break:break-word;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  body.digibord{background:#0f1430;}
+  body.digibord .kaart{background:#161c3d; border-color:rgba(255,255,255,.1); color:#eef1ff;}
+  body.digibord .knop, body.digibord .chip, body.digibord .seg, body.digibord .veld input{background:#1e2650; color:#eef1ff; border-color:rgba(255,255,255,.18);}
+  body.digibord .chip.aan{background:rgba(129,140,248,.25); border-color:#a5b4fc;}
+  body.digibord .titelrij .klein, body.digibord .voet{color:#a9b2d6;}
+  body.digibord details.uitleg p, body.digibord details.uitleg li{color:#dbe2ff;}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="kop">
+    <span class="logo" aria-hidden="true">📏</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · rekenen</div>
+      <h1>Getallenlijn</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="digibordKnop" type="button">🌙 Digibord</button>
+      <button id="schermKnop" type="button">⛶ Volledig scherm</button>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <section class="kaart" aria-label="Getallenlijn">
+    <div class="opdrachtbalk">
+      <div class="opdracht" id="opdracht">Klik op de lijn om een getal te plaatsen.</div>
+      <div class="rij-instel">
+        <button class="knop" id="nieuwKnop" type="button">↻ Volgende</button>
+        <button class="knop" id="wisKnop" type="button">🧹 Leegmaken</button>
+      </div>
+    </div>
+    <svg class="lijn" id="lijn" viewBox="0 0 1000 260" role="img" aria-label="Getallenlijn"></svg>
+    <div class="melding" id="melding"></div>
+  </section>
+
+  <section class="kaart" aria-label="Instellingen">
+    <div class="titelrij"><h2>De lijn</h2><span class="klein">Van welk getal tot welk getal, en hoe vol.</span></div>
+    <div class="rij-instel">
+      <div class="seg" id="bereikSeg">
+        <button type="button" data-van="0" data-tot="10">0 tot 10</button>
+        <button type="button" data-van="0" data-tot="20" class="aan">0 tot 20</button>
+        <button type="button" data-van="0" data-tot="100">0 tot 100</button>
+        <button type="button" data-van="0" data-tot="1000">0 tot 1000</button>
+      </div>
+      <span class="veld">eigen: <input id="van" type="number" value="0" step="1"> tot <input id="tot" type="number" value="20" step="1"></span>
+      <button class="knop" id="eigenKnop" type="button">Gebruik</button>
+    </div>
+    <div class="rij-instel" style="margin-top:10px;">
+      <div class="seg" id="volSeg">
+        <button type="button" data-vol="leeg">Lege lijn</button>
+        <button type="button" data-vol="streepjes" class="aan">Alleen streepjes</button>
+        <button type="button" data-vol="getallen">Met getallen</button>
+      </div>
+      <button class="chip aan" type="button" id="sprongChip"><span class="bol"></span>Sprongen laten zien</button>
+    </div>
+
+    <div class="titelrij" style="margin-top:20px;"><h2>Wat doen we?</h2><span class="klein">Kies een opdracht voor de klas.</span></div>
+    <div class="seg" id="modusSeg">
+      <button type="button" data-modus="vrij" class="aan">Vrij plaatsen</button>
+      <button type="button" data-modus="zoek">Zoek het getal</button>
+      <button type="button" data-modus="som">Sprongen bij een som</button>
+    </div>
+  </section>
+
+  <details class="uitleg">
+    <summary>Waarom een getallenlijn (voor de leerkracht)</summary>
+    <p>De getallenlijn helpt kinderen om te zien waar een getal ligt en hoe groot de afstand tussen twee getallen is. De lege getallenlijn is een bekend model bij de rijgstrategie: je houdt het eerste getal heel en springt vanaf daar verder, bijvoorbeeld 47 + 25 als 47, 57, 67, 72 (Hickendorff, 2023).</p>
+    <h3>De keuzes in deze lijn</h3>
+    <ul>
+      <li><b>Leeg, streepjes of met getallen.</b> Hoe leger de lijn, hoe meer een kind zelf moet nadenken. Begin vol en maak hem daarna leger.</li>
+      <li><b>Zelf getallen plaatsen.</b> Klik op de lijn en er komt een label. Zo bespreek je samen of 38 dichter bij 40 of bij 30 ligt.</li>
+      <li><b>Zoek het getal.</b> De app vraagt een getal, een kind klikt op de plek. De app laat zien hoe dicht het bij was.</li>
+      <li><b>Sprongen bij een som.</b> De app tekent de sprongen van de rijgstrategie, in stappen van tien en daarna de rest.</li>
+      <li><b>Elk bereik.</b> Van 0 tot 10 tot en met 0 tot 1000, of een eigen begin- en eindgetal.</li>
+    </ul>
+    <h3>Bronnen</h3>
+    <p class="bron">Hickendorff, M. (2023, 4 april). <i>Aanvankelijk en gevorderd rekenen in groep 3, 4 en 5</i>. Onderwijskennis.nl. Geraadpleegd op 23 september 2026, van <a href="https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5">https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5</a></p>
+    <p class="bron">Punt, R., &amp; Schoevers, E. (2023, 17 april). <i>Wat werkt in het rekenonderwijs om leerlingen het automatiseren en memoriseren van basisbewerkingen aan te leren?</i> (VRAAG-808). Kennisrotonde. Geraadpleegd op 23 september 2026, van <a href="https://www.kennisrotonde.nl/vraag-en-antwoord/rekenen-op-de-basisschool">https://www.kennisrotonde.nl/vraag-en-antwoord/rekenen-op-de-basisschool</a></p>
+  </details>
+
+  <footer class="voet">Getallenlijn · onderdeel van <a href="index.html">Lesmateriaal Blink</a> · klik op de lijn</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const NS = "http://www.w3.org/2000/svg";
+const L = 70, R = 930, Y = 150;       // linker- en rechterkant van de lijn, hoogte
+const BEWAAR = "blink-getallenlijn";
+
+let staat = { van: 0, tot: 20, vol: "streepjes", sprongen: true, modus: "vrij", digibord: false };
+try {
+  const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}");
+  ["van", "tot", "vol", "sprongen", "modus", "digibord"].forEach((k) => { if (k in b) staat[k] = b[k]; });
+} catch (e) {}
+const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
+
+let merken = [];        // zelf geplaatste getallen
+let doel = null;        // bij "zoek het getal"
+let som = null;         // bij "sprongen bij een som"
+
+const maak = (tag, k) => { const e = document.createElementNS(NS, tag); Object.entries(k).forEach(([a, v]) => e.setAttribute(a, v)); return e; };
+const naarX = (getal) => L + (getal - staat.van) / (staat.tot - staat.van) * (R - L);
+const naarGetal = (x) => staat.van + (x - L) / (R - L) * (staat.tot - staat.van);
+
+function stapGrootte() {
+  const spanne = staat.tot - staat.van;
+  if (spanne <= 10) return 1;
+  if (spanne <= 20) return 1;
+  if (spanne <= 100) return 5;
+  if (spanne <= 200) return 10;
+  return 50;
+}
+
+function teken() {
+  const svg = $("lijn");
+  svg.innerHTML = "";
+  const spanne = staat.tot - staat.van;
+
+  svg.appendChild(maak("line", { x1: L - 30, y1: Y, x2: R + 30, y2: Y, stroke: "#28324c", "stroke-width": 5, "stroke-linecap": "round" }));
+  svg.appendChild(maak("polygon", { points: `${R + 44},${Y} ${R + 24},${Y - 10} ${R + 24},${Y + 10}`, fill: "#28324c" }));
+
+  if (staat.vol !== "leeg") {
+    const stap = stapGrootte();
+    const klein = spanne <= 20 ? 1 : stap / 5;
+    const merkStap = spanne <= 10 ? 1 : spanne <= 20 ? 5 : stap;
+    for (let g = staat.van; g <= staat.tot + 0.001; g += klein) {
+      const groot = Math.abs(g / merkStap - Math.round(g / merkStap)) < 0.001;
+      const x = naarX(g);
+      svg.appendChild(maak("line", { x1: x, y1: Y - (groot ? 18 : 9), x2: x, y2: Y + (groot ? 18 : 9),
+        stroke: groot ? "#28324c" : "#aab2cc", "stroke-width": groot ? 4 : 2, "stroke-linecap": "round" }));
+      if ((spanne <= 20 || groot) && staat.vol === "getallen") {
+        const t = maak("text", { x, y: Y + 46, "text-anchor": "middle", "font-family": "Baloo 2, system-ui, sans-serif",
+          "font-size": spanne <= 20 ? 19 : 22, "font-weight": 800, fill: "#28324c" });
+        t.textContent = Math.round(g);
+        svg.appendChild(t);
+      }
+    }
+  }
+  // begin en eind altijd met getal
+  [staat.van, staat.tot].forEach((g) => {
+    const t = maak("text", { x: naarX(g), y: Y + 46, "text-anchor": "middle", "font-family": "Baloo 2, system-ui, sans-serif",
+      "font-size": 24, "font-weight": 800, fill: "#4f46e5" });
+    t.textContent = g;
+    svg.appendChild(t);
+  });
+
+  // sprongen bij een som
+  if (som && staat.sprongen) {
+    let positie = som.start;
+    som.stappen.forEach((s) => {
+      const x1 = naarX(positie), x2 = naarX(positie + s);
+      const hoogte = Math.min(70, 26 + Math.abs(x2 - x1) * .35);
+      svg.appendChild(maak("path", { d: `M ${x1} ${Y - 6} Q ${(x1 + x2) / 2} ${Y - hoogte} ${x2} ${Y - 6}`,
+        fill: "none", stroke: s >= 0 ? "#0e9f9e" : "#e2534a", "stroke-width": 4, "stroke-linecap": "round" }));
+      const label = maak("text", { x: (x1 + x2) / 2, y: Y - hoogte - 6, "text-anchor": "middle",
+        "font-family": "Baloo 2, system-ui, sans-serif", "font-size": 20, "font-weight": 800, fill: s >= 0 ? "#0b7c7b" : "#b3322b" });
+      label.textContent = (s >= 0 ? "+" : "−") + Math.abs(s);
+      svg.appendChild(label);
+      positie += s;
+    });
+    [som.start, positie].forEach((g, i) => {
+      svg.appendChild(maak("circle", { cx: naarX(g), cy: Y, r: 8, fill: i === 0 ? "#4f46e5" : "#0e9f9e" }));
+      const t = maak("text", { x: naarX(g), y: Y + 78, "text-anchor": "middle", "font-family": "Baloo 2, system-ui, sans-serif",
+        "font-size": 21, "font-weight": 800, fill: i === 0 ? "#4f46e5" : "#0b7c7b" });
+      t.textContent = g;
+      svg.appendChild(t);
+    });
+  }
+
+  // zelf geplaatste getallen
+  merken.forEach((m) => {
+    const x = naarX(m.getal);
+    svg.appendChild(maak("line", { x1: x, y1: Y - 34, x2: x, y2: Y + 34, stroke: m.kleur || "#4f46e5", "stroke-width": 3 }));
+    svg.appendChild(maak("circle", { cx: x, cy: Y, r: 9, fill: m.kleur || "#4f46e5" }));
+    const t = maak("text", { x, y: Y - 44, "text-anchor": "middle", "font-family": "Baloo 2, system-ui, sans-serif",
+      "font-size": 24, "font-weight": 800, fill: m.kleur || "#4f46e5" });
+    t.textContent = m.label ?? Math.round(m.getal);
+    svg.appendChild(t);
+  });
+}
+
+$("lijn").addEventListener("click", (e) => {
+  const vak = $("lijn").getBoundingClientRect();
+  const x = (e.clientX - vak.left) / vak.width * 1000;
+  if (x < L - 40 || x > R + 40) return;
+  const ruw = naarGetal(Math.max(L, Math.min(R, x)));
+  const spanne = staat.tot - staat.van;
+  const rond = spanne <= 20 ? 1 : spanne <= 100 ? 1 : 5;
+  const getal = Math.round(ruw / rond) * rond;
+
+  if (staat.modus === "zoek" && doel !== null) {
+    const verschil = Math.abs(getal - doel);
+    const marge = Math.max(1, Math.round(spanne * 0.02));
+    $("melding").className = "melding " + (verschil <= marge ? "goed" : "fout");
+    $("melding").textContent = verschil <= marge
+      ? `Goed zo! Dat is ${doel}.`
+      : `Je klikte bij ${getal}. ${doel} ligt ${getal < doel ? "verderop" : "eerder"}.`;
+    merken = [{ getal, kleur: verschil <= marge ? "#16a34a" : "#e2534a" }, { getal: doel, kleur: "#4f46e5", label: doel }];
+    teken();
+    return;
+  }
+  merken.push({ getal });
+  teken();
+});
+
+function nieuweOpdracht() {
+  merken = []; som = null; doel = null;
+  $("melding").textContent = ""; $("melding").className = "melding";
+  const spanne = staat.tot - staat.van;
+  if (staat.modus === "zoek") {
+    const rond = spanne <= 20 ? 1 : spanne <= 100 ? 1 : 5;
+    doel = Math.round((staat.van + Math.random() * spanne) / rond) * rond;
+    $("opdracht").textContent = `Waar ligt ${doel}? Klik op de lijn.`;
+  } else if (staat.modus === "som") {
+    const start = Math.round(staat.van + Math.random() * spanne * .5);
+    const rest = Math.max(2, Math.round(Math.random() * Math.min(spanne - (start - staat.van), spanne * .45)));
+    const erbij = Math.random() < .75;
+    const stappen = [];
+    let over = rest;
+    const tienen = Math.floor(over / 10);
+    if (tienen > 0) { stappen.push((erbij ? 1 : -1) * tienen * 10); over -= tienen * 10; }
+    if (over > 0) stappen.push((erbij ? 1 : -1) * over);
+    som = { start: erbij ? start : start + rest, stappen };
+    const eind = som.stappen.reduce((a, b) => a + b, som.start);
+    $("opdracht").textContent = `${som.start} ${erbij ? "+" : "−"} ${rest} = ${eind}`;
+  } else {
+    $("opdracht").textContent = "Klik op de lijn om een getal te plaatsen.";
+  }
+  teken();
+}
+
+$("bereikSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-tot]"); if (!b) return;
+  staat.van = Number(b.dataset.van); staat.tot = Number(b.dataset.tot);
+  $("van").value = staat.van; $("tot").value = staat.tot;
+  [...document.querySelectorAll("#bereikSeg button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.tot) === staat.tot && Number(x.dataset.van) === staat.van));
+  bewaar(); nieuweOpdracht();
+});
+$("eigenKnop").addEventListener("click", () => {
+  const van = Number($("van").value), tot = Number($("tot").value);
+  if (!(tot > van)) { $("melding").className = "melding fout"; $("melding").textContent = "Het eindgetal moet groter zijn dan het begingetal."; return; }
+  staat.van = van; staat.tot = tot;
+  [...document.querySelectorAll("#bereikSeg button")].forEach((x) => x.classList.remove("aan"));
+  bewaar(); nieuweOpdracht();
+});
+$("volSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-vol]"); if (!b) return;
+  staat.vol = b.dataset.vol;
+  [...document.querySelectorAll("#volSeg button")].forEach((x) => x.classList.toggle("aan", x.dataset.vol === staat.vol));
+  bewaar(); teken();
+});
+$("modusSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-modus]"); if (!b) return;
+  staat.modus = b.dataset.modus;
+  [...document.querySelectorAll("#modusSeg button")].forEach((x) => x.classList.toggle("aan", x.dataset.modus === staat.modus));
+  bewaar(); nieuweOpdracht();
+});
+$("sprongChip").addEventListener("click", () => { staat.sprongen = !staat.sprongen; $("sprongChip").classList.toggle("aan", staat.sprongen); bewaar(); teken(); });
+$("nieuwKnop").addEventListener("click", nieuweOpdracht);
+$("wisKnop").addEventListener("click", () => { merken = []; som = null; $("melding").textContent = ""; teken(); });
+$("digibordKnop").addEventListener("click", () => {
+  staat.digibord = !staat.digibord;
+  document.body.classList.toggle("digibord", staat.digibord);
+  $("digibordKnop").textContent = staat.digibord ? "☀️ Gewoon" : "🌙 Digibord";
+  bewaar();
+});
+$("schermKnop").addEventListener("click", () => {
+  if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen?.();
+});
+
+$("van").value = staat.van; $("tot").value = staat.tot;
+[...document.querySelectorAll("#bereikSeg button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.tot) === staat.tot && Number(x.dataset.van) === staat.van));
+[...document.querySelectorAll("#volSeg button")].forEach((x) => x.classList.toggle("aan", x.dataset.vol === staat.vol));
+[...document.querySelectorAll("#modusSeg button")].forEach((x) => x.classList.toggle("aan", x.dataset.modus === staat.modus));
+$("sprongChip").classList.toggle("aan", staat.sprongen);
+if (staat.digibord) { document.body.classList.add("digibord"); $("digibordKnop").textContent = "☀️ Gewoon"; }
+nieuweOpdracht();
+</script>
+</body>
+</html>
