@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bingo maken · Lesmateriaal Blink</title>
+<meta name="description" content="Maak bingokaarten met eigen woorden, sommen of getallen. Elke kaart is anders. Met een trekkingslijst voor de leerkracht en klaar om te printen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1220px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .vlak{display:grid; grid-template-columns:minmax(300px,.72fr) minmax(0,1.28fr); gap:18px; margin-top:18px; align-items:start;}
+  @media (max-width:940px){ .vlak{grid-template-columns:minmax(0,1fr);} }
+  .kaartvak{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:20px;}
+
+  .groep{margin-bottom:18px;}
+  .groep:last-child{margin-bottom:0;}
+  .groep h2{font-size:17px; margin-bottom:9px;}
+  .groep .klein{font-size:13px; color:var(--muted); margin:-4px 0 9px; line-height:1.45;}
+  textarea{width:100%; min-height:170px; font:inherit; font-size:15px; line-height:1.6; padding:11px 13px;
+    border:1px solid var(--line-2); border-radius:14px; background:#fff; color:var(--ink); resize:vertical;}
+  .rij{display:flex; flex-wrap:wrap; gap:9px; align-items:center;}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+  .kleinknop{font:inherit; font-size:14px; font-weight:800; background:#fff; border:1px solid var(--line-2);
+    border-radius:13px; padding:9px 13px; cursor:pointer; color:var(--ink);}
+  .kleinknop:hover{border-color:var(--accent);}
+  .veld label{display:block; font-size:12.5px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; color:var(--muted); margin-bottom:4px;}
+  .veld input{width:110px; font:inherit; font-size:15px; padding:10px 12px; border:1px solid var(--line-2); border-radius:13px; background:#fff; color:var(--ink);}
+  .veld input.breed{width:100%;}
+  .knoppen{display:flex; flex-wrap:wrap; gap:9px; margin-top:4px;}
+  .knop{font:inherit; font-size:16px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:15px; padding:13px 18px; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent; min-width:160px;}
+  .melding{font-size:14px; color:#b45309; margin-top:8px; min-height:20px; line-height:1.5;}
+
+  /* de kaarten */
+  .velkop{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:14px;}
+  .velkop h2{font-size:20px;} .velkop .tel{font-size:13.5px; color:var(--muted);}
+  .bingokaart{border:2px solid #55607e; border-radius:12px; padding:12px 13px 13px; margin-bottom:16px; break-inside:avoid; background:#fff;}
+  .bingokaart .titel{font-family:"Baloo 2",system-ui,sans-serif; font-weight:800; font-size:19px; text-align:center;
+    color:var(--kleur, var(--accent)); margin-bottom:3px;}
+  .bingokaart .naamregel{font-size:11px; color:#9aa3bd; text-align:center; margin-bottom:9px;}
+  .bingokaart .naamregel span{display:inline-block; min-width:130px; border-bottom:1px dotted #b8c0d8;}
+  table.bingo{border-collapse:collapse; width:100%;}
+  table.bingo td{border:1.5px solid #9aa3bd; text-align:center; vertical-align:middle; padding:6px 4px;
+    font-family:"Baloo 2",system-ui,sans-serif; font-weight:800; line-height:1.15;
+    height:var(--hok, 2.1cm); width:calc(100% / var(--kolommen, 5)); word-break:break-word; hyphens:auto;}
+  table.bingo td.vrij{background:#f2f4fc; color:var(--kleur, var(--accent)); font-size:.8em;}
+  .trekking{border:1.5px dashed #c3cadf; border-radius:14px; padding:13px 15px; margin-top:6px; break-inside:avoid;}
+  .trekking h3{font-size:14px; letter-spacing:.5px; text-transform:uppercase; color:var(--muted); margin-bottom:8px;}
+  .trekking ol{display:flex; flex-wrap:wrap; gap:5px 8px; list-style:none; counter-reset:t;}
+  .trekking li{counter-increment:t; font-size:13.5px; font-weight:700; background:#f6f7fd; border:1px solid #e4e7f4;
+    border-radius:8px; padding:3px 9px;}
+  .trekking li::before{content:counter(t) ". "; color:#b8c0d8; font-size:11px;}
+  .leegmelding{color:var(--muted); font-size:15px;}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  @media print{
+    body{background:#fff;}
+    .app{max-width:none; padding:0;}
+    .kop, .instellingen, details.uitleg, .voet, .velkop{display:none;}
+    .kaartvak{box-shadow:none; border:none; padding:0;}
+    .paginabreak{break-before:page;}
+    @page{size:A4 portrait; margin:12mm;}
+  }
+  @media (prefers-reduced-motion:reduce){ .knop:hover{transform:none;} }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="kop">
+    <span class="logo" aria-hidden="true">🎱</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · in de klas</div>
+      <h1>Bingo maken</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="printKnop" type="button">🖨 Afdrukken</button>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <div class="vlak">
+    <section class="kaartvak instellingen" aria-label="Instellingen">
+      <div class="groep">
+        <h2>Wat komt er op de kaarten?</h2>
+        <p class="klein">Eén woord, som of getal per regel. Hoe meer regels, hoe meer de kaarten van elkaar verschillen.</p>
+        <textarea id="lijst" spellcheck="false" aria-label="De inhoud van de bingokaarten" placeholder="hond&#10;kat&#10;muis"></textarea>
+        <div class="rij" style="margin-top:9px;">
+          <button class="kleinknop" type="button" id="getallenKnop">1 tot en met 50</button>
+          <button class="kleinknop" type="button" id="tafelKnop">Tafels 1 t/m 10</button>
+          <button class="kleinknop" type="button" id="wisKnop">Leegmaken</button>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Hoe groot zijn de kaarten?</h2>
+        <div class="seg" id="maatSeg">
+          <button type="button" data-maat="3">3 bij 3</button>
+          <button type="button" data-maat="4" class="aan">4 bij 4</button>
+          <button type="button" data-maat="5">5 bij 5</button>
+        </div>
+        <div class="rij" style="margin-top:10px;">
+          <button class="chip" type="button" id="vrijChip"><span class="bol"></span>Vrij vakje in het midden</button>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Het blad</h2>
+        <div class="veld" style="margin-bottom:10px;"><label for="titel">Titel op de kaart</label>
+          <input id="titel" class="breed" type="text" maxlength="40" value="Bingo"></div>
+        <div class="rij">
+          <div class="veld"><label for="aantal">Aantal kaarten</label>
+            <input id="aantal" type="number" min="1" max="40" step="1" value="8"></div>
+          <div class="seg" id="perVelSeg">
+            <button type="button" data-per="1">1 per vel</button>
+            <button type="button" data-per="2" class="aan">2 per vel</button>
+            <button type="button" data-per="4">4 per vel</button>
+          </div>
+        </div>
+        <div class="rij" style="margin-top:10px;">
+          <button class="chip aan" type="button" id="naamChip"><span class="bol"></span>Regel voor de naam</button>
+          <button class="chip aan" type="button" id="trekChip"><span class="bol"></span>Trekkingslijst erbij</button>
+        </div>
+      </div>
+
+      <div class="knoppen">
+        <button class="knop primair" id="maakKnop" type="button">Maak de kaarten</button>
+        <button class="knop" id="printKnop2" type="button">🖨 Afdrukken</button>
+      </div>
+      <p class="melding" id="melding"></p>
+    </section>
+
+    <section class="kaartvak" aria-label="De bingokaarten">
+      <div class="velkop"><h2>De kaarten</h2><span class="tel" id="tel"></span></div>
+      <div id="kaarten"></div>
+      <p class="leegmelding" id="leeg">Vul een lijst in en klik op "Maak de kaarten".</p>
+    </section>
+  </div>
+
+  <details class="uitleg">
+    <summary>Waarvoor je bingo gebruikt (voor de leerkracht)</summary>
+    <p>Bingo is een spel, maar het is ook oefenen zonder dat het zo voelt. Elke keer dat je iets voorleest, zoeken alle kinderen het op hun kaart. Ze horen het, lezen het en zoeken het, en dat gebeurt twintig keer achter elkaar.</p>
+    <h3>Waar ik het voor gebruik</h3>
+    <ul>
+      <li><b>Tafels.</b> Zet de antwoorden op de kaart en lees de sommen voor: je zegt "zeven keer acht" en de kinderen zoeken 56. Met de knop Tafels vul je in één klik alle antwoorden van de tafels van 1 tot en met 10 in.</li>
+      <li><b>Woordenschat.</b> Zet de woorden op de kaart en lees de betekenis voor, of andersom.</li>
+      <li><b>Klanken en letters.</b> In groep 3 met losse letters of klanken op de kaart.</li>
+      <li><b>Getallen.</b> Voor het oefenen van grote getallen: jij zegt het getal, zij zoeken het.</li>
+    </ul>
+    <h3>Hoe het werkt</h3>
+    <ul>
+      <li>Elke kaart krijgt een eigen, willekeurige selectie uit je lijst. De pagina controleert dat er geen twee kaarten precies hetzelfde zijn.</li>
+      <li>Staan er te weinig woorden in de lijst voor de gekozen maat, dan zegt de pagina hoeveel je er nog nodig hebt.</li>
+      <li>De <b>trekkingslijst</b> onderaan is jouw eigen lijstje: alles uit je lijst, door elkaar geschud, zodat je gewoon van boven naar beneden kunt voorlezen en kunt afstrepen. Die pagina hoort dus niet bij de kinderen.</li>
+      <li>Een <b>vrij vakje</b> in het midden kan bij 3 bij 3 en 5 bij 5. Bij 4 bij 4 is er geen midden, dus daar staat het uit.</li>
+    </ul>
+  </details>
+
+  <footer class="voet">Bingo maken · onderdeel van <a href="index.html">Lesmateriaal Blink</a> · de trekkingslijst staat op de laatste pagina</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const BEWAAR = "blink-bingo";
+const KLEUREN = ["#4f46e5", "#0e9f9e", "#c0397e", "#e08a1e", "#2f7d4f", "#7c3aed"];
+
+let staat = { lijst: "", maat: 4, vrij: false, titel: "Bingo", aantal: 8, per: 2, naam: true, trek: true };
+try { const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}"); Object.keys(staat).forEach((k) => { if (k in b) staat[k] = b[k]; }); } catch (e) {}
+const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
+
+const veilig = (t) => t.replace(/[&<>"]/g, (k) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[k]));
+const woordenLijst = () => [...new Set(staat.lijst.split("\n").map((n) => n.trim()).filter(Boolean))];
+
+function schud(l) {
+  const uit = [...l];
+  for (let i = uit.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [uit[i], uit[j]] = [uit[j], uit[i]]; }
+  return uit;
+}
+
+/* het vrije vakje kan alleen als er een midden is, dus bij een oneven maat */
+const heeftVrij = () => staat.vrij && staat.maat % 2 === 1;
+
+function maakKaarten() {
+  const woorden = woordenLijst();
+  $("melding").textContent = "";
+  const hokjes = staat.maat * staat.maat - (heeftVrij() ? 1 : 0);
+  if (woorden.length < hokjes) {
+    $("kaarten").innerHTML = ""; $("leeg").style.display = ""; $("tel").textContent = "";
+    $("melding").textContent = woorden.length
+      ? `Er staan ${woorden.length} regels in de lijst, maar voor ${staat.maat} bij ${staat.maat} heb je er minstens ${hokjes} nodig.`
+      : "Vul eerst een lijst in.";
+    return;
+  }
+  $("leeg").style.display = "none";
+
+  const kaarten = [], gezien = new Set();
+  for (let i = 0; i < staat.aantal; i++) {
+    let keuze = null;
+    for (let poging = 0; poging < 60; poging++) {
+      const k = schud(woorden).slice(0, hokjes);
+      const sleutel = k.join("|");
+      if (!gezien.has(sleutel)) { gezien.add(sleutel); keuze = k; break; }
+      keuze = k;
+    }
+    kaarten.push(keuze);
+  }
+  const uniek = new Set(kaarten.map((k) => k.join("|"))).size;
+  if (uniek < kaarten.length) {
+    $("melding").textContent = "Er zijn te weinig woorden om alle kaarten echt verschillend te maken. Zet er meer in de lijst.";
+  }
+
+  const hok = { 3: "2.9cm", 4: "2.3cm", 5: "1.9cm" }[staat.maat];
+  const letter = { 3: 22, 4: 18, 5: 15 }[staat.maat];
+  $("tel").textContent = `${kaarten.length} ${kaarten.length === 1 ? "kaart" : "kaarten"}, ${staat.maat} bij ${staat.maat}`;
+
+  let html = "";
+  kaarten.forEach((k, nr) => {
+    if (nr > 0 && nr % staat.per === 0) html += '<div class="paginabreak"></div>';
+    const kleur = KLEUREN[nr % KLEUREN.length];
+    const midden = Math.floor(staat.maat * staat.maat / 2);
+    let cel = 0;
+    let rijen = "";
+    for (let r = 0; r < staat.maat; r++) {
+      rijen += "<tr>";
+      for (let c = 0; c < staat.maat; c++) {
+        const index = r * staat.maat + c;
+        if (heeftVrij() && index === midden) rijen += `<td class="vrij">vrij</td>`;
+        else rijen += `<td style="font-size:${letter}px">${veilig(k[cel++])}</td>`;
+      }
+      rijen += "</tr>";
+    }
+    html += `<div class="bingokaart" style="--kleur:${kleur}; --hok:${hok}; --kolommen:${staat.maat}">
+      <div class="titel">${veilig(staat.titel || "Bingo")}</div>
+      ${staat.naam ? '<div class="naamregel">naam: <span></span></div>' : ""}
+      <table class="bingo">${rijen}</table>
+    </div>`;
+  });
+
+  if (staat.trek) {
+    html += `<div class="paginabreak"></div>
+      <div class="trekking"><h3>Trekkingslijst voor de leerkracht · ${woorden.length} stuks</h3>
+        <ol>${schud(woorden).map((w) => `<li>${veilig(w)}</li>`).join("")}</ol></div>`;
+  }
+  $("kaarten").innerHTML = html;
+}
+
+/* ---- knoppen ---- */
+$("lijst").addEventListener("input", () => { staat.lijst = $("lijst").value; bewaar(); });
+$("titel").addEventListener("change", () => { staat.titel = $("titel").value; bewaar(); });
+$("aantal").addEventListener("change", () => { staat.aantal = Number($("aantal").value); bewaar(); });
+$("maatSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-maat]"); if (!b) return;
+  staat.maat = Number(b.dataset.maat);
+  [...document.querySelectorAll("#maatSeg button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.maat) === staat.maat));
+  $("vrijChip").disabled = staat.maat % 2 === 0;
+  $("vrijChip").style.opacity = staat.maat % 2 === 0 ? ".45" : "";
+  bewaar();
+});
+$("perVelSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-per]"); if (!b) return;
+  staat.per = Number(b.dataset.per);
+  [...document.querySelectorAll("#perVelSeg button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.per) === staat.per));
+  bewaar();
+});
+[["vrijChip", "vrij"], ["naamChip", "naam"], ["trekChip", "trek"]].forEach(([id, sleutel]) => {
+  $(id).addEventListener("click", () => {
+    if ($(id).disabled) return;
+    staat[sleutel] = !staat[sleutel]; $(id).classList.toggle("aan", staat[sleutel]); bewaar();
+  });
+});
+$("getallenKnop").addEventListener("click", () => {
+  staat.lijst = Array.from({ length: 50 }, (_, i) => String(i + 1)).join("\n");
+  $("lijst").value = staat.lijst; bewaar(); maakKaarten();
+});
+$("tafelKnop").addEventListener("click", () => {
+  const uit = new Set();
+  for (let a = 1; a <= 10; a++) for (let b = 1; b <= 10; b++) uit.add(a * b);
+  staat.lijst = [...uit].sort((a, b) => a - b).join("\n");
+  $("lijst").value = staat.lijst; bewaar(); maakKaarten();
+});
+$("wisKnop").addEventListener("click", () => {
+  staat.lijst = ""; $("lijst").value = ""; bewaar();
+  $("kaarten").innerHTML = ""; $("leeg").style.display = ""; $("tel").textContent = "";
+});
+$("maakKnop").addEventListener("click", maakKaarten);
+$("printKnop").addEventListener("click", () => window.print());
+$("printKnop2").addEventListener("click", () => window.print());
+
+/* opstarten */
+$("lijst").value = staat.lijst; $("titel").value = staat.titel; $("aantal").value = staat.aantal;
+[...document.querySelectorAll("#maatSeg button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.maat) === staat.maat));
+[...document.querySelectorAll("#perVelSeg button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.per) === staat.per));
+[["vrijChip", "vrij"], ["naamChip", "naam"], ["trekChip", "trek"]].forEach(([id, sleutel]) => $(id).classList.toggle("aan", staat[sleutel]));
+$("vrijChip").disabled = staat.maat % 2 === 0;
+$("vrijChip").style.opacity = staat.maat % 2 === 0 ? ".45" : "";
+if (woordenLijst().length) maakKaarten();
+</script>
+</body>
+</html>

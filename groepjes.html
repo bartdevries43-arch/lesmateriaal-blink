@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Groepjesmaker · Lesmateriaal Blink</title>
+<meta name="description" content="Verdeel je klas eerlijk in groepjes. Kies hoeveel groepjes of hoeveel kinderen per groepje, en geef aan wie niet bij elkaar mogen. Voor op het digibord of om te printen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1220px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .vlak{display:grid; grid-template-columns:minmax(300px,.72fr) minmax(0,1.28fr); gap:18px; margin-top:18px; align-items:start;}
+  @media (max-width:940px){ .vlak{grid-template-columns:minmax(0,1fr);} }
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:20px;}
+
+  .groep{margin-bottom:18px;}
+  .groep:last-child{margin-bottom:0;}
+  .groep h2{font-size:17px; margin-bottom:9px;}
+  .groep .klein{font-size:13px; color:var(--muted); margin:-4px 0 9px; line-height:1.45;}
+  textarea{width:100%; font:inherit; font-size:15px; line-height:1.6; padding:11px 13px;
+    border:1px solid var(--line-2); border-radius:14px; background:#fff; color:var(--ink); resize:vertical;}
+  #namen{min-height:180px;}
+  #nietSamen{min-height:74px;}
+  .rij{display:flex; flex-wrap:wrap; gap:9px; align-items:center;}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+  .kleinknop{font:inherit; font-size:14px; font-weight:800; background:#fff; border:1px solid var(--line-2);
+    border-radius:13px; padding:9px 13px; cursor:pointer; color:var(--ink);}
+  .kleinknop:hover{border-color:var(--accent);}
+  .veld label{display:block; font-size:12.5px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; color:var(--muted); margin-bottom:4px;}
+  .veld input{width:96px; font:inherit; font-size:15px; padding:10px 12px; border:1px solid var(--line-2); border-radius:13px; background:#fff; color:var(--ink);}
+  .knoppen{display:flex; flex-wrap:wrap; gap:9px; margin-top:4px;}
+  .knop{font:inherit; font-size:16px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:15px; padding:13px 18px; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent; min-width:160px;}
+  .melding{font-size:14px; color:#b45309; margin-top:8px; min-height:20px; line-height:1.5;}
+
+  /* de groepjes */
+  .uitslag{padding:20px;}
+  .uitslagkop{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:14px;}
+  .uitslagkop h2{font-size:20px;}
+  .uitslagkop .tel{font-size:13.5px; color:var(--muted);}
+  .groepen{display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:14px;}
+  .groepkaart{border:1.5px solid var(--line); border-radius:18px; padding:13px 15px 15px; break-inside:avoid;
+    border-top:5px solid var(--kleur, var(--accent)); background:#fff;}
+  .groepkaart h3{font-size:16px; margin-bottom:8px; color:var(--kleur, var(--accent)); display:flex; align-items:center; gap:7px;}
+  .groepkaart ol{list-style:none; counter-reset:n;}
+  .groepkaart li{counter-increment:n; font-size:15.5px; font-weight:700; padding:4px 0 4px 22px; position:relative; line-height:1.35;}
+  .groepkaart li::before{content:counter(n) "."; position:absolute; left:0; color:#b8c0d8; font-size:12px; font-weight:800; top:6px;}
+  .leegmelding{color:var(--muted); font-size:15px;}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  body.digibord{background:#0f1430; --ink:#eef1ff; --line:rgba(255,255,255,.12);}
+  body.digibord .kaart{background:#161c3d; border-color:rgba(255,255,255,.1); color:#eef1ff;}
+  body.digibord .groepkaart{background:#1a2148; border-color:rgba(255,255,255,.1);}
+  body.digibord .knop, body.digibord .chip, body.digibord .seg, body.digibord .kleinknop,
+  body.digibord textarea, body.digibord .veld input{background:#1e2650; color:#eef1ff; border-color:rgba(255,255,255,.18);}
+  body.digibord .chip.aan{background:rgba(129,140,248,.25); border-color:#a5b4fc;}
+  body.digibord .uitslagkop .tel, body.digibord .groep .klein, body.digibord .voet, body.digibord .leegmelding{color:#a9b2d6;}
+  body.digibord details.uitleg p, body.digibord details.uitleg li{color:#dbe2ff;}
+
+  body.alleengroepen .instellingen, body.alleengroepen details.uitleg, body.alleengroepen .voet, body.alleengroepen .kop{display:none;}
+  body.alleengroepen .vlak{grid-template-columns:minmax(0,1fr);}
+  body.alleengroepen .groepen{grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:18px;}
+  body.alleengroepen .groepkaart li{font-size:19px;}
+  body.alleengroepen .app{padding-top:3vh;}
+
+  @media print{
+    body{background:#fff;}
+    .app{max-width:none; padding:0;}
+    .kop, .instellingen, details.uitleg, .voet{display:none;}
+    .uitslag{box-shadow:none; border:none; padding:0;}
+    .groepen{grid-template-columns:repeat(3,minmax(0,1fr));}
+    @page{size:A4 portrait; margin:14mm;}
+  }
+  @media (prefers-reduced-motion:reduce){ .knop:hover{transform:none;} }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="kop">
+    <span class="logo" aria-hidden="true">👥</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · in de klas</div>
+      <h1>Groepjesmaker</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="digibordKnop" type="button">🌙 Digibord</button>
+      <button id="alleenKnop" type="button">🔍 Alleen de groepjes</button>
+      <button id="printKnop" type="button">🖨 Afdrukken</button>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <div class="vlak">
+    <section class="kaart instellingen" aria-label="Instellingen">
+      <div class="groep">
+        <h2>Wie doen er mee?</h2>
+        <p class="klein">Eén naam per regel. De namen blijven op dit apparaat staan.</p>
+        <textarea id="namen" spellcheck="false" aria-label="Namen, een per regel"></textarea>
+        <div class="rij" style="margin-top:9px;">
+          <button class="kleinknop" type="button" id="uitRadKnop">Namen uit het keuzerad</button>
+          <button class="kleinknop" type="button" id="nummersKnop">1 tot en met 30</button>
+          <button class="kleinknop" type="button" id="wisKnop">Leegmaken</button>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Hoe verdelen?</h2>
+        <div class="rij">
+          <div class="seg" id="wijzeSeg">
+            <button type="button" data-wijze="aantal" class="aan">Zoveel groepjes</button>
+            <button type="button" data-wijze="grootte">Zoveel per groepje</button>
+          </div>
+          <div class="veld"><label for="getal" id="getalLabel">Aantal groepjes</label>
+            <input id="getal" type="number" min="2" max="20" step="1" value="4"></div>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Wie mogen niet bij elkaar?</h2>
+        <p class="klein">Eén paar per regel, met een streepje ertussen. Bijvoorbeeld: Bo - Iris</p>
+        <textarea id="nietSamen" spellcheck="false" aria-label="Paren die niet samen mogen"></textarea>
+      </div>
+
+      <div class="groep">
+        <h2>Hoe zien de groepjes eruit?</h2>
+        <div class="rij">
+          <div class="seg" id="naamSeg">
+            <button type="button" data-naam="nummer" class="aan">Groep 1, 2, 3</button>
+            <button type="button" data-naam="kleur">Kleuren</button>
+            <button type="button" data-naam="dier">Dieren</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="knoppen">
+        <button class="knop primair" id="maakKnop" type="button">👥 Maak de groepjes</button>
+      </div>
+      <p class="melding" id="melding"></p>
+    </section>
+
+    <section class="kaart uitslag" aria-label="De groepjes">
+      <div class="uitslagkop"><h2 id="uitslagTitel">De groepjes</h2><span class="tel" id="tel"></span></div>
+      <div class="groepen" id="groepen"></div>
+      <p class="leegmelding" id="leeg">Vul namen in en klik op "Maak de groepjes".</p>
+    </section>
+  </div>
+
+  <details class="uitleg">
+    <summary>Waarom een groepjesmaker (voor de leerkracht)</summary>
+    <p>Groepjes maken kost tijd en levert altijd gemor op. Met deze pagina verdeel je de klas in een paar seconden, en is het voor de kinderen duidelijk dat het niet aan voorkeur lag.</p>
+    <h3>Wat erin zit</h3>
+    <ul>
+      <li><b>Twee manieren van verdelen.</b> Je kiest hoeveel groepjes je wilt, of hoeveel kinderen er in een groepje horen. De rest wordt zo eerlijk mogelijk verdeeld, dus je krijgt nooit één groepje met twee kinderen en de rest met zes.</li>
+      <li><b>Wie niet bij elkaar mogen.</b> Zet een paar op een regel met een streepje ertussen, bijvoorbeeld <i>Bo - Iris</i>. De pagina probeert dan honderden verdelingen tot er één is waarin dat paar uit elkaar staat. Lukt het niet, dan zegt hij dat eerlijk in plaats van stiekem toch samen te zetten.</li>
+      <li><b>Namen uit het keuzerad.</b> Heb je de klassenlijst al in het <a href="keuzerad.html">Keuzerad</a> staan, dan haal je die met één klik hierheen.</li>
+      <li><b>Zonder namen.</b> Met de knop 1 tot en met 30 verdeel je op nummer, handig als je de namen niet op het digibord wilt.</li>
+    </ul>
+    <h3>Over de namen en de privacy</h3>
+    <p>De namen die je intypt blijven op dit apparaat staan, in de opslag van de browser. Ze gaan niet naar een server. Werk je op een computer die je met collega's deelt, gebruik dan de nummers of maak de lijst na afloop leeg.</p>
+    <h3>Een eerlijke kanttekening</h3>
+    <p>Toeval is niet altijd het beste. Bij samenwerkend leren wil je soms juist sturen, bijvoorbeeld een sterke lezer bij een zwakke lezer. Deze pagina verdeelt willekeurig, met alleen de regel wie niet bij elkaar mag. Wil je bewust indelen, doe dat dan zelf en gebruik dit voor de momenten waarop het niet uitmaakt.</p>
+  </details>
+
+  <footer class="voet">Groepjesmaker · onderdeel van <a href="index.html">Lesmateriaal Blink</a> · de namen blijven op je eigen apparaat</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const BEWAAR = "blink-groepjes";
+const KLEUREN = ["#4f46e5", "#0e9f9e", "#c0397e", "#e08a1e", "#2f7d4f", "#7c3aed", "#3b5bdb", "#b4552f"];
+const KLEURNAMEN = ["Blauw", "Groen", "Roze", "Oranje", "Donkergroen", "Paars", "Lichtblauw", "Bruin"];
+const DIERNAMEN = [["Tijgers", "🐯"], ["Dolfijnen", "🐬"], ["Uilen", "🦉"], ["Vossen", "🦊"],
+  ["Beren", "🐻"], ["Zeehonden", "🦭"], ["Egels", "🦔"], ["Pinguïns", "🐧"]];
+
+let staat = { namen: "", wijze: "aantal", getal: 4, nietSamen: "", naamsoort: "nummer", digibord: false };
+try { const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}"); Object.keys(staat).forEach((k) => { if (k in b) staat[k] = b[k]; }); } catch (e) {}
+const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
+
+const lijst = () => staat.namen.split("\n").map((n) => n.trim()).filter(Boolean);
+
+function schud(l) {
+  const uit = [...l];
+  for (let i = uit.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [uit[i], uit[j]] = [uit[j], uit[i]]; }
+  return uit;
+}
+
+/* de paren die niet samen mogen, als lijst van twee namen */
+function paren() {
+  const namen = lijst();
+  const laag = namen.map((n) => n.toLowerCase());
+  return staat.nietSamen.split("\n").map((regel) => {
+    const stukken = regel.split(/\s[-–—]\s|,/).map((s) => s.trim()).filter(Boolean);
+    if (stukken.length < 2) return null;
+    const twee = stukken.slice(0, 2);
+    const gevonden = twee.map((s) => {
+      const i = laag.indexOf(s.toLowerCase());
+      return i >= 0 ? namen[i] : null;
+    });
+    if (gevonden.every(Boolean)) return gevonden;
+    // alleen de namen melden die echt niet in de lijst staan
+    return { onbekend: twee.filter((_, i) => !gevonden[i]) };
+  }).filter(Boolean);
+}
+
+/* verdeel zo gelijk mogelijk: eerst de grootte per groep bepalen, dan uitdelen */
+function verdeel(namen, hoeveelGroepen) {
+  const groepen = Array.from({ length: hoeveelGroepen }, () => []);
+  namen.forEach((n, i) => groepen[i % hoeveelGroepen].push(n));
+  return groepen;
+}
+
+function magZo(groepen, verboden) {
+  return !verboden.some(([a, b]) => groepen.some((g) => g.includes(a) && g.includes(b)));
+}
+
+function groepNaam(i) {
+  if (staat.naamsoort === "kleur") return { tekst: KLEURNAMEN[i % KLEURNAMEN.length], emoji: "" };
+  if (staat.naamsoort === "dier") {
+    const [naam, emoji] = DIERNAMEN[i % DIERNAMEN.length];
+    return { tekst: naam, emoji };
+  }
+  return { tekst: "Groep " + (i + 1), emoji: "" };
+}
+
+function maakGroepjes() {
+  const namen = lijst();
+  $("melding").textContent = "";
+  if (namen.length < 2) {
+    $("groepen").innerHTML = ""; $("leeg").style.display = "";
+    $("melding").textContent = "Vul eerst minstens twee namen in."; $("tel").textContent = ""; return;
+  }
+  const getal = Math.max(1, Number(staat.getal) || 2);
+  const hoeveelGroepen = staat.wijze === "aantal"
+    ? Math.min(getal, namen.length)
+    : Math.max(1, Math.ceil(namen.length / getal));
+
+  const alle = paren();
+  const onbekend = [...new Set(alle.filter((p) => p.onbekend).flatMap((p) => p.onbekend))];
+  const verboden = alle.filter((p) => Array.isArray(p));
+
+  let groepen = null;
+  for (let poging = 0; poging < 600; poging++) {
+    const kandidaat = verdeel(schud(namen), hoeveelGroepen);
+    if (magZo(kandidaat, verboden)) { groepen = kandidaat; break; }
+  }
+  let waarschuwing = "";
+  if (!groepen) {
+    groepen = verdeel(schud(namen), hoeveelGroepen);
+    waarschuwing = "Het lukte niet om iedereen uit elkaar te houden. Maak meer groepjes, of haal een regel weg.";
+  }
+  if (onbekend.length) {
+    waarschuwing += (waarschuwing ? " " : "")
+      + (onbekend.length === 1 ? "Deze naam staat niet in de lijst: " : "Deze namen staan niet in de lijst: ")
+      + onbekend.join(", ") + ".";
+  }
+  $("melding").textContent = waarschuwing;
+
+  $("leeg").style.display = "none";
+  $("tel").textContent = `${namen.length} kinderen in ${groepen.length} ${groepen.length === 1 ? "groepje" : "groepjes"}`;
+  $("groepen").innerHTML = groepen.map((g, i) => {
+    const naam = groepNaam(i);
+    return `<div class="groepkaart" style="--kleur:${KLEUREN[i % KLEUREN.length]}">
+      <h3>${naam.emoji ? naam.emoji + " " : ""}${veilig(naam.tekst)}</h3>
+      <ol>${g.map((n) => `<li>${veilig(n)}</li>`).join("")}</ol>
+    </div>`;
+  }).join("");
+}
+const veilig = (t) => t.replace(/[&<>"]/g, (k) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[k]));
+
+/* ---- knoppen ---- */
+$("namen").addEventListener("input", () => { staat.namen = $("namen").value; bewaar(); });
+$("nietSamen").addEventListener("input", () => { staat.nietSamen = $("nietSamen").value; bewaar(); });
+$("getal").addEventListener("change", () => { staat.getal = Number($("getal").value); bewaar(); });
+$("wijzeSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-wijze]"); if (!b) return;
+  staat.wijze = b.dataset.wijze;
+  [...document.querySelectorAll("#wijzeSeg button")].forEach((x) => x.classList.toggle("aan", x.dataset.wijze === staat.wijze));
+  $("getalLabel").textContent = staat.wijze === "aantal" ? "Aantal groepjes" : "Per groepje";
+  bewaar();
+});
+$("naamSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-naam]"); if (!b) return;
+  staat.naamsoort = b.dataset.naam;
+  [...document.querySelectorAll("#naamSeg button")].forEach((x) => x.classList.toggle("aan", x.dataset.naam === staat.naamsoort));
+  bewaar();
+});
+$("uitRadKnop").addEventListener("click", () => {
+  try {
+    const rad = JSON.parse(localStorage.getItem("blink-keuzerad") || "{}");
+    const uit = [rad.namen || "", ...(rad.geweest || [])].join("\n").split("\n").map((n) => n.trim()).filter(Boolean);
+    if (!uit.length) { $("melding").textContent = "Er staan nog geen namen in het keuzerad."; return; }
+    staat.namen = uit.join("\n"); $("namen").value = staat.namen; bewaar();
+    $("melding").textContent = `${uit.length} namen overgenomen uit het keuzerad.`;
+  } catch (e) { $("melding").textContent = "Het overnemen lukte niet."; }
+});
+$("nummersKnop").addEventListener("click", () => {
+  staat.namen = Array.from({ length: 30 }, (_, i) => String(i + 1)).join("\n");
+  $("namen").value = staat.namen; bewaar();
+});
+$("wisKnop").addEventListener("click", () => {
+  staat.namen = ""; staat.nietSamen = "";
+  $("namen").value = ""; $("nietSamen").value = ""; bewaar();
+  $("groepen").innerHTML = ""; $("leeg").style.display = ""; $("tel").textContent = "";
+});
+$("maakKnop").addEventListener("click", maakGroepjes);
+$("printKnop").addEventListener("click", () => window.print());
+$("digibordKnop").addEventListener("click", () => {
+  staat.digibord = !staat.digibord;
+  document.body.classList.toggle("digibord", staat.digibord);
+  $("digibordKnop").textContent = staat.digibord ? "☀️ Gewoon" : "🌙 Digibord";
+  bewaar();
+});
+$("alleenKnop").addEventListener("click", () => document.body.classList.toggle("alleengroepen"));
+document.addEventListener("keydown", (e) => {
+  if (e.target.tagName === "TEXTAREA" || e.target.tagName === "INPUT") return;
+  if (e.code === "Space") { e.preventDefault(); maakGroepjes(); }
+  if (e.key === "Escape") document.body.classList.remove("alleengroepen");
+});
+
+/* opstarten */
+$("namen").value = staat.namen;
+$("nietSamen").value = staat.nietSamen;
+$("getal").value = staat.getal;
+[...document.querySelectorAll("#wijzeSeg button")].forEach((x) => x.classList.toggle("aan", x.dataset.wijze === staat.wijze));
+[...document.querySelectorAll("#naamSeg button")].forEach((x) => x.classList.toggle("aan", x.dataset.naam === staat.naamsoort));
+$("getalLabel").textContent = staat.wijze === "aantal" ? "Aantal groepjes" : "Per groepje";
+if (staat.digibord) { document.body.classList.add("digibord"); $("digibordKnop").textContent = "☀️ Gewoon"; }
+if (lijst().length >= 2) maakGroepjes();
+</script>
+</body>
+</html>
