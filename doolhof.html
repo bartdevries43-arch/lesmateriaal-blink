@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Doolhof maken · Lesmateriaal Blink</title>
+<meta name="description" content="Maak doolhoven om te printen, in drie maten en met een thema. Er is altijd precies één weg naar de uitgang. Met oplossingenblad en een code om hetzelfde blad terug te krijgen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1220px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .vlak{display:grid; grid-template-columns:minmax(300px,.8fr) minmax(0,1.2fr); gap:18px; margin-top:18px; align-items:start;}
+  @media (max-width:980px){ .vlak{grid-template-columns:minmax(0,1fr);} }
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:18px;}
+
+  .groep{margin-bottom:18px;}
+  .groep:last-child{margin-bottom:0;}
+  .groep h2{font-size:17px; margin-bottom:10px;}
+  .groep .klein{font-size:13px; color:var(--muted); margin:-6px 0 10px;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .velden{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px;}
+  .veld label{display:block; font-size:12.5px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; color:var(--muted); margin-bottom:4px;}
+  .veld input, .veld select{width:100%; font:inherit; font-size:15px; padding:10px 12px; border:1px solid var(--line-2); border-radius:13px; background:#fff; color:var(--ink);}
+  .knoppen{display:flex; flex-wrap:wrap; gap:9px; margin-top:6px;}
+  .knop{font:inherit; font-size:15px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:15px; padding:12px 17px; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent;}
+  .melding{font-size:14px; color:#b45309; margin-top:8px; min-height:20px;}
+
+  /* Het werkblad */
+  .bladvak{padding:0; overflow:hidden;}
+  .blad{background:#fff; padding:26px 30px 34px; font-size:16px;}
+  .bladkop{display:flex; align-items:flex-end; gap:16px; border-bottom:2px solid #e6e9f5; padding-bottom:12px; margin-bottom:18px; flex-wrap:wrap;}
+  .bladkop h2{font-size:24px;}
+  .bladkop .regels{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:#5b647f;}
+  .bladkop .regels span{display:inline-block; min-width:140px; border-bottom:1.5px dotted #b8c0d8; padding-bottom:2px;}
+  .opgaven{display:grid; gap:13px 24px;}
+  .opg{padding:8px 4px 10px; border-bottom:1px dotted #dfe3f0; break-inside:avoid;}
+  .opg .nr{font-size:12px; color:#9aa3bd; margin-right:6px;}
+  .opg .vraag{font-weight:700; line-height:1.45;}
+  .opg .lijn{display:inline-block; border-bottom:1.5px solid #c9cfe3; min-width:76px; height:1.15em; vertical-align:-2px;}
+  .opg .antwoord{font-weight:800; color:var(--accent); font-variant-numeric:tabular-nums; margin-top:3px;}
+  .opg .hint{font-size:12.5px; color:#8b93ad; margin-top:3px;}
+
+  .bladvoet{margin-top:22px; font-size:12px; color:#9aa3bd; display:flex; justify-content:space-between; gap:12px;}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .bron{font-size:13.5px; line-height:1.5; color:#4b5563; padding-left:22px; text-indent:-22px; margin-top:6px;}
+  .bron a{color:var(--accent); word-break:break-word;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  @media print{
+    body{background:#fff;}
+    .app{max-width:none; padding:0;}
+    .kop, .instellingen, details.uitleg, .voet{display:none;}
+    .bladvak{box-shadow:none; border:none; padding:0;}
+    .blad{padding:0; font-size:15px;}
+    .paginabreak{break-before:page;}
+    @page{size:A4 portrait; margin:14mm;}
+  }
+
+  /* Doolhof */
+  .doolhof{break-inside:avoid; margin-bottom:22px;}
+  .doolhofkop{display:flex; align-items:center; gap:9px; font-weight:700; font-size:15px; margin-bottom:9px;}
+  .doolhofkop .nr{display:inline-flex; align-items:center; justify-content:center; width:26px; height:26px;
+    border-radius:50%; background:var(--accent); color:#fff; font-size:13px; font-weight:800; flex:0 0 auto;}
+  .doolhofsvg{width:100%; max-width:15cm; height:auto; display:block; margin:0 auto;}
+  .doolhof.groot .doolhofsvg{max-width:17cm;}
+  .velkop{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:6px;}
+  .velkop .tel{font-size:13.5px; color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="kop">
+    <span class="logo" aria-hidden="true">🌀</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · puzzels</div>
+      <h1>Doolhof maken</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="printKnop" type="button">🖨 Afdrukken</button>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <div class="vlak">
+    <section class="kaart instellingen" aria-label="Instellingen">
+      <div class="groep">
+        <h2>Hoe moeilijk?</h2>
+        <div class="seg" id="maatSeg">
+          <button type="button" data-maat="makkelijk">10 bij 10</button>
+          <button type="button" data-maat="gemiddeld" class="aan">15 bij 15</button>
+          <button type="button" data-maat="pittig">20 bij 24</button>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Waar gaat het over?</h2>
+        <div class="seg" id="themaSeg">
+          <button type="button" data-thema="muis" class="aan">🐭 muis en kaas</button>
+          <button type="button" data-thema="kind">🧒 naar school</button>
+          <button type="button" data-thema="bij">🐝 bij en bloem</button>
+          <button type="button" data-thema="boot">⛵ naar het eiland</button>
+          <button type="button" data-thema="geen">start en eind</button>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Het blad</h2>
+        <div class="velden">
+          <div class="veld"><label for="titel">Titel</label><input id="titel" type="text" value="Doolhof" maxlength="40"></div>
+          <div class="veld"><label for="aantal">Aantal doolhoven</label><input id="aantal" type="number" min="1" max="12" step="1" value="2"></div>
+          <div class="veld"><label for="code">Herhaalcode</label><input id="code" type="text" maxlength="8" placeholder="bijv. 4821"></div>
+        </div>
+        <div class="seg" id="perVelSeg" style="margin-top:10px;">
+          <button type="button" data-per="1">1 per vel</button>
+          <button type="button" data-per="2" class="aan">2 per vel</button>
+        </div>
+        <div class="chips" style="margin-top:10px;">
+          <button class="chip aan" type="button" id="oplossingChip"><span class="bol"></span>Oplossingen erbij</button>
+          <button class="chip aan" type="button" id="naamChip"><span class="bol"></span>Regel voor naam en datum</button>
+        </div>
+      </div>
+
+      <div class="knoppen">
+        <button class="knop primair" id="maakKnop" type="button">Maak de doolhoven</button>
+        <button class="knop" id="printKnop2" type="button">🖨 Afdrukken</button>
+      </div>
+      <p class="melding" id="melding"></p>
+    </section>
+
+    <section class="kaart bladvak" aria-label="De doolhoven">
+      <div class="velkop"><span class="tel" id="tel"></span></div>
+      <div class="blad" id="blad"></div>
+    </section>
+  </div>
+
+  <details class="uitleg">
+    <summary>Hoe dit doolhof in elkaar zit (voor de leerkracht)</summary>
+    <p>Het doolhof wordt gemaakt met de methode van terugspringen. Je begint in een hokje, loopt naar een buurhokje waar je nog niet was en breekt die muur af. Kom je niet verder, dan spring je terug tot je weer ergens heen kunt. Zo wordt elk hokje precies één keer bereikt.</p>
+    <p>Daardoor geldt iets handigs: <b>tussen elk hokje en elk ander hokje bestaat precies één weg</b>. Er is dus altijd een oplossing, en er is er ook maar één. Je kunt nooit een doolhof krijgen waarin de uitgang niet te bereiken is, en ook niet één met twee goede routes.</p>
+    <h3>Waar ik het voor gebruik</h3>
+    <ul>
+      <li>Als werk voor kinderen die klaar zijn, of als rustig startmoment.</li>
+      <li>Voor fijne motoriek: met een potlood binnen de lijnen blijven is voor sommige kinderen echt oefenen.</li>
+      <li>Met de code krijg je hetzelfde blad terug, dus je kunt de hele klas hetzelfde doolhof geven en er samen over praten.</li>
+    </ul>
+    <h3>Een eerlijke kanttekening</h3>
+    <p>Een doolhof is leuk en het vraagt doorzettingsvermogen, maar het is geen rekenen of taal. Ik zet het in als extra werk en als ontspanning, niet als vervanging van een les. Onderzoek naar breintraining laat zien dat je vooral beter wordt in de oefening zelf, en dat die winst nauwelijks overdraagt naar andere taken (Simons et al., 2016).</p>
+    <h3>Bronnen</h3>
+    <p class="bron">Simons, D. J., Boot, W. R., Charness, N., Gathercole, S. E., Chabris, C. F., Hambrick, D. Z., &amp; Stine-Morrow, E. A. L. (2016). Do "brain-training" programs work? <i>Psychological Science in the Public Interest, 17</i>(3), 103-186. <a href="https://doi.org/10.1177/1529100616661983">https://doi.org/10.1177/1529100616661983</a></p>
+  </details>
+
+  <footer class="voet">Doolhof maken · onderdeel van <a href="index.html">Lesmateriaal Blink</a> · er is altijd precies één weg</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const BEWAAR = "blink-doolhof";
+
+let staat = { maat: "gemiddeld", aantal: 2, perVel: 2, thema: "muis", code: "",
+  titel: "Doolhof", oplossing: true, naam: true };
+try { const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}"); Object.keys(staat).forEach((k) => { if (k in b) staat[k] = b[k]; }); } catch (e) {}
+const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
+
+function zaadje(tekst) {
+  let h = 2166136261;
+  for (let i = 0; i < tekst.length; i++) { h ^= tekst.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+function maakRandom(zaad) {
+  let a = zaad >>> 0;
+  return function () {
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+const MATEN = { makkelijk: [10, 10], gemiddeld: [15, 15], pittig: [20, 24] };
+const THEMAS = {
+  muis: { start: "🐭", eind: "🧀", tekst: "Help de muis bij de kaas te komen." },
+  kind: { start: "🧒", eind: "🏫", tekst: "Breng het kind naar school." },
+  bij: { start: "🐝", eind: "🌻", tekst: "Breng de bij naar de bloem." },
+  boot: { start: "⛵", eind: "🏝️", tekst: "Vaar de boot naar het eiland." },
+  geen: { start: "", eind: "", tekst: "Zoek de weg van start naar finish." },
+};
+
+/* ---------- het doolhof maken ----------
+   Ik gebruik de methode van terugspringen: loop vanaf een hokje steeds naar een
+   buurman waar je nog niet was en breek die muur af. Kom je niet verder, spring
+   dan terug. Zo ontstaat een doolhof waarin elk hokje precies via één weg
+   bereikbaar is, dus er is altijd precies één goede route. */
+function maakDoolhof(r, kolommen, rijen) {
+  const aantal = kolommen * rijen;
+  // muren per hokje: [boven, rechts, onder, links]
+  const muren = Array.from({ length: aantal }, () => [true, true, true, true]);
+  const bezocht = new Array(aantal).fill(false);
+  const stapel = [0];
+  bezocht[0] = true;
+  const buren = (i) => {
+    const x = i % kolommen, y = Math.floor(i / kolommen);
+    const uit = [];
+    if (y > 0) uit.push([i - kolommen, 0, 2]);          // boven
+    if (x < kolommen - 1) uit.push([i + 1, 1, 3]);      // rechts
+    if (y < rijen - 1) uit.push([i + kolommen, 2, 0]);  // onder
+    if (x > 0) uit.push([i - 1, 3, 1]);                 // links
+    return uit;
+  };
+  while (stapel.length) {
+    const nu = stapel[stapel.length - 1];
+    const vrij = buren(nu).filter(([b]) => !bezocht[b]);
+    if (!vrij.length) { stapel.pop(); continue; }
+    const [buur, hier, daar] = vrij[Math.floor(r() * vrij.length)];
+    muren[nu][hier] = false;
+    muren[buur][daar] = false;
+    bezocht[buur] = true;
+    stapel.push(buur);
+  }
+  return { muren, kolommen, rijen };
+}
+
+/* de enige weg van start naar finish opzoeken */
+function zoekWeg(d, van, naar) {
+  const { muren, kolommen, rijen } = d;
+  const vorige = new Array(kolommen * rijen).fill(-1);
+  const gezien = new Array(kolommen * rijen).fill(false);
+  const rij = [van];
+  gezien[van] = true;
+  while (rij.length) {
+    const nu = rij.shift();
+    if (nu === naar) break;
+    const x = nu % kolommen, y = Math.floor(nu / kolommen);
+    const stappen = [];
+    if (!muren[nu][0] && y > 0) stappen.push(nu - kolommen);
+    if (!muren[nu][1] && x < kolommen - 1) stappen.push(nu + 1);
+    if (!muren[nu][2] && y < rijen - 1) stappen.push(nu + kolommen);
+    if (!muren[nu][3] && x > 0) stappen.push(nu - 1);
+    for (const s of stappen) if (!gezien[s]) { gezien[s] = true; vorige[s] = nu; rij.push(s); }
+  }
+  const weg = [];
+  let nu = naar;
+  while (nu !== -1) { weg.unshift(nu); if (nu === van) break; nu = vorige[nu]; }
+  return weg[0] === van ? weg : [];
+}
+
+/* ---------- tekenen ---------- */
+const HOK = 20;
+function doolhofSvg(d, weg, thema, metOplossing) {
+  const { muren, kolommen, rijen } = d;
+  const b = kolommen * HOK, h = rijen * HOK;
+  let lijnen = "";
+  for (let i = 0; i < kolommen * rijen; i++) {
+    const x = (i % kolommen) * HOK, y = Math.floor(i / kolommen) * HOK;
+    if (muren[i][0]) lijnen += `M${x},${y}h${HOK}`;
+    if (muren[i][3]) lijnen += `M${x},${y}v${HOK}`;
+    if (i % kolommen === kolommen - 1 && muren[i][1]) lijnen += `M${x + HOK},${y}v${HOK}`;
+    if (Math.floor(i / kolommen) === rijen - 1 && muren[i][2]) lijnen += `M${x},${y + HOK}h${HOK}`;
+  }
+  const midden = (i) => [(i % kolommen) * HOK + HOK / 2, Math.floor(i / kolommen) * HOK + HOK / 2];
+  const pad = metOplossing && weg.length
+    ? `<polyline points="${weg.map((i) => midden(i).join(",")).join(" ")}"
+        fill="none" stroke="#e2584f" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>`
+    : "";
+  const [sx, sy] = midden(0);
+  const [ex, ey] = midden(kolommen * rijen - 1);
+  const merk = thema.start
+    ? `<text x="${sx}" y="${sy + 5}" text-anchor="middle" font-size="13">${thema.start}</text>
+       <text x="${ex}" y="${ey + 5}" text-anchor="middle" font-size="13">${thema.eind}</text>`
+    : `<text x="${sx}" y="${sy + 4}" text-anchor="middle" font-size="9" font-weight="700" fill="#0e9f9e">START</text>
+       <text x="${ex}" y="${ey + 4}" text-anchor="middle" font-size="9" font-weight="700" fill="#e2584f">EIND</text>`;
+  return `<svg viewBox="-2 -2 ${b + 4} ${h + 4}" class="doolhofsvg" role="img" aria-label="doolhof">
+    ${pad}<path d="${lijnen}" fill="none" stroke="#2b3348" stroke-width="2" stroke-linecap="square"/>${merk}
+  </svg>`;
+}
+
+function maakBlad() {
+  $("melding").textContent = "";
+  const code = staat.code.trim() || String(Math.floor(1000 + Math.random() * 9000));
+  $("code").value = code; staat.code = code; bewaar();
+  const r = maakRandom(zaadje(code + "|" + staat.maat + "|" + staat.aantal));
+  const [kolommen, rijen] = MATEN[staat.maat];
+  const thema = THEMAS[staat.thema];
+
+  const doolhoven = [];
+  for (let i = 0; i < staat.aantal; i++) {
+    const d = maakDoolhof(r, kolommen, rijen);
+    doolhoven.push({ d, weg: zoekWeg(d, 0, kolommen * rijen - 1) });
+  }
+
+  const naamregel = staat.naam ? `<div class="regels"><div>Naam <span></span></div><div>Datum <span></span></div></div>` : "";
+  const blok = (o, i, metOplossing) => `
+    ${i > 0 && i % staat.perVel === 0 ? '<div class="paginabreak"></div>' : ""}
+    <div class="doolhof ${staat.perVel === 1 ? "groot" : ""}">
+      <div class="doolhofkop"><span class="nr">${i + 1}</span>${thema.tekst}</div>
+      ${doolhofSvg(o.d, o.weg, thema, metOplossing)}
+    </div>`;
+
+  let html = `
+    <div class="bladkop"><h2>${staat.titel || "Doolhof"}</h2>${naamregel}</div>
+    ${doolhoven.map((o, i) => blok(o, i, false)).join("")}
+    <div class="bladvoet"><span>Lesmateriaal Blink · doolhof</span><span>code ${code}</span></div>`;
+  if (staat.oplossing) {
+    html += `
+      <div class="paginabreak"></div>
+      <div class="bladkop" style="margin-top:22px;"><h2>Oplossingen · ${staat.titel || "Doolhof"}</h2></div>
+      ${doolhoven.map((o, i) => blok(o, i, true)).join("")}
+      <div class="bladvoet"><span>Lesmateriaal Blink · oplossingen</span><span>code ${code}</span></div>`;
+  }
+  $("blad").innerHTML = html;
+  $("tel").textContent = `${staat.aantal} ${staat.aantal === 1 ? "doolhof" : "doolhoven"} van ${kolommen} bij ${rijen}`;
+}
+
+/* ---- knoppen ---- */
+[["maatSeg", "maat", "maat"], ["perVelSeg", "per", "perVel"], ["themaSeg", "thema", "thema"]].forEach(([id, data, sleutel]) => {
+  $(id).addEventListener("click", (e) => {
+    const b = e.target.closest("[data-" + data + "]"); if (!b) return;
+    const w = b.dataset[data];
+    staat[sleutel] = sleutel === "perVel" ? Number(w) : w;
+    [...document.querySelectorAll("#" + id + " button")].forEach((x) =>
+      x.classList.toggle("aan", (sleutel === "perVel" ? Number(x.dataset[data]) : x.dataset[data]) === staat[sleutel]));
+    bewaar();
+  });
+});
+[["oplossingChip", "oplossing"], ["naamChip", "naam"]].forEach(([id, sleutel]) => {
+  $(id).addEventListener("click", () => { staat[sleutel] = !staat[sleutel]; $(id).classList.toggle("aan", staat[sleutel]); bewaar(); });
+});
+["titel", "aantal", "code"].forEach((id) => {
+  $(id).addEventListener("change", () => { staat[id] = id === "aantal" ? Number($(id).value) : $(id).value; bewaar(); });
+});
+$("maakKnop").addEventListener("click", () => { staat.code = ""; $("code").value = ""; maakBlad(); });
+$("printKnop").addEventListener("click", () => window.print());
+$("printKnop2").addEventListener("click", () => window.print());
+
+[["maatSeg", "maat", "maat"], ["perVelSeg", "per", "perVel"], ["themaSeg", "thema", "thema"]].forEach(([id, data, sleutel]) => {
+  [...document.querySelectorAll("#" + id + " button")].forEach((x) =>
+    x.classList.toggle("aan", (sleutel === "perVel" ? Number(x.dataset[data]) : x.dataset[data]) === staat[sleutel]));
+});
+$("titel").value = staat.titel; $("aantal").value = staat.aantal; $("code").value = staat.code;
+$("oplossingChip").classList.toggle("aan", staat.oplossing);
+$("naamChip").classList.toggle("aan", staat.naam);
+maakBlad();
+
+</script>
+</body>
+</html>

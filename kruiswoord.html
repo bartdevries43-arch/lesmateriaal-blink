@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kruiswoordpuzzel maken · Lesmateriaal Blink</title>
+<meta name="description" content="Maak een kruiswoordpuzzel met je eigen woorden en omschrijvingen. De woorden haken in elkaar, met genummerde vragen en een oplossingsblad.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1220px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .vlak{display:grid; grid-template-columns:minmax(300px,.8fr) minmax(0,1.2fr); gap:18px; margin-top:18px; align-items:start;}
+  @media (max-width:980px){ .vlak{grid-template-columns:minmax(0,1fr);} }
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:18px;}
+
+  .groep{margin-bottom:18px;}
+  .groep:last-child{margin-bottom:0;}
+  .groep h2{font-size:17px; margin-bottom:10px;}
+  .groep .klein{font-size:13px; color:var(--muted); margin:-6px 0 10px;}
+  .chips{display:flex; flex-wrap:wrap; gap:8px;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .velden{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px;}
+  .veld label{display:block; font-size:12.5px; font-weight:800; letter-spacing:.4px; text-transform:uppercase; color:var(--muted); margin-bottom:4px;}
+  .veld input, .veld select{width:100%; font:inherit; font-size:15px; padding:10px 12px; border:1px solid var(--line-2); border-radius:13px; background:#fff; color:var(--ink);}
+  .knoppen{display:flex; flex-wrap:wrap; gap:9px; margin-top:6px;}
+  .knop{font:inherit; font-size:15px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:15px; padding:12px 17px; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent;}
+  .melding{font-size:14px; color:#b45309; margin-top:8px; min-height:20px;}
+
+  /* Het werkblad */
+  .bladvak{padding:0; overflow:hidden;}
+  .blad{background:#fff; padding:26px 30px 34px; font-size:16px;}
+  .bladkop{display:flex; align-items:flex-end; gap:16px; border-bottom:2px solid #e6e9f5; padding-bottom:12px; margin-bottom:18px; flex-wrap:wrap;}
+  .bladkop h2{font-size:24px;}
+  .bladkop .regels{margin-left:auto; display:flex; gap:18px; font-size:13.5px; color:#5b647f;}
+  .bladkop .regels span{display:inline-block; min-width:140px; border-bottom:1.5px dotted #b8c0d8; padding-bottom:2px;}
+  .opgaven{display:grid; gap:13px 24px;}
+  .opg{padding:8px 4px 10px; border-bottom:1px dotted #dfe3f0; break-inside:avoid;}
+  .opg .nr{font-size:12px; color:#9aa3bd; margin-right:6px;}
+  .opg .vraag{font-weight:700; line-height:1.45;}
+  .opg .lijn{display:inline-block; border-bottom:1.5px solid #c9cfe3; min-width:76px; height:1.15em; vertical-align:-2px;}
+  .opg .antwoord{font-weight:800; color:var(--accent); font-variant-numeric:tabular-nums; margin-top:3px;}
+  .opg .hint{font-size:12.5px; color:#8b93ad; margin-top:3px;}
+
+  .bladvoet{margin-top:22px; font-size:12px; color:#9aa3bd; display:flex; justify-content:space-between; gap:12px;}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .bron{font-size:13.5px; line-height:1.5; color:#4b5563; padding-left:22px; text-indent:-22px; margin-top:6px;}
+  .bron a{color:var(--accent); word-break:break-word;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  @media print{
+    body{background:#fff;}
+    .app{max-width:none; padding:0;}
+    .kop, .instellingen, details.uitleg, .voet{display:none;}
+    .bladvak{box-shadow:none; border:none; padding:0;}
+    .blad{padding:0; font-size:15px;}
+    .paginabreak{break-before:page;}
+    @page{size:A4 portrait; margin:14mm;}
+  }
+
+  /* Kruiswoordpuzzel */
+  .puzzelvak{overflow-x:auto; margin-bottom:18px;}
+  table.kruis{border-collapse:collapse; margin:0 auto;}
+  table.kruis td{width:1.15cm; height:1.15cm; border:1px solid #55607e; position:relative;
+    text-align:center; vertical-align:middle; padding:0; background:#fff;}
+  .puzzelvak.klein table.kruis td{width:.92cm; height:.92cm;}
+  table.kruis td.zwart{background:#3a4560; border-color:#3a4560;}
+  table.kruis .hoek{position:absolute; top:1px; left:2px; font-size:8.5px; font-weight:800; color:#8b93ad; line-height:1;}
+  table.kruis .letter{font-family:"Baloo 2",system-ui,sans-serif; font-weight:800; font-size:.82cm; color:var(--accent);}
+  .puzzelvak.klein table.kruis .letter{font-size:.66cm;}
+
+  .vragen{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px 28px; break-inside:avoid;}
+  .vragen h3{font-size:14px; letter-spacing:.5px; text-transform:uppercase; color:var(--muted); margin-bottom:7px;}
+  .vragen ul{list-style:none;}
+  .vragen li{font-size:14.5px; line-height:1.5; padding:3px 0; border-bottom:1px dotted #e4e7f4;}
+  .vragen li b{color:var(--accent); margin-right:3px;}
+  .vragen .lengte{color:#b8c0d8; font-size:.85em; margin-left:3px;}
+  .vragen .antwoord{color:var(--accent); font-weight:800; margin-left:5px; text-transform:lowercase;}
+  .velkop{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:6px;}
+  .velkop .tel{font-size:13.5px; color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="kop">
+    <span class="logo" aria-hidden="true">🔠</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · puzzels</div>
+      <h1>Kruiswoordpuzzel maken</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="printKnop" type="button">🖨 Afdrukken</button>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <div class="vlak">
+    <section class="kaart instellingen" aria-label="Instellingen">
+      <div class="groep">
+        <h2>Welke woorden?</h2>
+        <p class="klein">Eén per regel: eerst het woord, dan een streepje | en dan de omschrijving.</p>
+        <textarea id="lijst" spellcheck="false" aria-label="Woorden en omschrijvingen"
+          placeholder="hond | dit dier blaft&#10;kat | dit dier miauwt"></textarea>
+        <div class="rij" style="margin-top:9px;">
+          <div class="seg" id="voorbeeldSeg">
+            <button type="button" data-voorbeeld="school">School</button>
+            <button type="button" data-voorbeeld="dieren">Dieren</button>
+            <button type="button" data-voorbeeld="rekenen">Rekenen</button>
+          </div>
+          <button class="kleinknop" type="button" id="wisKnop">Leegmaken</button>
+        </div>
+      </div>
+
+      <div class="groep">
+        <h2>Het blad</h2>
+        <div class="velden">
+          <div class="veld"><label for="titel">Titel</label><input id="titel" type="text" value="Kruiswoordpuzzel" maxlength="40"></div>
+          <div class="veld"><label for="code">Herhaalcode</label><input id="code" type="text" maxlength="8" placeholder="bijv. 4821"></div>
+        </div>
+        <div class="chips" style="margin-top:10px;">
+          <button class="chip aan" type="button" id="hoofdChip"><span class="bol"></span>Grote hokjes</button>
+          <button class="chip aan" type="button" id="oplossingChip"><span class="bol"></span>Oplossing erbij</button>
+          <button class="chip aan" type="button" id="naamChip"><span class="bol"></span>Regel voor naam en datum</button>
+        </div>
+      </div>
+
+      <div class="knoppen">
+        <button class="knop primair" id="maakKnop" type="button">Maak de puzzel</button>
+        <button class="knop" id="printKnop2" type="button">🖨 Afdrukken</button>
+      </div>
+      <p class="melding" id="melding"></p>
+    </section>
+
+    <section class="kaart bladvak" aria-label="De puzzel">
+      <div class="velkop"><span class="tel" id="tel"></span></div>
+      <div class="blad" id="blad"></div>
+    </section>
+  </div>
+
+  <details class="uitleg">
+    <summary>Hoe deze puzzel in elkaar zit (voor de leerkracht)</summary>
+    <p>Je geeft de woorden en de omschrijvingen, de pagina legt de puzzel. Het langste woord komt als eerste horizontaal in het midden. Daarna zoekt de pagina bij elk volgend woord een letter die het deelt met een woord dat er al ligt, en legt het er dwars doorheen.</p>
+    <h3>Waar de pagina op let</h3>
+    <ul>
+      <li><b>Elk woord moet ergens doorheen.</b> Losse woorden die nergens raken komen niet in de puzzel. Passen ze niet, dan krijg je een melding met welke woorden het zijn.</li>
+      <li><b>Geen woorden die per ongeluk aan elkaar plakken.</b> Een woord mag niet direct naast een ander woord liggen, want dan zou je van twee losse letters ongewild een woord lezen. Voor en achter een woord moet ook een zwart vakje of de rand zitten.</li>
+      <li><b>De nummers lopen op leesvolgorde</b>, van linksboven naar rechtsonder, net als bij een gewone kruiswoordpuzzel. Begint er een horizontaal en een verticaal woord in hetzelfde vakje, dan delen ze dat nummer.</li>
+      <li>De pagina probeert het vijfentwintig keer en houdt de puzzel waarin de meeste woorden passen.</li>
+    </ul>
+    <h3>Tips voor je woordenlijst</h3>
+    <ul>
+      <li>Acht tot vijftien woorden werkt het prettigst. Meer woorden maken de puzzel wel groter, maar niet altijd mooier.</li>
+      <li>Woorden met veel klinkers haken makkelijker in elkaar dan woorden met veel medeklinkers.</li>
+      <li>Zorg dat er een paar lange woorden bij zitten. Die vormen het geraamte waar de rest aan vast komt.</li>
+      <li>Leestekens en spaties haal ik automatisch weg, dus <i>ijs-beer</i> wordt IJSBEER.</li>
+    </ul>
+    <h3>Waar ik het voor gebruik</h3>
+    <p>Voor woordenschat is dit een fijne vorm: het kind leest de omschrijving en moet het woord zelf ophalen uit het geheugen, en de lengte en de kruisende letters helpen daarbij. Zelf iets ophalen werkt beter dan het nog een keer lezen (Dunlosky et al., 2013). Handig bij een thema, voor de woorden van een zaakvakles, of als afsluiting van een blok.</p>
+    <h3>Bronnen</h3>
+    <p class="bron">Dunlosky, J., Rawson, K. A., Marsh, E. J., Nathan, M. J., &amp; Willingham, D. T. (2013). Improving students' learning with effective learning techniques: Promising directions from cognitive and educational psychology. <i>Psychological Science in the Public Interest, 14</i>(1), 4-58. <a href="https://doi.org/10.1177/1529100612453266">https://doi.org/10.1177/1529100612453266</a></p>
+  </details>
+
+  <footer class="voet">Kruiswoordpuzzel maken · onderdeel van <a href="index.html">Lesmateriaal Blink</a> · met je eigen woorden</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const BEWAAR = "blink-kruiswoord";
+
+const VOORBEELDEN = {
+  school: `boek | hierin lees je een verhaal
+potlood | hiermee schrijf je, en je kunt het uitgummen
+schrift | hierin maak je je werk
+tafel | hieraan zit je te werken
+stoel | hierop zit je
+krijt | hiermee schrijf je op het bord
+plein | hier speel je in de pauze
+gum | hiermee haal je een fout weg
+lezen | wat je met een boek doet
+juf | de vrouw die lesgeeft`,
+  dieren: `hond | dit dier blaft
+kat | dit dier miauwt
+paard | hierop kun je rijden
+muis | klein dier met een lange staart
+vogel | dit dier heeft veren en kan vliegen
+koe | dit dier geeft melk
+kip | dit dier legt eieren
+vis | dit dier leeft in het water
+schaap | van dit dier komt wol
+beer | groot bruin bosdier`,
+  rekenen: `optellen | erbij doen
+aftrekken | eraf halen
+breuk | een deel van een geheel
+meter | hiermee meet je lengte
+liter | hiermee meet je inhoud
+kilo | duizend gram
+helft | de ene van twee gelijke delen
+tafel | rijtje keersommen
+rest | wat overblijft na het delen
+som | een opgave met getallen`,
+};
+
+let staat = { lijst: VOORBEELDEN.school, titel: "Kruiswoordpuzzel", code: "",
+  hoofdletters: true, oplossing: true, naam: true };
+try { const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}"); Object.keys(staat).forEach((k) => { if (k in b) staat[k] = b[k]; }); } catch (e) {}
+const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
+
+function zaadje(tekst) {
+  let h = 2166136261;
+  for (let i = 0; i < tekst.length; i++) { h ^= tekst.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+function maakRandom(zaad) {
+  let a = zaad >>> 0;
+  return function () {
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function schud(r, l) {
+  const uit = [...l];
+  for (let i = uit.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [uit[i], uit[j]] = [uit[j], uit[i]]; }
+  return uit;
+}
+const veilig = (t) => t.replace(/[&<>"]/g, (k) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[k]));
+
+/* woord | omschrijving, alleen letters in het woord */
+function woorden() {
+  const gezien = new Set();
+  return staat.lijst.split("\n").map((regel) => {
+    const [ruw, omschrijving] = regel.split("|").map((s) => (s || "").trim());
+    if (!ruw) return null;
+    const woord = ruw.toUpperCase().replace(/[^A-ZÀ-ÿ]/gi, "");
+    if (woord.length < 2 || gezien.has(woord)) return null;
+    gezien.add(woord);
+    return { woord, omschrijving: omschrijving || "", lengte: woord.length };
+  }).filter(Boolean);
+}
+
+/* ---------- de puzzel leggen ----------
+   Het eerste woord komt horizontaal in het midden. Elk volgend woord probeer ik
+   te kruisen met een woord dat er al ligt: dezelfde letter, en dan de andere
+   richting op. Een plek mag alleen als er geen woorden per ongeluk aan elkaar
+   plakken. Lukt kruisen niet, dan blijft het woord liggen en meld ik dat. */
+const MAAT = 40;
+const idx = (x, y) => y * MAAT + x;
+
+function leegRooster() { return new Array(MAAT * MAAT).fill(""); }
+
+function magHier(rooster, woord, x, y, horizontaal) {
+  const dx = horizontaal ? 1 : 0, dy = horizontaal ? 0 : 1;
+  if (x < 1 || y < 1) return false;
+  if (x + dx * (woord.length - 1) > MAAT - 2 || y + dy * (woord.length - 1) > MAAT - 2) return false;
+  // voor en na het woord moet het leeg zijn
+  if (rooster[idx(x - dx, y - dy)]) return false;
+  if (rooster[idx(x + dx * woord.length, y + dy * woord.length)]) return false;
+  let kruisingen = 0;
+  for (let i = 0; i < woord.length; i++) {
+    const cx = x + dx * i, cy = y + dy * i;
+    const hier = rooster[idx(cx, cy)];
+    if (hier && hier !== woord[i]) return false;
+    if (hier) { kruisingen++; continue; }
+    // een leeg vakje mag er opzij niet tegenaan liggen, anders ontstaan er woorden van twee letters
+    if (horizontaal) {
+      if (rooster[idx(cx, cy - 1)] || rooster[idx(cx, cy + 1)]) return false;
+    } else {
+      if (rooster[idx(cx - 1, cy)] || rooster[idx(cx + 1, cy)]) return false;
+    }
+  }
+  return kruisingen;   // 0 betekent: hier mag het niet
+}
+
+function zet(rooster, woord, x, y, horizontaal) {
+  const dx = horizontaal ? 1 : 0, dy = horizontaal ? 0 : 1;
+  for (let i = 0; i < woord.length; i++) rooster[idx(x + dx * i, y + dy * i)] = woord[i];
+}
+
+function bouwPuzzel(r, lijst, compact, doorElkaar) {
+  // Meestal van lang naar kort, want lange woorden vormen het geraamte.
+  // Soms door elkaar, want een andere volgorde laat soms net meer woorden passen.
+  const gesorteerd = doorElkaar
+    ? schud(r, lijst).sort((a, b) => (r() < .3 ? 0 : b.lengte - a.lengte))
+    : [...lijst].sort((a, b) => b.lengte - a.lengte);
+  const rooster = leegRooster();
+  const gelegd = [];
+  const start = gesorteerd[0];
+  const sx = Math.floor((MAAT - start.lengte) / 2), sy = Math.floor(MAAT / 2);
+  zet(rooster, start.woord, sx, sy, true);
+  gelegd.push({ ...start, x: sx, y: sy, horizontaal: true });
+
+  const zoekPlekken = (w) => {
+    const plekken = [];
+    for (const g of gelegd) {
+      for (let i = 0; i < g.woord.length; i++) {
+        for (let j = 0; j < w.woord.length; j++) {
+          if (g.woord[i] !== w.woord[j]) continue;
+          const horizontaal = !g.horizontaal;
+          const x = horizontaal ? g.x + (g.horizontaal ? i : 0) - j : g.x + (g.horizontaal ? i : 0);
+          const y = horizontaal ? g.y + (g.horizontaal ? 0 : i) : g.y + (g.horizontaal ? 0 : i) - j;
+          const kruisingen = magHier(rooster, w.woord, x, y, horizontaal);
+          if (kruisingen) plekken.push({ x, y, horizontaal, kruisingen });
+        }
+      }
+    }
+    return plekken;
+  };
+
+  // Blijf rondjes maken zolang er nog iets bij komt. Een woord dat in de eerste
+  // ronde nergens paste, past vaak wel als er later meer woorden liggen.
+  let wachten = gesorteerd.slice(1);
+  let gelukt = true;
+  while (wachten.length && gelukt) {
+    gelukt = false;
+    const nogSteedsNiet = [];
+    for (const w of wachten) {
+      const plekken = zoekPlekken(w);
+      if (!plekken.length) { nogSteedsNiet.push(w); continue; }
+      // Soms kies ik de plek met de meeste kruisingen, dat maakt de puzzel compact.
+      // Soms kies ik zomaar een plek, want te compact leggen blokkeert latere woorden.
+      let keuze = plekken;
+      if (compact) {
+        const meeste = Math.max(...plekken.map((k) => k.kruisingen));
+        keuze = plekken.filter((k) => k.kruisingen === meeste);
+      }
+      const plek = keuze[Math.floor(r() * keuze.length)];
+      zet(rooster, w.woord, plek.x, plek.y, plek.horizontaal);
+      gelegd.push({ ...w, ...plek });
+      gelukt = true;
+    }
+    wachten = nogSteedsNiet;
+  }
+  return { rooster, gelegd, overgebleven: wachten.map((w) => w.woord) };
+}
+
+/* het gebruikte deel uitsnijden en de startvakjes nummeren */
+function netjes(puzzel) {
+  const { rooster, gelegd } = puzzel;
+  let minX = MAAT, maxX = 0, minY = MAAT, maxY = 0;
+  for (let y = 0; y < MAAT; y++) for (let x = 0; x < MAAT; x++) {
+    if (rooster[idx(x, y)]) {
+      minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+      minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+    }
+  }
+  const kolommen = maxX - minX + 1, rijen = maxY - minY + 1;
+  const vakjes = Array.from({ length: rijen }, (_, y) =>
+    Array.from({ length: kolommen }, (_, x) => rooster[idx(x + minX, y + minY)]));
+  const verschoven = gelegd.map((g) => ({ ...g, x: g.x - minX, y: g.y - minY }));
+  // nummeren op leesvolgorde van het startvakje
+  verschoven.sort((a, b) => (a.y - b.y) || (a.x - b.x));
+  const nummers = new Map();
+  let nummer = 0;
+  for (const g of verschoven) {
+    const sleutel = g.y + "," + g.x;
+    if (!nummers.has(sleutel)) nummers.set(sleutel, ++nummer);
+    g.nummer = nummers.get(sleutel);
+  }
+  return { vakjes, kolommen, rijen, gelegd: verschoven, nummers };
+}
+
+function roosterHtml(p, metOplossing) {
+  const cel = (x, y) => {
+    const letter = p.vakjes[y][x];
+    if (!letter) return `<td class="zwart"></td>`;
+    const nummer = p.nummers.get(y + "," + x);
+    return `<td>${nummer ? `<span class="hoek">${nummer}</span>` : ""}${metOplossing ? `<span class="letter">${letter}</span>` : ""}</td>`;
+  };
+  let uit = `<table class="kruis" style="--kolommen:${p.kolommen}">`;
+  for (let y = 0; y < p.rijen; y++) {
+    uit += "<tr>";
+    for (let x = 0; x < p.kolommen; x++) uit += cel(x, y);
+    uit += "</tr>";
+  }
+  return uit + "</table>";
+}
+
+function vragenHtml(p, metOplossing) {
+  const maak = (horizontaal) => p.gelegd
+    .filter((g) => g.horizontaal === horizontaal)
+    .sort((a, b) => a.nummer - b.nummer)
+    .map((g) => `<li><b>${g.nummer}.</b> ${veilig(g.omschrijving || "(geen omschrijving)")}
+      ${metOplossing ? `<span class="antwoord">${veilig(g.woord)}</span>` : `<span class="lengte">(${g.lengte})</span>`}</li>`)
+    .join("");
+  return `<div class="vragen">
+    <div><h3>Horizontaal →</h3><ul>${maak(true)}</ul></div>
+    <div><h3>Verticaal ↓</h3><ul>${maak(false)}</ul></div>
+  </div>`;
+}
+
+function maakBlad() {
+  const lijst = woorden();
+  $("melding").textContent = "";
+  if (lijst.length < 3) {
+    $("blad").innerHTML = ""; $("tel").textContent = "";
+    $("melding").textContent = "Vul minstens drie woorden in, als woord | omschrijving."; return;
+  }
+  const code = staat.code.trim() || String(Math.floor(1000 + Math.random() * 9000));
+  $("code").value = code; staat.code = code; bewaar();
+
+  // een paar keer proberen en de puzzel met de meeste woorden houden
+  // Meer woorden is beter. Passen er evenveel, dan wint de kleinste puzzel.
+  const maatVan = (p) => {
+    let minX = MAAT, maxX = 0, minY = MAAT, maxY = 0;
+    for (const g of p.gelegd) {
+      minX = Math.min(minX, g.x); minY = Math.min(minY, g.y);
+      maxX = Math.max(maxX, g.x + (g.horizontaal ? g.woord.length - 1 : 0));
+      maxY = Math.max(maxY, g.y + (g.horizontaal ? 0 : g.woord.length - 1));
+    }
+    return (maxX - minX + 1) * (maxY - minY + 1);
+  };
+  let beste = null;
+  for (let poging = 0; poging < 40; poging++) {
+    const r = maakRandom(zaadje(code + "|" + poging + "|" + lijst.length));
+    const p = bouwPuzzel(r, lijst, poging % 2 === 0, poging % 4 >= 2);
+    if (!beste || p.gelegd.length > beste.gelegd.length
+      || (p.gelegd.length === beste.gelegd.length && maatVan(p) < maatVan(beste))) beste = p;
+    if (!p.overgebleven.length && poging > 3) break;
+  }
+  const p = netjes(beste);
+  const zonderOmschrijving = p.gelegd.filter((g) => !g.omschrijving).length;
+
+  const melding = [];
+  if (beste.overgebleven.length) {
+    melding.push(`Deze woorden passen nergens en staan niet in de puzzel: ${beste.overgebleven.join(", ").toLowerCase()}. Dat gebeurt als een woord geen letter deelt met de rest.`);
+  }
+  if (zonderOmschrijving) melding.push(`${zonderOmschrijving} woorden hebben nog geen omschrijving.`);
+  $("melding").textContent = melding.join(" ");
+  $("tel").textContent = `${p.gelegd.length} van de ${lijst.length} woorden, rooster ${p.kolommen} bij ${p.rijen}`;
+
+  const naamregel = staat.naam ? `<div class="regels"><div>Naam <span></span></div><div>Datum <span></span></div></div>` : "";
+  let html = `
+    <div class="bladkop"><h2>${veilig(staat.titel || "Kruiswoordpuzzel")}</h2>${naamregel}</div>
+    <div class="puzzelvak ${staat.hoofdletters ? "" : "klein"}">${roosterHtml(p, false)}</div>
+    ${vragenHtml(p, false)}
+    <div class="bladvoet"><span>Lesmateriaal Blink · kruiswoordpuzzel</span><span>code ${code}</span></div>`;
+  if (staat.oplossing) {
+    html += `
+      <div class="paginabreak"></div>
+      <div class="bladkop" style="margin-top:22px;"><h2>Oplossing · ${veilig(staat.titel || "Kruiswoordpuzzel")}</h2></div>
+      <div class="puzzelvak ${staat.hoofdletters ? "" : "klein"}">${roosterHtml(p, true)}</div>
+      ${vragenHtml(p, true)}
+      <div class="bladvoet"><span>Lesmateriaal Blink · oplossing</span><span>code ${code}</span></div>`;
+  }
+  $("blad").innerHTML = html;
+}
+
+/* ---- knoppen ---- */
+$("lijst").addEventListener("input", () => { staat.lijst = $("lijst").value; bewaar(); });
+["titel", "code"].forEach((id) => $(id).addEventListener("change", () => { staat[id] = $(id).value; bewaar(); }));
+$("voorbeeldSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-voorbeeld]"); if (!b) return;
+  staat.lijst = VOORBEELDEN[b.dataset.voorbeeld];
+  $("lijst").value = staat.lijst; staat.code = ""; $("code").value = ""; bewaar(); maakBlad();
+});
+[["hoofdChip", "hoofdletters"], ["oplossingChip", "oplossing"], ["naamChip", "naam"]].forEach(([id, sleutel]) => {
+  $(id).addEventListener("click", () => { staat[sleutel] = !staat[sleutel]; $(id).classList.toggle("aan", staat[sleutel]); bewaar(); maakBlad(); });
+});
+$("wisKnop").addEventListener("click", () => {
+  staat.lijst = ""; $("lijst").value = ""; bewaar();
+  $("blad").innerHTML = ""; $("tel").textContent = "";
+});
+$("maakKnop").addEventListener("click", () => { staat.code = ""; $("code").value = ""; maakBlad(); });
+$("printKnop").addEventListener("click", () => window.print());
+$("printKnop2").addEventListener("click", () => window.print());
+
+/* opstarten */
+$("lijst").value = staat.lijst; $("titel").value = staat.titel; $("code").value = staat.code;
+[["hoofdChip", "hoofdletters"], ["oplossingChip", "oplossing"], ["naamChip", "naam"]]
+  .forEach(([id, sleutel]) => $(id).classList.toggle("aan", staat[sleutel]));
+maakBlad();
+
+</script>
+</body>
+</html>
