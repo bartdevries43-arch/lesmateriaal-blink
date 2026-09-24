@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weegschaal · Lesmateriaal Blink</title>
+<meta name="description" content="Maak de weegschaal gelijk: welk blokje hoort erbij? Oefenen met gelijkheid en aanvullen, voor groep 4 en 5 op het digibord.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+    --goed:#16a34a; --fout:#e2584f;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1020px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:22px; margin-top:18px;}
+
+  .vraag{text-align:center; font-family:"Baloo 2",system-ui,sans-serif; font-weight:800;
+    font-size:clamp(1.15rem,3vw,1.75rem); line-height:1.2; margin-bottom:18px; min-height:1.3em;}
+
+  /* de weegschaal */
+  .weegschaal{position:relative; max-width:660px; margin:0 auto; padding-top:8px;}
+  .balk{position:relative; height:10px; border-radius:99px; background:#55607e; margin:0 6px;
+    transform-origin:center; transition:transform .5s cubic-bezier(.3,.9,.3,1);}
+  .weegschaal.linksomlaag .balk{transform:rotate(6deg);}
+  .weegschaal.rechtsomlaag .balk{transform:rotate(-6deg);}
+  .weegschaal.gelijk .balk{transform:rotate(0deg);}
+  .schalen{display:flex; justify-content:space-between; gap:12px; margin-top:-4px;}
+  .schaal{flex:1; display:flex; flex-direction:column; align-items:center;
+    transition:transform .5s cubic-bezier(.3,.9,.3,1);}
+  .weegschaal.linksomlaag .schaal.links{transform:translateY(20px);}
+  .weegschaal.linksomlaag .schaal.rechts{transform:translateY(-20px);}
+  .weegschaal.rechtsomlaag .schaal.links{transform:translateY(-20px);}
+  .weegschaal.rechtsomlaag .schaal.rechts{transform:translateY(20px);}
+  .touw{width:2px; height:26px; background:#9aa3bd;}
+  .bak{min-height:74px; width:100%; border:3px solid #55607e; border-top:none;
+    border-radius:0 0 26px 26px; background:#fbfcff; display:flex; flex-wrap:wrap; gap:6px;
+    align-items:center; justify-content:center; padding:10px 8px 12px;}
+  .blok{font-family:"Baloo 2",system-ui,sans-serif; font-weight:800;
+    font-size:clamp(17px,3.6vw,24px); min-width:clamp(40px,8vw,56px); padding:9px 8px; border-radius:11px;
+    background:linear-gradient(160deg,#6f7bea,#4f46e5); color:#fff; text-align:center;
+    box-shadow:0 3px 8px rgba(31,41,90,.2);}
+  .blok.vraag{background:linear-gradient(160deg,#f0a0c4,#c0397e);}
+  .blok.vraag.gevonden{background:linear-gradient(160deg,#5cc98a,#16a34a);}
+  .totaal{font-family:"Baloo 2",system-ui,sans-serif; font-weight:800; font-size:clamp(15px,3vw,20px);
+    color:var(--muted); margin-top:8px;}
+  .voet-schaal{height:12px; background:#55607e; border-radius:4px; max-width:150px; margin:14px auto 0;}
+  .staander{width:14px; height:44px; background:#55607e; margin:-1px auto 0;}
+
+  .keuzes{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:22px;}
+  .keuze{font:inherit; font-family:"Baloo 2",system-ui,sans-serif; font-weight:800;
+    font-size:clamp(19px,4vw,26px); min-width:72px; padding:13px 16px; border-radius:16px;
+    border:2px solid var(--line-2); background:#fff; color:var(--ink); cursor:pointer; transition:transform .1s ease;}
+  .keuze:hover{transform:translateY(-2px); border-color:var(--accent);}
+  .keuze.mis{background:#fdeceb; border-color:var(--fout); color:var(--fout);}
+
+  .melding{text-align:center; font-weight:800; font-size:clamp(1rem,2.6vw,1.25rem); min-height:1.6em; margin-top:14px;}
+  .melding.goed{color:var(--goed);} .melding.fout{color:var(--fout);}
+  .teller{text-align:center; font-size:13.5px; color:var(--muted); margin-top:8px;}
+
+  .knoppen{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:14px;}
+  .knop{font:inherit; font-size:16px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:16px; padding:13px 20px; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent; min-width:170px; font-size:18px; padding:15px 26px;}
+
+  .titelrij{display:flex; align-items:baseline; gap:10px; margin-bottom:10px; flex-wrap:wrap;}
+  .titelrij h2{font-size:18px;} .titelrij .klein{font-size:13.5px; color:var(--muted);}
+  .rij{display:flex; flex-wrap:wrap; gap:9px; align-items:center;}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .bron{font-size:13.5px; line-height:1.5; color:#4b5563; padding-left:22px; text-indent:-22px; margin-top:6px;}
+  .bron a{color:var(--accent); word-break:break-word;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  body.digibord{background:#0f1430; --ink:#eef1ff;}
+  body.digibord .kaart{background:#161c3d; border-color:rgba(255,255,255,.1); color:#eef1ff;}
+  body.digibord .knop, body.digibord .chip, body.digibord .seg, body.digibord .keuze{background:#1e2650; color:#eef1ff; border-color:rgba(255,255,255,.22);}
+  body.digibord .chip.aan{background:rgba(129,140,248,.25); border-color:#a5b4fc;}
+  body.digibord .bak{background:#1a2148; border-color:#7d87b5;}
+  body.digibord .balk, body.digibord .staander, body.digibord .voet-schaal{background:#7d87b5;}
+  body.digibord .totaal, body.digibord .teller, body.digibord .titelrij .klein, body.digibord .voet{color:#a9b2d6;}
+  body.digibord details.uitleg p, body.digibord details.uitleg li{color:#dbe2ff;}
+
+  body.alleenweeg .instellingen, body.alleenweeg details.uitleg, body.alleenweeg .voet, body.alleenweeg .kop{display:none;}
+  body.alleenweeg .app{padding-top:3vh;}
+
+  .printkop{display:none;}
+  @media print{
+    body{background:#fff !important;} body.digibord{background:#fff !important; --ink:#1c2433;}
+    .app{max-width:none; padding:0;}
+    .kop, .instellingen, details.uitleg, .voet, .keuzes, .knoppen{display:none !important;}
+    .printkop{display:flex !important; align-items:flex-end; gap:16px; border-bottom:2px solid #d9dded; padding-bottom:10px; margin-bottom:16px;}
+    .printkop h2{font-family:"Baloo 2",system-ui,sans-serif; font-size:22px;}
+    .printkop .regels{margin-left:auto; display:flex; gap:20px; font-size:13px; color:#5b647f;}
+    .printkop .regels span{display:inline-block; min-width:135px; border-bottom:1.5px dotted #b8c0d8;}
+    .kaart{box-shadow:none !important; border:1px solid #dfe3f0 !important;}
+    @page{size:A4 portrait; margin:14mm;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .balk, .schaal{transition:none;} .keuze:hover, .knop:hover{transform:none;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="printkop" aria-hidden="true">
+    <h2>Weegschaal</h2>
+    <div class="regels"><div>Naam <span></span></div><div>Datum <span></span></div></div>
+  </div>
+
+  <header class="kop">
+    <span class="logo" aria-hidden="true">⚖️</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · groep 4 en 5</div>
+      <h1>Weegschaal</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="digibordKnop" type="button">🌙 Digibord</button>
+      <button id="alleenKnop" type="button">🔍 Alleen de weegschaal</button>
+      <button id="schermKnop" type="button">⛶ Volledig scherm</button>
+      <button id="printKnop" type="button">🖨 Afdrukken</button>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <section class="kaart" aria-label="De weegschaal">
+    <div class="vraag" id="vraag"></div>
+
+    <div class="weegschaal" id="weegschaal">
+      <div class="balk"></div>
+      <div class="schalen">
+        <div class="schaal links">
+          <div class="touw"></div>
+          <div class="bak" id="schaalLinks"></div>
+          <div class="totaal" id="totaalLinks"></div>
+        </div>
+        <div class="schaal rechts">
+          <div class="touw"></div>
+          <div class="bak" id="schaalRechts"></div>
+          <div class="totaal" id="totaalRechts"></div>
+        </div>
+      </div>
+      <div class="staander"></div>
+      <div class="voet-schaal"></div>
+    </div>
+
+    <div class="keuzes" id="keuzes"></div>
+    <div class="melding" id="melding"></div>
+
+    <div class="knoppen">
+      <button class="knop primair" id="nieuwKnop" type="button">⚖️ Nieuwe weging</button>
+      <button class="knop" id="helpKnop" type="button">💡 Help me</button>
+    </div>
+    <p class="teller" id="teller"></p>
+  </section>
+
+  <section class="kaart instellingen" aria-label="Instellingen">
+    <div class="titelrij"><h2>Tot welk getal?</h2></div>
+    <div class="seg" id="totSeg">
+      <button type="button" data-tot="10">tot 10</button>
+      <button type="button" data-tot="20" class="aan">tot 20</button>
+      <button type="button" data-tot="100">tot 100</button>
+    </div>
+
+    <div class="titelrij" style="margin-top:20px;"><h2>Wat staat er op de weegschaal?</h2></div>
+    <div class="rij">
+      <div class="seg" id="soortSeg">
+        <button type="button" data-soort="aanvullen" class="aan">één blokje rechts</button>
+        <button type="button" data-soort="vergelijken">twee kanten vergelijken</button>
+      </div>
+      <button class="chip aan" type="button" id="geluidChip"><span class="bol"></span>Geluid aan</button>
+    </div>
+    <p class="klein" style="margin-top:9px; font-size:13.5px; color:var(--muted);">
+      Met de spatiebalk krijg je een nieuwe weging.</p>
+  </section>
+
+  <details class="uitleg">
+    <summary>Waarom dit spel (voor de leerkracht)</summary>
+    <p>Links liggen twee blokjes, samen bijvoorbeeld 15. Rechts ligt er één van 9. De weegschaal hangt scheef. Welk blokje moet erbij om hem gelijk te maken?</p>
+    <h3>Waarom een weegschaal</h3>
+    <p>Kinderen leren het isgelijkteken vaak als "hier komt het antwoord". Dat is een misverstand dat later problemen geeft, bijvoorbeeld bij sommen als 7 + □ = 12 of bij vergelijkingen op de middelbare school. Het isgelijkteken betekent: links en rechts zijn evenveel waard.</p>
+    <p>Een weegschaal maakt dat zichtbaar. Je ziet de balk scheef hangen, je ziet hem rechtkomen, en dan snapt een kind wat gelijk zijn betekent. Daarna is 7 + □ = 12 geen rare som meer.</p>
+    <h3>Waar ik op gelet heb</h3>
+    <ul>
+      <li><b>De weegschaal reageert echt.</b> Hij hangt scheef naar de zware kant en komt recht zodra het klopt. Dat is de feedback, nog voor er tekst verschijnt.</li>
+      <li><b>De foute keuzes zeggen iets.</b> Kies je te zwaar, dan staat er "te zwaar, die kant zakt door". Kies je te licht, dan het omgekeerde. Zo leert een kind in welke richting het moet zoeken.</li>
+      <li><b>Onder elke bak staat het totaal.</b> Links een getal, rechts "9 + ?". Zo koppel je het beeld aan de som.</li>
+      <li><b>Drie bereiken</b>, tot 10, 20 en 100, zodat het meegroeit van groep 3 naar groep 5.</li>
+    </ul>
+    <h3>Wat erbij hoort</h3>
+    <p>Dit sluit aan bij het <a href="ontbrekendgetal.html">Ontbrekend getal</a> op papier en bij de <a href="splitsmachine.html">Splitsmachine</a> op het digibord. Eerst zien wat gelijk betekent, dan pas opschrijven.</p>
+    <h3>Bronnen</h3>
+    <p class="bron">Hickendorff, M. (2023, 4 april). <i>Aanvankelijk en gevorderd rekenen in groep 3, 4 en 5</i>. Onderwijskennis.nl. Geraadpleegd op 24 september 2026, van <a href="https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5">https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5</a></p>
+    <p class="bron">SLO. (2025). <i>Definitieve conceptkerndoelen rekenen en wiskunde: Herziene versie 2025</i>. Geraadpleegd op 24 september 2026, van <a href="https://www.slo.nl/@24175/definitieve-conceptkerndoelen-rekenen/">https://www.slo.nl/@24175/definitieve-conceptkerndoelen-rekenen/</a></p>
+  </details>
+
+  <footer class="voet">Weegschaal · onderdeel van <a href="index.html">Lesmateriaal Blink</a> · links en rechts evenveel waard</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const BEWAAR = "blink-weegschaal";
+
+let staat = { soort: "aanvullen", tot: 20, geluid: true, digibord: false };
+try { const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}"); Object.keys(staat).forEach((k) => { if (k in b) staat[k] = b[k]; }); } catch (e) {}
+const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
+
+let links = [], rechts = [], gezocht = 0, gekozen = null, klaar = false, goed = 0, fout = 0;
+const tussen = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+function schud(l) {
+  const u = [...l];
+  for (let i = u.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [u[i], u[j]] = [u[j], u[i]]; }
+  return u;
+}
+const som = (l) => l.reduce((a, b) => a + b, 0);
+
+function toon(hoog) {
+  if (!staat.geluid) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator(), gain = ctx.createGain();
+    osc.type = "sine"; osc.frequency.value = hoog ? 700 : 250;
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(.12, ctx.currentTime + .015);
+    gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + (hoog ? .18 : .26));
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime + .3);
+    setTimeout(() => ctx.close(), 700);
+  } catch (e) {}
+}
+
+/* ---------- de opgave ---------- */
+function nieuweOpgave() {
+  const top = staat.tot;
+  klaar = false; gekozen = null;
+
+  if (staat.soort === "aanvullen") {
+    // links staat al iets, rechts ontbreekt er nog eentje
+    const totaal = tussen(Math.max(6, Math.round(top * .4)), top);
+    const a = tussen(2, totaal - 2);
+    links = [a, totaal - a];
+    const b = tussen(1, totaal - 1);
+    rechts = [b];
+    gezocht = totaal - b;
+  } else {
+    // twee kanten met elk twee blokken, eentje is bedekt
+    const totaal = tussen(Math.max(8, Math.round(top * .45)), top);
+    const a = tussen(2, totaal - 2);
+    links = [a, totaal - a];
+    const c = tussen(2, totaal - 2);
+    rechts = [c];
+    gezocht = totaal - c;
+  }
+  teken();
+}
+
+/* ---------- tekenen ---------- */
+function blokjes(lijst, verborgen) {
+  // zodra het klopt, laat ik het gevonden getal zien in plaats van het vraagteken
+  const laatste = verborgen
+    ? `<span class="blok vraag${klaar ? " gevonden" : ""}">${klaar ? gezocht : "?"}</span>` : "";
+  return lijst.map((w) => `<span class="blok">${w}</span>`).join("") + laatste;
+}
+
+function teken() {
+  const linksTotaal = som(links);
+  const rechtsTotaal = som(rechts) + (klaar ? gezocht : 0);
+  const scheef = klaar ? 0 : (linksTotaal - som(rechts)) > 0 ? 1 : -1;
+
+  $("weegschaal").className = "weegschaal " + (klaar ? "gelijk" : scheef > 0 ? "linksomlaag" : "rechtsomlaag");
+  $("schaalLinks").innerHTML = blokjes(links, false);
+  $("schaalRechts").innerHTML = blokjes(rechts, true);
+  $("totaalLinks").textContent = linksTotaal;
+  $("totaalRechts").textContent = klaar ? rechtsTotaal : som(rechts) + " + ?";
+
+  $("vraag").textContent = klaar
+    ? `Precies in evenwicht: ${links.join(" + ")} = ${rechts.join(" + ")} + ${gezocht}`
+    : "Welk blokje maakt de weegschaal gelijk?";
+
+  // de keuzeknoppen
+  const fout1 = gezocht + 1, fout2 = Math.max(1, gezocht - 1);
+  const fout3 = som(links) - som(rechts) + tussen(2, 4);
+  const opties = [...new Set([gezocht, fout1, fout2, fout3, gezocht + 10 <= staat.tot ? gezocht + 10 : Math.max(1, gezocht - 2)])]
+    .filter((x) => x > 0);
+  while (opties.length < 4) {
+    const extra = tussen(1, staat.tot);
+    if (!opties.includes(extra)) opties.push(extra);
+  }
+  $("keuzes").innerHTML = klaar ? "" : schud(opties).slice(0, 5).map((w) =>
+    `<button class="keuze" type="button" data-waarde="${w}">${w}</button>`).join("");
+  $("teller").textContent = (goed + fout) ? `${goed} goed · ${fout} fout` : "";
+}
+
+function melding(tekst, soort) {
+  $("melding").className = "melding " + soort;
+  $("melding").textContent = tekst;
+}
+
+$("keuzes").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-waarde]");
+  if (!b || klaar) return;
+  const w = Number(b.dataset.waarde);
+  if (w === gezocht) {
+    goed++; klaar = true; gekozen = w;
+    toon(true); teken();
+    melding("Goed zo! De weegschaal staat gelijk.", "goed");
+  } else {
+    fout++;
+    b.classList.add("mis");
+    setTimeout(() => b.classList.remove("mis"), 400);
+    toon(false);
+    melding(w > gezocht ? "Te zwaar, die kant zakt door." : "Te licht, die kant komt omhoog.", "fout");
+    teken();
+  }
+});
+$("nieuwKnop").addEventListener("click", () => { nieuweOpgave(); melding("", ""); });
+$("helpKnop").addEventListener("click", () => {
+  if (klaar) return;
+  melding(`Links is ${som(links)} samen. Rechts ligt al ${som(rechts)}. Hoeveel moet erbij?`, "");
+});
+
+[["soortSeg", "soort", "soort"], ["totSeg", "tot", "tot"]].forEach(([id, data, sleutel]) => {
+  $(id).addEventListener("click", (e) => {
+    const b = e.target.closest("[data-" + data + "]"); if (!b) return;
+    staat[sleutel] = data === "tot" ? Number(b.dataset[data]) : b.dataset[data];
+    [...document.querySelectorAll("#" + id + " button")].forEach((x) =>
+      x.classList.toggle("aan", (data === "tot" ? Number(x.dataset[data]) : x.dataset[data]) === staat[sleutel]));
+    bewaar(); nieuweOpgave(); melding("", "");
+  });
+});
+$("geluidChip").addEventListener("click", () => {
+  staat.geluid = !staat.geluid; $("geluidChip").classList.toggle("aan", staat.geluid); bewaar();
+});
+$("digibordKnop").addEventListener("click", () => {
+  staat.digibord = !staat.digibord;
+  document.body.classList.toggle("digibord", staat.digibord);
+  $("digibordKnop").textContent = staat.digibord ? "☀️ Gewoon" : "🌙 Digibord";
+  bewaar();
+});
+$("alleenKnop").addEventListener("click", () => document.body.classList.toggle("alleenweeg"));
+$("schermKnop").addEventListener("click", () => {
+  if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen?.();
+});
+$("printKnop").addEventListener("click", () => window.print());
+document.addEventListener("keydown", (e) => {
+  if (e.code === "Space") { e.preventDefault(); nieuweOpgave(); melding("", ""); }
+  if (e.key === "Escape") document.body.classList.remove("alleenweeg");
+});
+
+[["soortSeg", "soort", "soort"], ["totSeg", "tot", "tot"]].forEach(([id, data, sleutel]) => {
+  [...document.querySelectorAll("#" + id + " button")].forEach((x) =>
+    x.classList.toggle("aan", (data === "tot" ? Number(x.dataset[data]) : x.dataset[data]) === staat[sleutel]));
+});
+$("geluidChip").classList.toggle("aan", staat.geluid);
+if (staat.digibord) { document.body.classList.add("digibord"); $("digibordKnop").textContent = "☀️ Gewoon"; }
+nieuweOpgave();
+
+</script>
+</body>
+</html>
