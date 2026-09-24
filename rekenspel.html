@@ -44,6 +44,9 @@
   .stand{display:flex; flex-wrap:wrap; gap:10px 22px; align-items:center; justify-content:center; margin-bottom:6px;}
   .stand div{font-size:13px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; color:var(--muted);}
   .stand b{display:block; font-family:"Baloo 2",system-ui,sans-serif; font-size:26px; color:var(--ink); line-height:1.1;}
+  .watSpeel{text-align:center; font-size:14px; font-weight:800; color:var(--muted); margin-top:8px;}
+  .watSpeel b{color:var(--accent);}
+  body.digibord .watSpeel{color:#a9b2d6;} body.digibord .watSpeel b{color:#a5b4fc;}
   .baan{height:8px; border-radius:99px; background:#e7eaf7; overflow:hidden; margin:10px 0 16px;}
   .baan span{display:block; height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2));
     transform-origin:left; transition:transform .2s linear;}
@@ -160,6 +163,7 @@
       <div>Tijd <b id="klok">60s</b></div>
       <div>Resultaat <b id="goedfout" style="font-size:17px;">0 goed · 0 fout</b></div>
     </div>
+    <div class="watSpeel" id="watSpeel"></div>
     <div class="baan"><span id="balk"></span></div>
 
     <div class="vraag" id="vraag">Klaar om te beginnen?</div>
@@ -425,11 +429,19 @@ $("doelen").addEventListener("click", (e) => {
 });
 
 /* ---------- scorekaart om te printen ---------- */
-function vulScorekaart() {
-  const namen = { blikken: "Tafelblikken", harten: "Verliefde harten", raket: "Raketstart" };
-  const wat = staat.spel === "blikken" ? "tafels " + (staat.tafels.length ? staat.tafels.join(", ") : "geen")
+const SPELNAAM = { blikken: "Tafelblikken", harten: "Verliefde harten", raket: "Raketstart" };
+function watSpeelJe() {
+  return staat.spel === "blikken" ? "tafels " + (staat.tafels.length ? staat.tafels.join(", ") : "nog geen gekozen")
     : staat.spel === "harten" ? "samen " + staat.tot
     : "plus en min tot " + staat.bereik;
+}
+/* laat boven het spel zien waarmee je speelt, zodat je nooit hoeft te raden */
+function toonWatSpeelJe() {
+  $("watSpeel").innerHTML = `<b>${SPELNAAM[staat.spel]}</b> · ${watSpeelJe()}`;
+}
+function vulScorekaart() {
+  const namen = SPELNAAM;
+  const wat = watSpeelJe();
   $("kaartSpel").textContent = namen[staat.spel];
   $("kaartWat").textContent = wat;
   $("kaartTijd").textContent = staat.tijd + " seconden";
@@ -447,20 +459,22 @@ $("spelSeg").addEventListener("click", (e) => {
   document.body.dataset.spel = staat.spel;
   ["tafelGroep", "hartGroep", "raketGroep"].forEach((id) => $(id).classList.add("uit"));
   $({ blikken: "tafelGroep", harten: "hartGroep", raket: "raketGroep" }[staat.spel]).classList.remove("uit");
-  bewaar(); if (loopt) klaar(); vulScorekaart();
+  bewaar(); if (loopt) klaar(); vulScorekaart(); toonWatSpeelJe();
 });
 $("tafels").addEventListener("click", (e) => {
   const b = e.target.closest("[data-tafel]"); if (!b) return;
   const t = Number(b.dataset.tafel);
   staat.tafels = staat.tafels.includes(t) ? staat.tafels.filter((x) => x !== t) : [...staat.tafels, t];
-  b.classList.toggle("aan", staat.tafels.includes(t)); bewaar();
+  b.classList.toggle("aan", staat.tafels.includes(t)); bewaar(); toonWatSpeelJe();
+  if (loopt && staat.tafels.length) tekenOpgave();
 });
 [["totSeg", "tot", "tot"], ["bereikSeg", "bereik", "bereik"], ["tijdSeg", "tijd", "tijd"]].forEach(([id, data, sleutel]) => {
   $(id).addEventListener("click", (e) => {
     const b = e.target.closest("[data-" + data + "]"); if (!b) return;
     staat[sleutel] = Number(b.dataset[data]);
     [...document.querySelectorAll("#" + id + " button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset[data]) === staat[sleutel]));
-    bewaar(); tekenStand(); vulScorekaart();
+    bewaar(); tekenStand(); vulScorekaart(); toonWatSpeelJe();
+    if (loopt) tekenOpgave();   // meteen een som met de nieuwe instelling
   });
 });
 $("geluidChip").addEventListener("click", () => {
@@ -499,7 +513,7 @@ $("tafels").innerHTML = Array.from({ length: 12 }, (_, i) => i + 1)
 });
 $("geluidChip").classList.toggle("aan", staat.geluid);
 if (staat.digibord) { document.body.classList.add("digibord"); $("digibordKnop").textContent = "☀️ Gewoon"; }
-tekenStand(); vulScorekaart();
+tekenStand(); vulScorekaart(); toonWatSpeelJe();
 
 </script>
 </body>

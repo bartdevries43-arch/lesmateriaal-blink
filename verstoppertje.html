@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verstoppertje · Lesmateriaal Blink</title>
+<meta name="description" content="Splitsen oefenen op het digibord: er schuift een doek over een paar dieren. Hoeveel zitten eronder? Til de doek op en zie de splitsing. Voor groep 3.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+    --goed:#16a34a; --fout:#e2584f; --doek:#c0397e;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1080px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:22px; margin-top:18px;}
+
+  /* het toneel */
+  .zin{text-align:center; font-family:"Baloo 2",system-ui,sans-serif; font-weight:800;
+    font-size:clamp(1.25rem,3.4vw,2rem); line-height:1.2; margin-bottom:16px; min-height:1.3em;}
+  .toneel{display:flex; align-items:flex-end; justify-content:center; gap:clamp(8px,2vw,22px);
+    min-height:clamp(120px,22vw,190px); padding:10px 4px 0;}
+  .groep{position:relative; display:flex; flex-wrap:wrap; gap:clamp(2px,1vw,10px); justify-content:center;
+    align-items:flex-end; max-width:47%;}
+  .dier{font-size:clamp(30px,7.5vw,62px); line-height:1.05;}
+  .grond{height:10px; border-radius:99px; background:linear-gradient(90deg,#d8f0dd,#bfe6c9);
+    max-width:640px; margin:6px auto 0;}
+
+  /* de doek */
+  .doek{position:absolute; inset:-10px -12px -6px -12px; border-radius:18px 18px 12px 12px;
+    background:repeating-linear-gradient(45deg, var(--doek), var(--doek) 12px, #d14e8d 12px, #d14e8d 24px);
+    box-shadow:0 6px 18px rgba(31,41,90,.18); display:flex; align-items:center; justify-content:center;
+    transition:transform .45s cubic-bezier(.3,.9,.3,1), opacity .45s ease;}
+  .doek::after{content:"?"; font-family:"Baloo 2",system-ui,sans-serif; font-weight:800;
+    font-size:clamp(34px,7vw,64px); color:#fff; opacity:.92;}
+  .doek.weg{transform:translateY(-130%) rotate(-7deg); opacity:0; pointer-events:none;}
+
+  .som{text-align:center; font-family:"Baloo 2",system-ui,sans-serif; font-weight:800;
+    font-size:clamp(1.5rem,4.5vw,2.6rem); margin-top:14px; min-height:1.2em; letter-spacing:1px;}
+  .som .verborgen{color:var(--doek);} .som .zichtbaar{color:var(--accent2);} .som .heel{color:var(--accent);}
+
+  .melding{text-align:center; font-weight:800; font-size:clamp(1rem,2.6vw,1.3rem); min-height:1.6em; margin-top:8px;}
+  .melding.goed{color:var(--goed);} .melding.fout{color:var(--fout);}
+
+  /* toetsenbord */
+  .cijfers{display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:9px; max-width:520px; margin:16px auto 0;}
+  .cijfers button{font:inherit; font-family:"Baloo 2",system-ui,sans-serif; font-weight:800;
+    font-size:clamp(18px,4vw,26px); padding:12px 4px; border-radius:16px;
+    border:2px solid var(--line-2); background:#fff; color:var(--ink); cursor:pointer; transition:transform .1s ease;}
+  .cijfers button:hover{transform:translateY(-2px); border-color:var(--accent);}
+
+  .knoppen{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:18px;}
+  .knop{font:inherit; font-size:16px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:16px; padding:13px 20px; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent; min-width:170px; font-size:18px; padding:15px 26px;}
+
+  .titelrij{display:flex; align-items:baseline; gap:10px; margin-bottom:10px; flex-wrap:wrap;}
+  .titelrij h2{font-size:18px;} .titelrij .klein{font-size:13.5px; color:var(--muted);}
+  .rij{display:flex; flex-wrap:wrap; gap:9px; align-items:center;}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+  .teller{font-size:13.5px; color:var(--muted); text-align:center; margin-top:10px;}
+  .uit{display:none !important;}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .bron{font-size:13.5px; line-height:1.5; color:#4b5563; padding-left:22px; text-indent:-22px; margin-top:6px;}
+  .bron a{color:var(--accent); word-break:break-word;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  body.digibord{background:#0f1430; --ink:#eef1ff;}
+  body.digibord .kaart{background:#161c3d; border-color:rgba(255,255,255,.1); color:#eef1ff;}
+  body.digibord .knop, body.digibord .chip, body.digibord .seg, body.digibord .cijfers button{background:#1e2650; color:#eef1ff; border-color:rgba(255,255,255,.2);}
+  body.digibord .chip.aan{background:rgba(129,140,248,.25); border-color:#a5b4fc;}
+  body.digibord .grond{background:linear-gradient(90deg,#1f3b2a,#2a5138);}
+  body.digibord .teller, body.digibord .titelrij .klein, body.digibord .voet{color:#a9b2d6;}
+  body.digibord details.uitleg p, body.digibord details.uitleg li{color:#dbe2ff;}
+
+  body.alleentoneel .instellingen, body.alleentoneel details.uitleg, body.alleentoneel .voet, body.alleentoneel .kop{display:none;}
+  body.alleentoneel .app{padding-top:4vh;}
+  body.alleentoneel .dier{font-size:clamp(40px,11vw,96px);}
+
+  .printkop{display:none;}
+  @media print{
+    body{background:#fff !important;} body.digibord{background:#fff !important; --ink:#1c2433;}
+    .app{max-width:none; padding:0;}
+    .kop, .instellingen, details.uitleg, .voet, .cijfers, .knoppen{display:none !important;}
+    .printkop{display:flex !important; align-items:flex-end; gap:16px; border-bottom:2px solid #d9dded; padding-bottom:10px; margin-bottom:16px;}
+    .printkop h2{font-family:"Baloo 2",system-ui,sans-serif; font-size:22px;}
+    .printkop .regels{margin-left:auto; display:flex; gap:20px; font-size:13px; color:#5b647f;}
+    .printkop .regels span{display:inline-block; min-width:135px; border-bottom:1.5px dotted #b8c0d8;}
+    .kaart{box-shadow:none !important; border:1px solid #dfe3f0 !important;}
+    @page{size:A4 landscape; margin:14mm;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .doek{transition:none;} .knop:hover, .cijfers button:hover{transform:none;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="printkop" aria-hidden="true">
+    <h2>Verstoppertje</h2>
+    <div class="regels"><div>Naam <span></span></div><div>Datum <span></span></div></div>
+  </div>
+
+  <header class="kop">
+    <span class="logo" aria-hidden="true">🫣</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · groep 3</div>
+      <h1>Verstoppertje</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="digibordKnop" type="button">🌙 Digibord</button>
+      <button id="alleenKnop" type="button">🔍 Alleen het toneel</button>
+      <button id="schermKnop" type="button">⛶ Volledig scherm</button>
+      <button id="printKnop" type="button">🖨 Afdrukken</button>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <section class="kaart" aria-label="Het toneel">
+    <div class="zin" id="zin"></div>
+    <div class="toneel">
+      <div class="groep" id="verstopt"><div class="doek" id="doek"></div></div>
+      <div class="groep" id="zichtbaar"></div>
+    </div>
+    <div class="grond"></div>
+    <div class="som" id="som"></div>
+    <div class="melding" id="melding"></div>
+
+    <div class="cijfers" id="cijfers"></div>
+
+    <div class="knoppen">
+      <button class="knop primair" id="kijkKnop" type="button">👀 Kijken</button>
+      <button class="knop" id="nieuwKnop" type="button">↻ Nog een keer</button>
+    </div>
+    <p class="teller" id="teller"></p>
+  </section>
+
+  <section class="kaart instellingen" aria-label="Instellingen">
+    <div class="titelrij"><h2>Hoe spelen we?</h2></div>
+    <div class="rij">
+      <div class="seg" id="modusSeg">
+        <button type="button" data-modus="samen" class="aan">Samen ontdekken</button>
+        <button type="button" data-modus="oefenen">Zelf oefenen</button>
+      </div>
+      <button class="chip aan" type="button" id="somChip"><span class="bol"></span>Splitsing laten zien</button>
+      <button class="chip aan" type="button" id="geluidChip"><span class="bol"></span>Geluid aan</button>
+    </div>
+    <p class="klein" style="margin-top:9px; font-size:13.5px; color:var(--muted);">
+      Bij <b>samen ontdekken</b> stel jij het aantal in en laat je de klas raden. Bij <b>zelf oefenen</b> kiest de app en typt het kind het antwoord.</p>
+
+    <div class="titelrij" style="margin-top:20px;"><h2>Hoeveel dieren?</h2></div>
+    <div class="rij">
+      <div class="seg" id="totaalSeg">
+        <button type="button" data-tot="5">tot 5</button>
+        <button type="button" data-tot="10" class="aan">tot 10</button>
+        <button type="button" data-tot="20">tot 20</button>
+      </div>
+      <div class="seg" id="vastSeg">
+        <button type="button" data-vast="0" class="aan">door elkaar</button>
+        <button type="button" data-vast="5">steeds 5</button>
+        <button type="button" data-vast="6">steeds 6</button>
+        <button type="button" data-vast="7">steeds 7</button>
+        <button type="button" data-vast="8">steeds 8</button>
+        <button type="button" data-vast="9">steeds 9</button>
+        <button type="button" data-vast="10">steeds 10</button>
+      </div>
+    </div>
+
+    <div class="titelrij" style="margin-top:20px;"><h2>Welke dieren?</h2></div>
+    <div class="seg" id="dierSeg">
+      <button type="button" data-dier="eend" class="aan">🦆 eendjes</button>
+      <button type="button" data-dier="kikker">🐸 kikkers</button>
+      <button type="button" data-dier="muis">🐭 muizen</button>
+      <button type="button" data-dier="vogel">🐦 vogels</button>
+      <button type="button" data-dier="appel">🍎 appels</button>
+      <button type="button" data-dier="wissel">door elkaar</button>
+    </div>
+  </section>
+
+  <details class="uitleg">
+    <summary>Waarom dit spel (voor de leerkracht)</summary>
+    <p>Je ziet zeven eendjes. Er schuift een doek over een paar. Vier eendjes blijven zichtbaar. Hoeveel zitten er onder de doek? Daarna til je de doek op en zie je het antwoord.</p>
+    <p>Dit is splitsen, maar dan als spel. En splitsen is de basis onder het rekenen van groep 3: een kind dat weet dat 7 bestaat uit 4 en 3, rekent 7 min 4 uit zonder te tellen.</p>
+    <h3>Waarom dit werkt</h3>
+    <ul>
+      <li><b>Je ziet het niet, dus je moet het weten.</b> Zolang alles zichtbaar is, tellen kinderen. Zodra er iets verdwijnt, moeten ze denken. Dat is precies de stap die je wilt.</li>
+      <li><b>Het antwoord komt meteen.</b> Je tilt de doek op en iedereen ziet of het klopte. Directe feedback voorkomt dat een fout antwoord blijft hangen.</li>
+      <li><b>Steeds hetzelfde getal.</b> Zet "steeds 7" aan en alle splitsingen van 7 komen langs. Zo zien kinderen het patroon: 1 en 6, 2 en 5, 3 en 4. Oefenen werkt het best als kinderen patronen en verbanden ontdekken in plaats van rijtjes stampen (Hickendorff, 2023).</li>
+      <li><b>De splitsing komt in beeld.</b> Na het kijken staat er 7 = 4 + 3, in dezelfde kleuren als het toneel. Zo koppel je wat ze zien aan hoe je het opschrijft. Zet dat uit zodra het zonder kan.</li>
+    </ul>
+    <h3>Twee manieren om te spelen</h3>
+    <ul>
+      <li><b>Samen ontdekken.</b> Jij bepaalt het aantal, de app verstopt er een paar en de klas raadt hardop. Handig bij de instructie, want jij houdt het tempo in de hand.</li>
+      <li><b>Zelf oefenen.</b> De app kiest en het kind typt het antwoord op de cijfers. Met een teller van goed en fout.</li>
+    </ul>
+    <h3>Wat erbij hoort</h3>
+    <p>Gebruik dit naast de <a href="splitsmachine.html">Splitsmachine</a> op het digibord en het <a href="splitswerkblad.html">Splitswerkblad</a> om te printen. Eerst zien en doen, dan opschrijven. Een model helpt alleen als het langzaam naar de achtergrond verdwijnt (Hickendorff, 2023).</p>
+    <h3>Bronnen</h3>
+    <p class="bron">Hickendorff, M. (2023, 4 april). <i>Aanvankelijk en gevorderd rekenen in groep 3, 4 en 5</i>. Onderwijskennis.nl. Geraadpleegd op 24 september 2026, van <a href="https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5">https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5</a></p>
+    <p class="bron">SLO. (2025). <i>Definitieve conceptkerndoelen rekenen en wiskunde: Herziene versie 2025</i>. Geraadpleegd op 24 september 2026, van <a href="https://www.slo.nl/@24175/definitieve-conceptkerndoelen-rekenen/">https://www.slo.nl/@24175/definitieve-conceptkerndoelen-rekenen/</a></p>
+  </details>
+
+  <footer class="voet">Verstoppertje · onderdeel van <a href="index.html">Lesmateriaal Blink</a> · spatiebalk tilt de doek op</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const BEWAAR = "blink-verstoppertje";
+const DIEREN = { eend: "🦆", kikker: "🐸", muis: "🐭", vogel: "🐦", appel: "🍎" };
+const ZINNEN = {
+  eend: (n) => `Er zwemmen ${n} eendjes in de vijver.`,
+  kikker: (n) => `Er zitten ${n} kikkers op de kant.`,
+  muis: (n) => `Er lopen ${n} muizen door het gras.`,
+  vogel: (n) => `Er zitten ${n} vogels in de boom.`,
+  appel: (n) => `Er liggen ${n} appels op tafel.`,
+};
+
+let staat = { modus: "samen", tot: 10, vast: 0, dier: "eend", som: true, geluid: true, digibord: false };
+try { const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}"); Object.keys(staat).forEach((k) => { if (k in b) staat[k] = b[k]; }); } catch (e) {}
+const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
+
+let totaal = 0, verborgen = 0, gekeken = false, goed = 0, fout = 0, geraden = false, welkDier = "eend";
+const tussen = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+
+function toon(hoog) {
+  if (!staat.geluid) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator(), gain = ctx.createGain();
+    osc.type = "sine"; osc.frequency.value = hoog ? 700 : 250;
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(.13, ctx.currentTime + .015);
+    gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + (hoog ? .2 : .28));
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime + .32);
+    setTimeout(() => ctx.close(), 700);
+  } catch (e) {}
+}
+
+function nieuweRonde() {
+  welkDier = staat.dier === "wissel" ? Object.keys(DIEREN)[Math.floor(Math.random() * 5)] : staat.dier;
+  totaal = staat.vast ? staat.vast : tussen(Math.min(3, staat.tot), staat.tot);
+  // minstens één verstopt en minstens één zichtbaar, dan valt er echt iets te denken
+  verborgen = tussen(1, totaal - 1);
+  gekeken = false; geraden = false;
+  delete $("melding").dataset.vast;
+  $("melding").className = "melding"; $("melding").textContent = "";
+  teken();
+}
+
+function teken() {
+  const emoji = DIEREN[welkDier];
+  $("zin").textContent = ZINNEN[welkDier](totaal);
+  $("verstopt").innerHTML = '<div class="doek" id="doek"></div>' +
+    Array.from({ length: verborgen }, () => `<span class="dier">${emoji}</span>`).join("");
+  $("zichtbaar").innerHTML = Array.from({ length: totaal - verborgen }, () => `<span class="dier">${emoji}</span>`).join("");
+  if (gekeken) $("doek").classList.add("weg");
+  $("som").innerHTML = gekeken && staat.som
+    ? `<span class="heel">${totaal}</span> = <span class="zichtbaar">${totaal - verborgen}</span> + <span class="verborgen">${verborgen}</span>`
+    : "";
+  $("kijkKnop").textContent = gekeken ? "👀 Gekeken" : "👀 Kijken";
+  $("cijfers").classList.toggle("uit", staat.modus !== "oefenen" || gekeken);
+  $("teller").textContent = staat.modus === "oefenen" && (goed + fout)
+    ? `${goed} goed · ${fout} fout` : "";
+  // alleen de standaardvraag terugzetten als er nog niet geraden of gekeken is,
+  // anders veeg je de feedback meteen weer weg
+  if (!gekeken && !geraden && !$("melding").dataset.vast) {
+    $("melding").className = "melding";
+    $("melding").textContent = staat.modus === "oefenen" ? "Hoeveel zitten er onder de doek?" : "";
+  }
+}
+
+function kijk() {
+  if (gekeken) return;
+  gekeken = true;
+  $("doek").classList.add("weg");
+  toon(true);
+  teken();
+  if (staat.modus === "samen") {
+    $("melding").className = "melding goed";
+    $("melding").textContent = `Er zaten er ${verborgen} onder!`;
+    $("melding").dataset.vast = "1";
+  }
+}
+
+function raad(getal) {
+  if (gekeken || geraden) return;
+  const zegMaar = (klasse, tekst) => {
+    $("melding").className = "melding " + klasse;
+    $("melding").textContent = tekst;
+    $("melding").dataset.vast = "1";
+  };
+  if (getal === verborgen) {
+    goed++; geraden = true;
+    teken();
+    zegMaar("goed", "Goed zo!");
+    toon(true);
+    setTimeout(() => { kijk(); setTimeout(nieuweRonde, 1600); }, 500);
+  } else {
+    fout++;
+    teken();
+    zegMaar("fout", "Nog niet. Tel de dieren die je ziet, en denk aan hoeveel het er waren.");
+    toon(false);
+  }
+}
+
+/* het toetsenbord past zich aan het aantal aan */
+function bouwCijfers() {
+  const hoogste = staat.vast ? staat.vast : staat.tot;
+  $("cijfers").innerHTML = Array.from({ length: hoogste }, (_, i) => i + 1)
+    .map((n) => `<button type="button" data-getal="${n}">${n}</button>`).join("");
+}
+
+$("cijfers").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-getal]"); if (!b) return;
+  raad(Number(b.dataset.getal));
+});
+$("kijkKnop").addEventListener("click", kijk);
+$("nieuwKnop").addEventListener("click", nieuweRonde);
+$("modusSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-modus]"); if (!b) return;
+  staat.modus = b.dataset.modus;
+  [...document.querySelectorAll("#modusSeg button")].forEach((x) => x.classList.toggle("aan", x.dataset.modus === staat.modus));
+  goed = 0; fout = 0; bewaar(); nieuweRonde();
+});
+$("totaalSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-tot]"); if (!b) return;
+  staat.tot = Number(b.dataset.tot);
+  if (staat.vast > staat.tot) staat.vast = 0;
+  [...document.querySelectorAll("#totaalSeg button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.tot) === staat.tot));
+  [...document.querySelectorAll("#vastSeg button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.vast) === staat.vast));
+  bewaar(); bouwCijfers(); nieuweRonde();
+});
+$("vastSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-vast]"); if (!b) return;
+  const v = Number(b.dataset.vast);
+  staat.vast = v;
+  if (v > staat.tot) { staat.tot = v <= 10 ? 10 : 20;
+    [...document.querySelectorAll("#totaalSeg button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.tot) === staat.tot)); }
+  [...document.querySelectorAll("#vastSeg button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.vast) === staat.vast));
+  bewaar(); bouwCijfers(); nieuweRonde();
+});
+$("dierSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-dier]"); if (!b) return;
+  staat.dier = b.dataset.dier;
+  [...document.querySelectorAll("#dierSeg button")].forEach((x) => x.classList.toggle("aan", x.dataset.dier === staat.dier));
+  bewaar(); nieuweRonde();
+});
+[["somChip", "som"], ["geluidChip", "geluid"]].forEach(([id, sleutel]) => {
+  $(id).addEventListener("click", () => { staat[sleutel] = !staat[sleutel]; $(id).classList.toggle("aan", staat[sleutel]); bewaar(); teken(); });
+});
+$("digibordKnop").addEventListener("click", () => {
+  staat.digibord = !staat.digibord;
+  document.body.classList.toggle("digibord", staat.digibord);
+  $("digibordKnop").textContent = staat.digibord ? "☀️ Gewoon" : "🌙 Digibord";
+  bewaar();
+});
+$("alleenKnop").addEventListener("click", () => document.body.classList.toggle("alleentoneel"));
+$("schermKnop").addEventListener("click", () => {
+  if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen?.();
+});
+$("printKnop").addEventListener("click", () => window.print());
+document.addEventListener("keydown", (e) => {
+  if (e.code === "Space") { e.preventDefault(); gekeken ? nieuweRonde() : kijk(); }
+  if (e.key === "Escape") document.body.classList.remove("alleentoneel");
+  if (/^[0-9]$/.test(e.key) && staat.modus === "oefenen") raad(Number(e.key));
+});
+
+/* opstarten */
+[["modusSeg", "modus", "modus"], ["dierSeg", "dier", "dier"]].forEach(([id, data, sleutel]) => {
+  [...document.querySelectorAll("#" + id + " button")].forEach((x) => x.classList.toggle("aan", x.dataset[data] === staat[sleutel]));
+});
+[...document.querySelectorAll("#totaalSeg button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.tot) === staat.tot));
+[...document.querySelectorAll("#vastSeg button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset.vast) === staat.vast));
+$("somChip").classList.toggle("aan", staat.som);
+$("geluidChip").classList.toggle("aan", staat.geluid);
+if (staat.digibord) { document.body.classList.add("digibord"); $("digibordKnop").textContent = "☀️ Gewoon"; }
+bouwCijfers(); nieuweRonde();
+</script>
+</body>
+</html>
