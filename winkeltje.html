@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Het winkeltje · Lesmateriaal Blink</title>
+<meta name="description" content="Betaal met munten en reken het wisselgeld uit. Oefenen met geld voor groep 4 en 5, op het digibord of als werkblad.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+    --goed:#16a34a; --fout:#e2584f;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1020px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:22px; margin-top:18px;}
+
+  /* het spul in de etalage */
+  .etalage{display:flex; align-items:center; justify-content:center; gap:clamp(12px,3vw,26px);
+    flex-wrap:wrap; background:linear-gradient(170deg,#fdfbff,#eef1fb); border:1px solid var(--line);
+    border-radius:20px; padding:clamp(14px,3vw,22px); max-width:620px; margin:0 auto;}
+  .etalage .plaatje{font-size:clamp(48px,11vw,84px); line-height:1;}
+  .etalage .naam{font-family:"Baloo 2",system-ui,sans-serif; font-weight:800;
+    font-size:clamp(1.1rem,3vw,1.6rem); text-transform:lowercase;}
+  .prijskaartje{position:relative; font-family:"Baloo 2",system-ui,sans-serif; font-weight:800;
+    font-size:clamp(1.2rem,3.4vw,1.9rem); color:#fff; background:linear-gradient(150deg,#f0a0c4,#c0397e);
+    border-radius:14px; padding:10px 18px 10px 24px; box-shadow:0 6px 16px rgba(192,57,126,.28);}
+  .prijskaartje::before{content:""; position:absolute; left:9px; top:50%; margin-top:-5px;
+    width:10px; height:10px; border-radius:50%; background:#fff; opacity:.85;}
+
+  .opdracht{text-align:center; font-family:"Baloo 2",system-ui,sans-serif; font-weight:800;
+    font-size:clamp(1.05rem,2.8vw,1.55rem); line-height:1.25; margin:18px 0 4px;}
+  .tussenstand{text-align:center; font-size:clamp(.92rem,2.2vw,1.05rem); color:var(--muted); font-weight:700; min-height:1.5em;}
+
+  /* de toonbank waar je geld op legt */
+  .toonbank{min-height:96px; display:flex; flex-wrap:wrap; gap:9px; align-items:center; justify-content:center;
+    border:3px dashed var(--line-2); border-radius:20px; padding:12px; margin-top:10px;
+    background:rgba(79,70,229,.03);}
+  .toonbank .leeg{color:var(--muted); font-size:15px; font-weight:700;}
+  .toonbank .gelegd{border:none; background:none; padding:0; cursor:pointer; line-height:0;
+    transition:transform .12s ease;}
+  .toonbank .gelegd:hover{transform:translateY(-4px) rotate(-3deg);}
+
+  .lade{display:flex; flex-wrap:wrap; gap:clamp(7px,1.6vw,12px); justify-content:center; margin-top:16px;
+    background:linear-gradient(170deg,#f6f2e8,#ede5d4); border:1px solid #ddd2ba; border-radius:20px; padding:14px 12px;}
+  .lade .geldknop{border:none; background:none; padding:2px; cursor:pointer; line-height:0; border-radius:50%;
+    transition:transform .12s ease;}
+  .lade .geldknop:hover{transform:translateY(-5px) scale(1.05);}
+  .ladetekst{text-align:center; font-size:13px; color:var(--muted); font-weight:700; margin-top:9px;}
+
+  .geld{display:block; filter:drop-shadow(0 3px 5px rgba(31,41,90,.2));}
+
+  .melding{text-align:center; font-weight:800; font-size:clamp(1rem,2.6vw,1.25rem); min-height:1.6em; margin-top:14px;}
+  .melding.goed{color:var(--goed);} .melding.fout{color:var(--fout);}
+  .teller{text-align:center; font-size:13.5px; color:var(--muted); margin-top:8px;}
+
+  .knoppen{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:14px;}
+  .knop{font:inherit; font-size:16px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:16px; padding:13px 20px; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent; min-width:170px; font-size:18px; padding:15px 26px;}
+
+  .titelrij{display:flex; align-items:baseline; gap:10px; margin-bottom:10px; flex-wrap:wrap;}
+  .titelrij h2{font-size:18px;} .titelrij .klein{font-size:13.5px; color:var(--muted);}
+  .rij{display:flex; flex-wrap:wrap; gap:9px; align-items:center;}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .bron{font-size:13.5px; line-height:1.5; color:#4b5563; padding-left:22px; text-indent:-22px; margin-top:6px;}
+  .bron a{color:var(--accent); word-break:break-word;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  body.digibord{background:#0f1430; --ink:#eef1ff;}
+  body.digibord .kaart{background:#161c3d; border-color:rgba(255,255,255,.1); color:#eef1ff;}
+  body.digibord .knop, body.digibord .chip, body.digibord .seg{background:#1e2650; color:#eef1ff; border-color:rgba(255,255,255,.22);}
+  body.digibord .chip.aan{background:rgba(129,140,248,.25); border-color:#a5b4fc;}
+  body.digibord .etalage{background:linear-gradient(170deg,#1b2249,#151b3c); border-color:rgba(255,255,255,.12);}
+  body.digibord .toonbank{border-color:rgba(255,255,255,.28); background:rgba(255,255,255,.04);}
+  body.digibord .lade{background:linear-gradient(170deg,#2a2b3f,#22233a); border-color:rgba(255,255,255,.16);}
+  body.digibord .tussenstand, body.digibord .teller, body.digibord .ladetekst,
+  body.digibord .titelrij .klein, body.digibord .voet{color:#a9b2d6;}
+  body.digibord .toonbank .leeg{color:#8f99c2;}
+  body.digibord details.uitleg p, body.digibord details.uitleg li{color:#dbe2ff;}
+
+  body.alleenwinkel .instellingen, body.alleenwinkel details.uitleg, body.alleenwinkel .voet, body.alleenwinkel .kop{display:none;}
+  body.alleenwinkel .app{padding-top:3vh;}
+
+  /* het werkblad om uit te printen */
+  .printblad{display:none;}
+  .printkop{display:none;}
+  @media print{
+    body{background:#fff !important;} body.digibord{background:#fff !important; --ink:#1c2433;}
+    .app{max-width:none; padding:0;}
+    .kop, .instellingen, details.uitleg, .voet, .spelkaart{display:none !important;}
+    .printkop{display:flex !important; align-items:flex-end; gap:16px; border-bottom:2px solid #d9dded; padding-bottom:10px; margin-bottom:16px;}
+    .printkop h2{font-family:"Baloo 2",system-ui,sans-serif; font-size:22px;}
+    .printkop .regels{margin-left:auto; display:flex; gap:20px; font-size:13px; color:#5b647f;}
+    .printkop .regels span{display:inline-block; min-width:135px; border-bottom:1.5px dotted #b8c0d8;}
+    .printblad{display:block !important;}
+    .printuitleg{font-size:13.5px; color:#39435a; margin-bottom:12px;}
+    .printrij{display:flex; align-items:center; gap:14px; border:1.5px solid #dfe3f0; border-radius:12px;
+      padding:10px 12px; margin-bottom:9px; break-inside:avoid;}
+    .printrij .pl{font-size:30px; line-height:1;}
+    .printrij .pn{font-family:"Baloo 2",system-ui,sans-serif; font-weight:800; font-size:16px; min-width:86px;}
+    .printrij .pp{font-family:"Baloo 2",system-ui,sans-serif; font-weight:800; font-size:18px; min-width:86px;}
+    .printrij .pv{flex:1; font-size:13px; color:#6b7590; border-bottom:1.5px dotted #b8c0d8; align-self:flex-end; padding-bottom:22px;}
+    @page{size:A4 portrait; margin:14mm;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .lade .geldknop:hover, .toonbank .gelegd:hover, .knop:hover{transform:none;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="printkop" aria-hidden="true">
+    <h2>Het winkeltje</h2>
+    <div class="regels"><div>Naam <span></span></div><div>Datum <span></span></div></div>
+  </div>
+
+  <header class="kop">
+    <span class="logo" aria-hidden="true">🛒</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · groep 4 en 5</div>
+      <h1>Het winkeltje</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="digibordKnop" type="button">🌙 Digibord</button>
+      <button id="alleenKnop" type="button">🔍 Alleen de winkel</button>
+      <button id="schermKnop" type="button">⛶ Volledig scherm</button>
+      <button id="printKnop" type="button">🖨 Werkblad</button>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <section class="kaart spelkaart" aria-label="De winkel">
+    <div class="etalage" id="spul"></div>
+    <p class="opdracht" id="opdracht"></p>
+    <p class="tussenstand" id="tussenstand"></p>
+
+    <div class="toonbank" id="toonbank" aria-label="Het geld dat je neerlegt"></div>
+
+    <div class="lade" id="lade" aria-label="Je geld"></div>
+    <p class="ladetekst">Klik op geld om het neer te leggen. Klik op de toonbank om het terug te nemen.</p>
+
+    <p class="melding" id="melding" role="status" aria-live="polite"></p>
+
+    <div class="knoppen">
+      <button class="knop primair" id="nieuwKnop" type="button">🛒 Volgende klant</button>
+      <button class="knop" id="wisKnop" type="button">↩️ Opnieuw</button>
+      <button class="knop" id="helpKnop" type="button">💡 Help me</button>
+    </div>
+    <p class="teller" id="teller"></p>
+  </section>
+
+  <section class="kaart instellingen" aria-label="Instellingen">
+    <div class="titelrij"><h2>Wat oefen je?</h2></div>
+    <div class="seg" id="modusSeg">
+      <button type="button" data-modus="betalen" class="aan">gepast betalen</button>
+      <button type="button" data-modus="wisselgeld">wisselgeld teruggeven</button>
+    </div>
+
+    <div class="titelrij" style="margin-top:20px;"><h2>Hoe duur mogen de spullen zijn?</h2></div>
+    <div class="rij">
+      <div class="seg" id="totSeg">
+        <button type="button" data-tot="200">tot € 2</button>
+        <button type="button" data-tot="500" class="aan">tot € 5</button>
+        <button type="button" data-tot="1000">tot € 10</button>
+        <button type="button" data-tot="2000">tot € 20</button>
+      </div>
+      <button class="chip aan" type="button" id="geluidChip"><span class="bol"></span>Geluid aan</button>
+    </div>
+    <p class="klein" style="margin-top:9px; font-size:13.5px; color:var(--muted);">
+      Met de spatiebalk komt de volgende klant. Met backspace neem je het laatste muntje terug.</p>
+  </section>
+
+  <div class="printblad" id="printblad" aria-hidden="true"></div>
+
+  <details class="uitleg">
+    <summary>Waarom dit spel (voor de leerkracht)</summary>
+    <p>In de etalage staat een spulletje met een prijskaartje. De kinderen leggen munten op de toonbank tot het bedrag precies klopt. In de tweede stand betaal je met een rond bedrag en leggen ze het wisselgeld klaar.</p>
+    <h3>Waarom geld</h3>
+    <p>Geld is voor kinderen een van de weinige plekken waar rekenen meteen ergens over gaat. Het is ook een vaste lijn in het leerplan: in groep 4 betalen met munten tot 20 euro, in groep 5 met euro's en centen door elkaar (SLO, 2025).</p>
+    <p>Bovendien is geld een prachtig model voor het tientallig stelsel. Tien dubbeltjes zijn een euro, twee vijftigjes ook. Kinderen die dat met munten hebben gedaan, snappen later makkelijker waarom 10 tientallen samen een honderdtal zijn (Hickendorff, 2023).</p>
+    <h3>Waar ik op gelet heb</h3>
+    <ul>
+      <li><b>Er is nooit maar één goede oplossing.</b> Je kunt 80 cent neerleggen als 50 + 20 + 10, of als 20 + 20 + 20 + 20. Allebei goed. Daar kun je een mooi gesprek over voeren: welke manier heeft de minste munten?</li>
+      <li><b>Te veel betalen mag.</b> Er komt geen kruis, maar de tekst zegt hoeveel je er overheen zit. Dan pak je gewoon een muntje terug.</li>
+      <li><b>De munten zien er echt uit.</b> Koper voor de centen, goud voor 10, 20 en 50, zilver met goud voor de euro's, en briefjes voor 5, 10 en 20 euro.</li>
+      <li><b>Het wisselgeld blijft te doen.</b> Ik reken eerst uit wat je terugkrijgt en bouw de prijs daar omheen, zodat je nooit een som als "terug van 20 euro bij 3,40" krijgt. Het wisselgeld is hier nooit meer dan 2 euro.</li>
+      <li><b>De knop Werkblad</b> maakt er een A4 van met acht spullen en ruimte om de munten bij te tekenen.</li>
+    </ul>
+    <h3>Wat erbij hoort</h3>
+    <p>Het werkblad <a href="geldsommen.html">Geldsommen</a> gaat verder met optellen en teruggeven op papier. Wie nog moeite heeft met splitsen, kan eerst naar <a href="splitswerkblad.html">Splitsen</a> of naar de <a href="weegschaal.html">Weegschaal</a>.</p>
+    <h3>Bronnen</h3>
+    <p class="bron">Hickendorff, M. (2023). <i>Rekenen en wiskunde in het basisonderwijs</i>. In Kennisrotonde/NRO-overzichten over rekenvaardigheid en het tientallig stelsel.</p>
+    <p class="bron">SLO. (2025). <i>Leerlijn rekenen-wiskunde: meten en meetkunde, getallen en bewerkingen</i>. SLO. <a href="https://www.slo.nl/">https://www.slo.nl/</a></p>
+  </details>
+
+  <p class="voet">Gemaakt voor de klas · <a href="index.html">terug naar het lesmateriaal</a></p>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const BEWAAR = "blink-winkeltje";
+
+const MUNTEN = [5, 10, 20, 50, 100, 200];
+const BILJETTEN = [500, 1000, 2000];
+const ROND = [100, 200, 500, 1000, 2000];
+const SPULLEN = [
+  ["appel", "🍎", 40, 90], ["broodje", "🥐", 90, 250], ["ijsje", "🍦", 120, 250],
+  ["koekje", "🍪", 50, 120], ["potlood", "✏️", 60, 150], ["schrift", "📓", 100, 250],
+  ["bloem", "🌻", 150, 400], ["stuiterbal", "⚽", 300, 900], ["boek", "📗", 450, 1200],
+  ["knuffel", "🧸", 500, 1500], ["pet", "🧢", 400, 1000], ["rugzak", "🎒", 700, 1900],
+];
+
+let staat = { modus: "betalen", tot: 500, geluid: true, digibord: false };
+try {
+  const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}");
+  Object.keys(staat).forEach((k) => { if (k in b) staat[k] = b[k]; });
+} catch (e) {}
+const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
+
+let spul = null, prijs = 0, betaaldMet = 0, gelegd = [], klaar = false, goed = 0, fout = 0;
+
+const tussen = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const kiesUit = (l) => l[Math.floor(Math.random() * l.length)];
+const euro = (c) => "€ " + (c / 100).toFixed(2).replace(".", ",");
+const kort = (w) => w >= 100 ? "€ " + w / 100 : w + " cent";
+const som = (l) => l.reduce((a, b) => a + b, 0);
+const doelBedrag = () => staat.modus === "betalen" ? prijs : betaaldMet - prijs;
+
+function piep(hoog) {
+  if (!staat.geluid) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator(), gain = ctx.createGain();
+    osc.type = "sine"; osc.frequency.value = hoog ? 720 : 260;
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(.11, ctx.currentTime + .015);
+    gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + (hoog ? .18 : .26));
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime + .3);
+    setTimeout(() => ctx.close(), 700);
+  } catch (e) {}
+}
+
+/* welk geld ligt er in de lade */
+function beschikbaar() {
+  const grens = staat.modus === "wisselgeld" && betaaldMet ? betaaldMet : Math.max(200, staat.tot);
+  return [...MUNTEN, ...BILJETTEN].filter((w) => w <= grens);
+}
+
+/* zoek een spulletje waar deze prijs bij past */
+function spulBij(p) {
+  const dichtbij = [...SPULLEN].sort((a, b) =>
+    Math.abs((a[2] + a[3]) / 2 - p) - Math.abs((b[2] + b[3]) / 2 - p));
+  const [naam, emoji] = kiesUit(dichtbij.slice(0, 3));
+  return { naam, emoji };
+}
+
+/* de opgave wordt zo gebouwd dat het antwoord al vaststaat */
+function maakOpgave() {
+  const stap = staat.tot <= 200 ? 5 : 10;
+  if (staat.modus === "wisselgeld") {
+    const ronde = ROND.filter((w) => w <= staat.tot);
+    const met = kiesUit(ronde.length ? ronde : [100]);
+    const maxWissel = Math.min(200, met - stap);
+    const wissel = tussen(1, Math.max(1, Math.floor(maxWissel / stap))) * stap;
+    const p = met - wissel;
+    return { spul: spulBij(p), prijs: p, betaaldMet: met };
+  }
+  const passend = SPULLEN.filter(([, , min]) => min <= staat.tot);
+  const [naam, emoji, min, max] = kiesUit(passend.length ? passend : SPULLEN);
+  const boven = Math.min(max, staat.tot);
+  const laag = Math.ceil(min / stap), hoog = Math.floor(boven / stap);
+  const p = tussen(Math.min(laag, hoog), hoog) * stap;
+  return { spul: { naam, emoji }, prijs: p, betaaldMet: 0 };
+}
+
+function nieuweOpgave() {
+  const o = maakOpgave();
+  spul = o.spul; prijs = o.prijs; betaaldMet = o.betaaldMet;
+  gelegd = []; klaar = false;
+  melding("", ""); teken();
+}
+
+/* ---------- geld tekenen ---------- */
+function geldSvg(w) {
+  if (w >= 500) {
+    const kleuren = { 500: ["#c3c6d2", "#8f94a3"], 1000: ["#e3897f", "#c4574d"], 2000: ["#9fc4e0", "#5b8cb0"] };
+    const [vlak, rand] = kleuren[w] || kleuren[500];
+    const breed = w === 500 ? 86 : w === 1000 ? 94 : 102;
+    return '<svg viewBox="0 0 84 44" class="geld biljet" style="width:' + breed + 'px" role="img" aria-label="briefje van ' + kort(w) + '">'
+      + '<rect x="1.5" y="1.5" width="81" height="41" rx="5" fill="' + vlak + '" stroke="' + rand + '" stroke-width="2"/>'
+      + '<rect x="7" y="7" width="70" height="30" rx="3" fill="none" stroke="#fff" stroke-width="1.2" opacity=".55"/>'
+      + '<text x="42" y="30" text-anchor="middle" font-family="Baloo 2, system-ui, sans-serif"'
+      + ' font-size="19" font-weight="800" fill="#2b3348">€ ' + (w / 100) + '</text></svg>';
+  }
+  const kleuren = {
+    5: ["#c98a5b", "#b0714a"], 10: ["#e9c46a", "#d8ae48"], 20: ["#e9c46a", "#d8ae48"],
+    50: ["#e9c46a", "#d8ae48"], 100: ["#e9c46a", "#dcdde3"], 200: ["#dcdde3", "#e9c46a"],
+  };
+  const [buiten, binnen] = kleuren[w];
+  const maat = { 5: 44, 10: 48, 20: 53, 50: 58, 100: 60, 200: 64 }[w];
+  const label = w >= 100 ? "€ " + w / 100 : String(w);
+  const onder = w >= 100 ? "" : '<text x="26" y="38" text-anchor="middle" font-family="Baloo 2, system-ui, sans-serif"'
+    + ' font-size="8.5" font-weight="800" fill="#4a4230" opacity=".8">CENT</text>';
+  return '<svg viewBox="0 0 52 52" class="geld munt" style="width:' + maat + 'px" role="img" aria-label="munt van ' + kort(w) + '">'
+    + '<circle cx="26" cy="26" r="24.2" fill="' + buiten + '" stroke="#a98634" stroke-width="1.6"/>'
+    + '<circle cx="26" cy="26" r="16" fill="' + binnen + '" opacity=".95"/>'
+    + '<text x="26" y="' + (w >= 100 ? 32 : 29) + '" text-anchor="middle" font-family="Baloo 2, system-ui, sans-serif"'
+    + ' font-size="' + (w >= 100 ? 16 : 17) + '" font-weight="800" fill="#3a3320">' + label + '</text>'
+    + onder + '</svg>';
+}
+
+function teken() {
+  $("spul").innerHTML = '<span class="plaatje" aria-hidden="true">' + spul.emoji + '</span>'
+    + '<span class="naam">' + spul.naam + '</span>'
+    + '<span class="prijskaartje">' + euro(prijs) + '</span>';
+
+  const betaald = som(gelegd), doel = doelBedrag();
+  if (staat.modus === "betalen") {
+    $("opdracht").textContent = klaar
+      ? "Precies " + euro(prijs) + ". Bedankt!"
+      : "Betaal precies " + euro(prijs) + ".";
+  } else {
+    $("opdracht").textContent = klaar
+      ? "Klopt, " + euro(doel) + " terug."
+      : "De klant betaalt met " + kort(betaaldMet) + ". Leg het wisselgeld klaar.";
+  }
+  $("tussenstand").textContent = klaar ? ""
+    : gelegd.length ? "Je hebt nu " + euro(betaald) + " van de " + euro(doel) + " liggen." : "";
+
+  $("toonbank").innerHTML = gelegd.length
+    ? gelegd.map((w, i) => '<button class="gelegd" type="button" data-weg="' + i + '" aria-label="neem ' + kort(w) + ' terug">' + geldSvg(w) + "</button>").join("")
+    : '<span class="leeg">Leg hier het geld neer</span>';
+
+  $("lade").innerHTML = beschikbaar()
+    .map((w) => '<button class="geldknop" type="button" data-munt="' + w + '">' + geldSvg(w) + "</button>").join("");
+
+  $("teller").textContent = (goed + fout) ? goed + " goed · " + fout + " keer te veel" : "";
+}
+
+function melding(tekst, soort) {
+  $("melding").className = "melding " + soort;
+  $("melding").textContent = tekst;
+}
+
+function controleer() {
+  const betaald = som(gelegd), doel = doelBedrag();
+  if (betaald === doel) {
+    klaar = true; goed++; piep(true); teken();
+    melding(staat.modus === "betalen" ? "Goed zo! Precies betaald." : "Goed zo! Dat is het wisselgeld.", "goed");
+  } else if (betaald > doel) {
+    fout++; piep(false);
+    melding("Dat is " + euro(betaald - doel) + " te veel. Neem er iets af.", "fout");
+  }
+}
+
+/* ---------- het werkblad ---------- */
+function vulPrintblad() {
+  const rijen = [];
+  for (let i = 0; i < 8; i++) {
+    const o = maakOpgave();
+    rijen.push('<div class="printrij"><span class="pl">' + o.spul.emoji + '</span>'
+      + '<span class="pn">' + o.spul.naam + '</span>'
+      + '<span class="pp">' + euro(o.prijs) + '</span>'
+      + '<span class="pv">' + (staat.modus === "betalen"
+        ? "teken de munten waarmee je precies betaalt"
+        : "je betaalt met " + kort(o.betaaldMet) + ". Hoeveel krijg je terug?") + "</span></div>");
+  }
+  $("printblad").innerHTML = '<p class="printuitleg">' + (staat.modus === "betalen"
+    ? "Teken bij elk spulletje de munten waarmee je precies betaalt. Er zijn vaak meer goede manieren. Probeer het met zo min mogelijk munten."
+    : "Je betaalt met een rond bedrag. Schrijf op hoeveel geld je terugkrijgt.") + "</p>" + rijen.join("");
+}
+
+/* ---------- klikken ---------- */
+$("lade").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-munt]");
+  if (!b || klaar) return;
+  gelegd.push(Number(b.dataset.munt));
+  teken(); controleer();
+});
+$("toonbank").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-weg]");
+  if (!b || klaar) return;
+  gelegd.splice(Number(b.dataset.weg), 1);
+  melding("", ""); teken();
+});
+$("nieuwKnop").addEventListener("click", nieuweOpgave);
+$("wisKnop").addEventListener("click", () => {
+  if (klaar) return;
+  gelegd = []; melding("", ""); teken();
+});
+$("helpKnop").addEventListener("click", () => {
+  if (klaar) return;
+  const rest = doelBedrag() - som(gelegd);
+  if (rest <= 0) { melding("Je hebt al genoeg neergelegd.", ""); return; }
+  const grootste = beschikbaar().filter((w) => w <= rest).pop();
+  melding(grootste
+    ? "Je moet nog " + euro(rest) + ". Dat past: begin met " + kort(grootste) + "."
+    : "Je moet nog " + euro(rest) + ".", "");
+});
+
+[["modusSeg", "modus"], ["totSeg", "tot"]].forEach(([id, sleutel]) => {
+  $(id).addEventListener("click", (e) => {
+    const b = e.target.closest("[data-" + sleutel + "]");
+    if (!b) return;
+    staat[sleutel] = sleutel === "tot" ? Number(b.dataset.tot) : b.dataset.modus;
+    zetKnoppen(id, sleutel);
+    bewaar(); nieuweOpgave();
+  });
+});
+function zetKnoppen(id, sleutel) {
+  [...document.querySelectorAll("#" + id + " button")].forEach((x) => {
+    const w = sleutel === "tot" ? Number(x.dataset.tot) : x.dataset.modus;
+    x.classList.toggle("aan", w === staat[sleutel]);
+  });
+}
+
+$("geluidChip").addEventListener("click", () => {
+  staat.geluid = !staat.geluid;
+  $("geluidChip").classList.toggle("aan", staat.geluid);
+  $("geluidChip").lastChild.textContent = staat.geluid ? "Geluid aan" : "Geluid uit";
+  bewaar();
+});
+$("digibordKnop").addEventListener("click", () => {
+  staat.digibord = !staat.digibord;
+  document.body.classList.toggle("digibord", staat.digibord);
+  $("digibordKnop").textContent = staat.digibord ? "☀️ Gewoon" : "🌙 Digibord";
+  bewaar();
+});
+$("alleenKnop").addEventListener("click", () => document.body.classList.toggle("alleenwinkel"));
+$("schermKnop").addEventListener("click", () => {
+  if (document.fullscreenElement) document.exitFullscreen();
+  else document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+});
+$("printKnop").addEventListener("click", () => { vulPrintblad(); window.print(); });
+window.addEventListener("beforeprint", vulPrintblad);
+document.addEventListener("keydown", (e) => {
+  if (e.target.closest("input, textarea")) return;
+  if (e.code === "Space") { e.preventDefault(); nieuweOpgave(); }
+  if (e.key === "Escape") document.body.classList.remove("alleenwinkel");
+  if (e.key === "Backspace") {
+    e.preventDefault();
+    if (!klaar && gelegd.length) { gelegd.pop(); melding("", ""); teken(); }
+  }
+});
+
+zetKnoppen("modusSeg", "modus");
+zetKnoppen("totSeg", "tot");
+$("geluidChip").classList.toggle("aan", staat.geluid);
+$("geluidChip").lastChild.textContent = staat.geluid ? "Geluid aan" : "Geluid uit";
+if (staat.digibord) { document.body.classList.add("digibord"); $("digibordKnop").textContent = "☀️ Gewoon"; }
+nieuweOpgave();
+</script>
+</body>
+</html>
