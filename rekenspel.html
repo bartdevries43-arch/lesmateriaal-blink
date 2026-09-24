@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rekenspel · Lesmateriaal Blink</title>
+<meta name="description" content="Drie rekenspelletjes om te automatiseren: tafelblikken, verliefde harten en raketstart. Kort en vaak oefenen, met een scorekaart om te printen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+    --goed:#16a34a; --fout:#e2584f;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1120px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:20px; margin-top:18px;}
+
+  /* het speelveld */
+  .stand{display:flex; flex-wrap:wrap; gap:10px 22px; align-items:center; justify-content:center; margin-bottom:6px;}
+  .stand div{font-size:13px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; color:var(--muted);}
+  .stand b{display:block; font-family:"Baloo 2",system-ui,sans-serif; font-size:26px; color:var(--ink); line-height:1.1;}
+  .baan{height:8px; border-radius:99px; background:#e7eaf7; overflow:hidden; margin:10px 0 16px;}
+  .baan span{display:block; height:100%; background:linear-gradient(90deg,var(--accent),var(--accent2));
+    transform-origin:left; transition:transform .2s linear;}
+  body.bijnaklaar .baan span{background:linear-gradient(90deg,#e0a33c,#e2584f);}
+
+  .vraag{font-family:"Baloo 2",system-ui,sans-serif; font-weight:800; text-align:center;
+    font-size:clamp(2.2rem,8vw,4.4rem); line-height:1.05; margin:4px 0 18px; letter-spacing:1px;}
+
+  .doelen{display:grid; grid-template-columns:repeat(auto-fit,minmax(122px,1fr)); gap:12px; max-width:760px; margin:0 auto;}
+  .doel{font:inherit; cursor:pointer; background:#fff; border:2px solid var(--line-2); border-radius:20px;
+    padding:12px 8px 14px; display:flex; flex-direction:column; align-items:center; gap:2px;
+    transition:transform .12s ease, border-color .12s ease, background .12s ease;}
+  .doel:hover{transform:translateY(-3px); border-color:var(--accent);}
+  .doel .beeld{font-size:clamp(28px,6vw,40px); line-height:1;}
+  .doel .waarde{font-family:"Baloo 2",system-ui,sans-serif; font-weight:800; font-size:clamp(20px,4.5vw,28px);}
+  .doel.goed{background:#e8f8ee; border-color:var(--goed); color:var(--goed);}
+  .doel.mis{background:#fdeceb; border-color:var(--fout); color:var(--fout);}
+  .doel.wijs{border-color:var(--goed); box-shadow:0 0 0 3px rgba(22,163,74,.18);}
+  .doelen.harten .doel .beeld{filter:saturate(.9);}
+
+  .uitslag{display:none; text-align:center; padding:12px 0 4px;}
+  .uitslag.aan{display:block;}
+  .uitslag .punten{font-family:"Baloo 2",system-ui,sans-serif; font-weight:800; font-size:clamp(2.4rem,9vw,4rem); color:var(--accent); line-height:1;}
+  .uitslag p{font-size:16px; color:var(--muted); margin-top:4px;}
+
+  .knoppen{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:18px;}
+  .knop{font:inherit; font-size:16px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:16px; padding:13px 20px; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent; min-width:180px; font-size:18px; padding:15px 26px;}
+
+  .titelrij{display:flex; align-items:baseline; gap:10px; margin-bottom:10px; flex-wrap:wrap;}
+  .titelrij h2{font-size:18px;} .titelrij .klein{font-size:13.5px; color:var(--muted);}
+  .rij{display:flex; flex-wrap:wrap; gap:9px; align-items:center;}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+  .tafels{display:flex; flex-wrap:wrap; gap:7px;}
+  .tafels button{font:inherit; font-size:14.5px; font-weight:800; width:44px; height:44px; border-radius:13px;
+    border:1px solid var(--line-2); background:#fff; color:var(--ink); cursor:pointer;}
+  .tafels button.aan{background:var(--accent2); color:#fff; border-color:transparent;}
+  .uit{display:none !important;}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .bron{font-size:13.5px; line-height:1.5; color:#4b5563; padding-left:22px; text-indent:-22px; margin-top:6px;}
+  .bron a{color:var(--accent); word-break:break-word;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  body.digibord{background:#0f1430; --ink:#eef1ff;}
+  body.digibord .kaart{background:#161c3d; border-color:rgba(255,255,255,.1); color:#eef1ff;}
+  body.digibord .doel, body.digibord .knop, body.digibord .chip, body.digibord .seg,
+  body.digibord .tafels button{background:#1e2650; color:#eef1ff; border-color:rgba(255,255,255,.2);}
+  body.digibord .doel.goed{background:rgba(22,163,74,.22); color:#8ef0b0;}
+  body.digibord .doel.mis{background:rgba(226,88,79,.22); color:#ffb3ae;}
+  body.digibord .chip.aan{background:rgba(129,140,248,.25); border-color:#a5b4fc;}
+  body.digibord .baan{background:rgba(255,255,255,.12);}
+  body.digibord .stand div, body.digibord .titelrij .klein, body.digibord .voet, body.digibord .uitslag p{color:#a9b2d6;}
+  body.digibord details.uitleg p, body.digibord details.uitleg li{color:#dbe2ff;}
+
+  /* de scorekaart is alleen om te printen */
+  .scorekaart{display:none;}
+  @media print{
+    body{background:#fff !important;}
+    body.digibord{background:#fff !important; --ink:#1c2433;}
+    .app{max-width:none; padding:0;}
+    .kop, .kaart, details.uitleg, .voet{display:none !important;}
+    .scorekaart{display:block !important; border:2px solid #55607e; border-radius:14px; padding:18px 20px; max-width:16cm;}
+    .scorekaart h2{font-family:"Baloo 2",system-ui,sans-serif; font-size:22px; margin-bottom:3px; color:#1c2433;}
+    .scorekaart .onder{font-size:12px; color:#6b7590; margin-bottom:14px;}
+    .scorekaart table{border-collapse:collapse; width:100%;}
+    .scorekaart th{text-align:left; font-size:12.5px; font-weight:800; color:#5b647f; padding:5px 12px 5px 0; white-space:nowrap; width:38%;}
+    .scorekaart td{font-size:13.5px; font-weight:700; padding:5px 0; border-bottom:1px dotted #d9dded;}
+    .scorekaart .naamregel{margin-top:16px; font-size:12.5px; color:#5b647f; display:flex; gap:26px;}
+    .scorekaart .naamregel span{display:inline-block; min-width:5cm; border-bottom:1.5px dotted #b8c0d8;}
+    @page{size:A4 portrait; margin:16mm;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .doel:hover, .knop:hover{transform:none;}
+    .baan span{transition:none;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="kop">
+    <span class="logo" aria-hidden="true">🎯</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · rekenen</div>
+      <h1>Rekenspel</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="digibordKnop" type="button">🌙 Digibord</button>
+      <button id="schermKnop" type="button">⛶ Volledig scherm</button>
+      <button id="printKnop" type="button">🖨 Scorekaart</button>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <section class="kaart" aria-label="Het spel">
+    <div class="stand">
+      <div>Score <b id="score">0</b></div>
+      <div>Reeks <b id="reeks">0</b></div>
+      <div>Tijd <b id="klok">60s</b></div>
+      <div>Resultaat <b id="goedfout" style="font-size:17px;">0 goed · 0 fout</b></div>
+    </div>
+    <div class="baan"><span id="balk"></span></div>
+
+    <div class="vraag" id="vraag">Klaar om te beginnen?</div>
+    <div class="doelen" id="doelen"></div>
+
+    <div class="uitslag" id="uitslag">
+      <div class="punten" id="uitslagScore">0</div>
+      <p id="uitslagTekst"></p>
+    </div>
+
+    <div class="knoppen">
+      <button class="knop primair" id="startKnop" type="button">▶ Starten</button>
+    </div>
+  </section>
+
+  <section class="kaart" aria-label="Instellingen">
+    <div class="titelrij"><h2>Welk spel?</h2><span class="klein">Alle drie oefenen ze het uit je hoofd weten.</span></div>
+    <div class="seg" id="spelSeg">
+      <button type="button" data-spel="blikken" class="aan">🥫 Tafelblikken</button>
+      <button type="button" data-spel="harten">❤️ Verliefde harten</button>
+      <button type="button" data-spel="raket">🚀 Raketstart</button>
+    </div>
+
+    <div id="tafelGroep">
+      <div class="titelrij" style="margin-top:20px;"><h2>Welke tafels?</h2><span class="klein">Klik ze aan en uit.</span></div>
+      <div class="tafels" id="tafels"></div>
+    </div>
+
+    <div id="hartGroep" class="uit">
+      <div class="titelrij" style="margin-top:20px;"><h2>Samen hoeveel?</h2><span class="klein">Welk getal hoort erbij om samen dit te maken?</span></div>
+      <div class="seg" id="totSeg">
+        <button type="button" data-tot="10" class="aan">10</button>
+        <button type="button" data-tot="20">20</button>
+        <button type="button" data-tot="100">100</button>
+      </div>
+    </div>
+
+    <div id="raketGroep" class="uit">
+      <div class="titelrij" style="margin-top:20px;"><h2>Tot welk getal?</h2><span class="klein">Plus- en minsommen door elkaar.</span></div>
+      <div class="seg" id="bereikSeg">
+        <button type="button" data-bereik="10">tot 10</button>
+        <button type="button" data-bereik="20" class="aan">tot 20</button>
+        <button type="button" data-bereik="100">tot 100</button>
+      </div>
+    </div>
+
+    <div class="titelrij" style="margin-top:20px;"><h2>Hoe lang?</h2></div>
+    <div class="rij">
+      <div class="seg" id="tijdSeg">
+        <button type="button" data-tijd="30">30 seconden</button>
+        <button type="button" data-tijd="60" class="aan">1 minuut</button>
+        <button type="button" data-tijd="120">2 minuten</button>
+      </div>
+      <button class="chip aan" type="button" id="geluidChip"><span class="bol"></span>Geluid aan</button>
+    </div>
+    <p class="klein" style="margin-top:12px; color:var(--muted); font-size:13.5px;">Met de spatiebalk start en stop je. Met de cijfers 1 tot en met 6 kies je een antwoord zonder muis.</p>
+  </section>
+
+  <!-- alleen zichtbaar bij het printen -->
+  <div class="scorekaart" aria-hidden="true">
+    <h2>Scorekaart rekenspel</h2>
+    <div class="onder">Lesmateriaal Blink</div>
+    <table>
+      <tr><th>Spel</th><td id="kaartSpel"></td></tr>
+      <tr><th>Wat geoefend</th><td id="kaartWat"></td></tr>
+      <tr><th>Speeltijd</th><td id="kaartTijd"></td></tr>
+      <tr><th>Score</th><td id="kaartScore"></td></tr>
+      <tr><th>Goed</th><td id="kaartGoed"></td></tr>
+      <tr><th>Fout</th><td id="kaartFout"></td></tr>
+      <tr><th>Langste reeks</th><td id="kaartReeks"></td></tr>
+    </table>
+    <div class="naamregel"><div>Naam <span></span></div><div>Datum <span></span></div></div>
+  </div>
+
+  <details class="uitleg">
+    <summary>Waarom dit spel (voor de leerkracht)</summary>
+    <p>Alle drie de spellen oefenen hetzelfde: sommen die een kind uit zijn hoofd moet weten. Wie de tafels en de sommen tot twintig paraat heeft, houdt ruimte over in zijn hoofd voor het echte rekenwerk daarboven.</p>
+    <h3>Waar ik op gelet heb</h3>
+    <ul>
+      <li><b>Kort en vaak.</b> De rondes duren dertig seconden tot twee minuten. Minstens tien minuten per dag oefenen helpt, en dan gericht op patronen en verbanden in plaats van stampen (Hickendorff, 2023). Drie korte rondes op een dag werkt beter dan één lange.</li>
+      <li><b>Zelf het antwoord ophalen.</b> Het kind kiest uit een paar antwoorden en moet het goede zelf uit zijn hoofd halen. Jezelf overhoren en gespreid oefenen horen bij de sterkst onderbouwde leertechnieken (Dunlosky et al., 2013).</li>
+      <li><b>De foute antwoorden zijn niet willekeurig.</b> Ze lijken op wat kinderen echt fout doen: één tafel ernaast, of het antwoord van de som ervoor. Zo moet een kind echt weten wat het weet, in plaats van de rare optie weg te strepen.</li>
+      <li><b>Bij een fout zie je het goede antwoord.</b> Het spel gaat pas verder nadat het juiste blikje is aangewezen. Directe feedback voorkomt dat een fout antwoord blijft hangen.</li>
+      <li><b>Rustig, geen kermis.</b> Geen flitsende animaties en geen harde geluiden. Eén zacht toontje bij goed en een lager toontje bij fout, en dat kun je uitzetten.</li>
+    </ul>
+    <h3>De drie spellen</h3>
+    <ul>
+      <li><b>Tafelblikken</b>: keersommen uit de tafels die jij aanzet.</li>
+      <li><b>Verliefde harten</b>: welk getal hoort erbij om samen 10, 20 of 100 te maken. Dit is splitsen, en de basis onder het rekenen tot honderd.</li>
+      <li><b>Raketstart</b>: plus- en minsommen door elkaar, tot 10, 20 of 100.</li>
+    </ul>
+    <h3>De scorekaart</h3>
+    <p>Na een ronde kun je een scorekaart printen met het spel, wat er geoefend is, de score, het aantal goed en fout en de langste reeks. Handig om in een schriftje te plakken en over een paar weken naast een nieuwe kaart te leggen. Voor een kind is die eigen groei zien belangrijker dan de score zelf.</p>
+    <h3>Een eerlijke kanttekening</h3>
+    <p>Een spel maakt oefenen leuker, maar het vervangt de instructie niet. Als een kind de tafel van 7 niet snapt, helpt harder spelen niet. Dan gaat de uitleg voor, en daarna pas het oefenen.</p>
+    <h3>Bronnen</h3>
+    <p class="bron">Dunlosky, J., Rawson, K. A., Marsh, E. J., Nathan, M. J., &amp; Willingham, D. T. (2013). Improving students' learning with effective learning techniques: Promising directions from cognitive and educational psychology. <i>Psychological Science in the Public Interest, 14</i>(1), 4-58. <a href="https://doi.org/10.1177/1529100612453266">https://doi.org/10.1177/1529100612453266</a></p>
+    <p class="bron">Hickendorff, M. (2023, 4 april). <i>Aanvankelijk en gevorderd rekenen in groep 3, 4 en 5</i>. Onderwijskennis.nl. Geraadpleegd op 24 september 2026, van <a href="https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5">https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5</a></p>
+  </details>
+
+  <footer class="voet">Rekenspel · onderdeel van <a href="index.html">Lesmateriaal Blink</a> · spatiebalk start en stopt</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const BEWAAR = "blink-rekenspel";
+
+let staat = { spel: "blikken", tafels: [1, 2, 3, 4, 5, 10], bereik: 20, tot: 10,
+  tijd: 60, geluid: true, digibord: false };
+try { const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}"); Object.keys(staat).forEach((k) => { if (k in b) staat[k] = b[k]; }); } catch (e) {}
+const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
+
+let loopt = false, score = 0, reeks = 0, besteReeks = 0, goed = 0, fout = 0;
+let eindTijd = 0, tikker = null, huidige = null, bezig = false;
+
+const tussen = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const kies = (l) => l[Math.floor(Math.random() * l.length)];
+function schud(l) {
+  const u = [...l];
+  for (let i = u.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [u[i], u[j]] = [u[j], u[i]]; }
+  return u;
+}
+
+/* ---------- de opgaven ---------- */
+function maakOpgave() {
+  if (staat.spel === "blikken") {
+    const a = kies(staat.tafels.length ? staat.tafels : [1]);
+    const b = tussen(1, 10);
+    const uit = a * b;
+    return { vraag: `${a} × ${b}`, antwoord: uit, afleiders: afleidersKeer(a, b, uit) };
+  }
+  if (staat.spel === "harten") {
+    const eerste = tussen(1, staat.tot - 1);
+    const uit = staat.tot - eerste;
+    return { vraag: `${eerste} + ? = ${staat.tot}`, toon: eerste, antwoord: uit, afleiders: afleidersBuurt(uit, staat.tot) };
+  }
+  // raket: plus en min
+  const plus = Math.random() < .5;
+  if (plus) {
+    const uit = tussen(Math.round(staat.bereik * .3), staat.bereik);
+    const a = tussen(1, uit - 1);
+    return { vraag: `${a} + ${uit - a}`, antwoord: uit, afleiders: afleidersBuurt(uit, staat.bereik) };
+  }
+  const a = tussen(Math.round(staat.bereik * .4), staat.bereik);
+  const b = tussen(1, a - 1);
+  return { vraag: `${a} − ${b}`, antwoord: a - b, afleiders: afleidersBuurt(a - b, staat.bereik) };
+}
+/* afleiders die lijken op wat kinderen echt fout doen */
+const NODIG = 5;   // zoveel foute antwoorden heb ik minstens nodig
+
+/* Soms vallen er te veel afleiders af, bijvoorbeeld bij 7 x 1. Dan vul ik aan
+   met getallen vlak in de buurt, zodat er altijd evenveel knoppen staan. */
+function vulAan(uit, lijst) {
+  const set = new Set(lijst);
+  for (let stap = 1; set.size < NODIG && stap < 40; stap++) {
+    if (uit - stap > 0) set.add(uit - stap);
+    if (set.size < NODIG) set.add(uit + stap);
+  }
+  set.delete(uit);
+  return [...set];
+}
+function afleidersKeer(a, b, uit) {
+  const kandidaten = new Set([a * (b + 1), a * (b - 1), uit + a, uit - a, uit + 1, uit - 1, (a + 1) * b]);
+  return vulAan(uit, [...kandidaten].filter((x) => x > 0 && x !== uit));
+}
+function afleidersBuurt(uit, top) {
+  const kandidaten = new Set([uit + 1, uit - 1, uit + 2, uit - 2, uit + 10, uit - 10, top - uit]);
+  return vulAan(uit, [...kandidaten].filter((x) => x > 0 && x !== uit && x <= top + 12));
+}
+
+/* ---------- geluid ---------- */
+function toon(hoog) {
+  if (!staat.geluid) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator(), gain = ctx.createGain();
+    osc.type = "sine"; osc.frequency.value = hoog ? 740 : 240;
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(.12, ctx.currentTime + .015);
+    gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + (hoog ? .18 : .26));
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime + .3);
+    setTimeout(() => ctx.close(), 700);
+  } catch (e) {}
+}
+
+/* ---------- tekenen ---------- */
+const VORM = { blikken: "🥫", harten: "❤️", raket: "🚀" };
+
+function tekenOpgave() {
+  huidige = maakOpgave();
+  const hoeveel = staat.spel === "blikken" ? 6 : 5;
+  const opties = schud([huidige.antwoord, ...schud(huidige.afleiders).slice(0, hoeveel - 1)]);
+  $("vraag").textContent = huidige.vraag;
+  $("doelen").className = "doelen " + staat.spel;
+  $("doelen").innerHTML = opties.map((w) =>
+    `<button class="doel" type="button" data-waarde="${w}">
+       <span class="beeld" aria-hidden="true">${VORM[staat.spel]}</span>
+       <span class="waarde">${w}</span>
+     </button>`).join("");
+  bezig = false;
+}
+
+function tekenStand() {
+  $("score").textContent = score;
+  $("reeks").textContent = reeks;
+  $("goedfout").textContent = `${goed} goed · ${fout} fout`;
+  const over = Math.max(0, Math.ceil((eindTijd - Date.now()) / 1000));
+  $("klok").textContent = loopt ? over + "s" : staat.tijd + "s";
+  const deel = loopt ? over / staat.tijd : 1;
+  $("balk").style.transform = `scaleX(${Math.max(0, Math.min(1, deel))})`;
+  document.body.classList.toggle("bijnaklaar", loopt && over <= 10);
+}
+
+function klaar() {
+  loopt = false;
+  if (tikker) { clearInterval(tikker); tikker = null; }
+  besteReeks = Math.max(besteReeks, reeks);
+  $("doelen").innerHTML = "";
+  $("vraag").textContent = "Klaar!";
+  $("uitslag").classList.add("aan");
+  $("uitslagScore").textContent = score;
+  $("uitslagTekst").textContent =
+    `${goed} goed en ${fout} fout. Je langste reeks was ${besteReeks}.`;
+  $("startKnop").textContent = "▶ Nog een keer";
+  tekenStand();
+  vulScorekaart();
+}
+
+function start() {
+  score = 0; reeks = 0; besteReeks = 0; goed = 0; fout = 0;
+  loopt = true;
+  $("uitslag").classList.remove("aan");
+  $("startKnop").textContent = "⏹ Stoppen";
+  eindTijd = Date.now() + staat.tijd * 1000;
+  if (tikker) clearInterval(tikker);
+  tikker = setInterval(() => { tekenStand(); if (Date.now() >= eindTijd) klaar(); }, 200);
+  tekenOpgave(); tekenStand();
+}
+function stop() {
+  if (!loopt) { start(); return; }
+  klaar();
+}
+
+$("doelen").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-waarde]");
+  if (!b || !loopt || bezig) return;
+  bezig = true;
+  const gekozen = Number(b.dataset.waarde);
+  if (gekozen === huidige.antwoord) {
+    goed++; reeks++; besteReeks = Math.max(besteReeks, reeks);
+    score += 10 + Math.min(reeks, 10);
+    b.classList.add("goed"); toon(true);
+    setTimeout(() => { if (loopt) tekenOpgave(); tekenStand(); }, 260);
+  } else {
+    fout++; reeks = 0;
+    b.classList.add("mis"); toon(false);
+    const juist = [...document.querySelectorAll("[data-waarde]")].find((x) => Number(x.dataset.waarde) === huidige.antwoord);
+    if (juist) juist.classList.add("wijs");
+    setTimeout(() => { if (loopt) tekenOpgave(); tekenStand(); }, 900);
+  }
+  tekenStand();
+});
+
+/* ---------- scorekaart om te printen ---------- */
+function vulScorekaart() {
+  const namen = { blikken: "Tafelblikken", harten: "Verliefde harten", raket: "Raketstart" };
+  const wat = staat.spel === "blikken" ? "tafels " + (staat.tafels.length ? staat.tafels.join(", ") : "geen")
+    : staat.spel === "harten" ? "samen " + staat.tot
+    : "plus en min tot " + staat.bereik;
+  $("kaartSpel").textContent = namen[staat.spel];
+  $("kaartWat").textContent = wat;
+  $("kaartTijd").textContent = staat.tijd + " seconden";
+  $("kaartScore").textContent = score;
+  $("kaartGoed").textContent = goed;
+  $("kaartFout").textContent = fout;
+  $("kaartReeks").textContent = besteReeks;
+}
+
+/* ---------- knoppen ---------- */
+$("spelSeg").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-spel]"); if (!b) return;
+  staat.spel = b.dataset.spel;
+  [...document.querySelectorAll("#spelSeg button")].forEach((x) => x.classList.toggle("aan", x.dataset.spel === staat.spel));
+  document.body.dataset.spel = staat.spel;
+  ["tafelGroep", "hartGroep", "raketGroep"].forEach((id) => $(id).classList.add("uit"));
+  $({ blikken: "tafelGroep", harten: "hartGroep", raket: "raketGroep" }[staat.spel]).classList.remove("uit");
+  bewaar(); if (loopt) klaar(); vulScorekaart();
+});
+$("tafels").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-tafel]"); if (!b) return;
+  const t = Number(b.dataset.tafel);
+  staat.tafels = staat.tafels.includes(t) ? staat.tafels.filter((x) => x !== t) : [...staat.tafels, t];
+  b.classList.toggle("aan", staat.tafels.includes(t)); bewaar();
+});
+[["totSeg", "tot", "tot"], ["bereikSeg", "bereik", "bereik"], ["tijdSeg", "tijd", "tijd"]].forEach(([id, data, sleutel]) => {
+  $(id).addEventListener("click", (e) => {
+    const b = e.target.closest("[data-" + data + "]"); if (!b) return;
+    staat[sleutel] = Number(b.dataset[data]);
+    [...document.querySelectorAll("#" + id + " button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset[data]) === staat[sleutel]));
+    bewaar(); tekenStand(); vulScorekaart();
+  });
+});
+$("geluidChip").addEventListener("click", () => {
+  staat.geluid = !staat.geluid; $("geluidChip").classList.toggle("aan", staat.geluid); bewaar();
+});
+$("startKnop").addEventListener("click", stop);
+$("printKnop").addEventListener("click", () => { vulScorekaart(); window.print(); });
+$("digibordKnop").addEventListener("click", () => {
+  staat.digibord = !staat.digibord;
+  document.body.classList.toggle("digibord", staat.digibord);
+  $("digibordKnop").textContent = staat.digibord ? "☀️ Gewoon" : "🌙 Digibord";
+  bewaar();
+});
+$("schermKnop").addEventListener("click", () => {
+  if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen?.();
+});
+document.addEventListener("keydown", (e) => {
+  if (e.target.tagName === "INPUT") return;
+  if (e.code === "Space") { e.preventDefault(); stop(); }
+  if (/^[1-9]$/.test(e.key) && loopt && !bezig) {
+    const knoppen = [...document.querySelectorAll("[data-waarde]")];
+    const k = knoppen[Number(e.key) - 1];
+    if (k) k.click();
+  }
+});
+
+/* opstarten */
+[...document.querySelectorAll("#spelSeg button")].forEach((x) => x.classList.toggle("aan", x.dataset.spel === staat.spel));
+document.body.dataset.spel = staat.spel;
+["tafelGroep", "hartGroep", "raketGroep"].forEach((id) => $(id).classList.add("uit"));
+$({ blikken: "tafelGroep", harten: "hartGroep", raket: "raketGroep" }[staat.spel]).classList.remove("uit");
+$("tafels").innerHTML = Array.from({ length: 12 }, (_, i) => i + 1)
+  .map((t) => `<button type="button" data-tafel="${t}" class="${staat.tafels.includes(t) ? "aan" : ""}">${t}</button>`).join("");
+[["totSeg", "tot", "tot"], ["bereikSeg", "bereik", "bereik"], ["tijdSeg", "tijd", "tijd"]].forEach(([id, data, sleutel]) => {
+  [...document.querySelectorAll("#" + id + " button")].forEach((x) => x.classList.toggle("aan", Number(x.dataset[data]) === staat[sleutel]));
+});
+$("geluidChip").classList.toggle("aan", staat.geluid);
+if (staat.digibord) { document.body.classList.add("digibord"); $("digibordKnop").textContent = "☀️ Gewoon"; }
+tekenStand(); vulScorekaart();
+
+</script>
+</body>
+</html>
