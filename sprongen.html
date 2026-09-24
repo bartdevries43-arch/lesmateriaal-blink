@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sprongen op de getallenlijn · Lesmateriaal Blink</title>
+<meta name="description" content="Rijgen op de lege getallenlijn: laat de kikker springen van 10 en van 1 om bij het antwoord te komen. Voor groep 4 en 5, op het digibord.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+    --goed:#16a34a; --fout:#e2584f;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1120px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.45rem,3.2vw,2.3rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:22px; margin-top:18px;}
+
+  .som{text-align:center; font-family:"Baloo 2",system-ui,sans-serif; font-weight:800;
+    font-size:clamp(1.9rem,6vw,3.2rem); line-height:1.05; letter-spacing:1px; margin-bottom:6px;}
+  .som .vak{display:inline-block; min-width:1.6em; border-bottom:4px solid var(--line-2); color:#b8c0d8;}
+  .som .uit{color:var(--goed);}
+  .lijnvak svg{width:100%; height:auto; display:block;}
+  .spoor{text-align:center; font-family:"Baloo 2",system-ui,sans-serif; font-weight:800;
+    font-size:clamp(1rem,2.6vw,1.35rem); color:var(--ink); margin-top:4px; line-height:1.7;}
+  .spoor .pijl{color:var(--accent2); font-size:.85em;}
+  .gesprongen{text-align:center; font-size:14px; color:var(--muted); margin-top:4px;}
+  .melding{text-align:center; font-weight:800; font-size:clamp(1rem,2.6vw,1.25rem); min-height:1.6em; margin-top:8px;}
+  .melding.goed{color:var(--goed);} .melding.fout{color:var(--fout);}
+  .teller{text-align:center; font-size:13.5px; color:var(--muted); margin-top:8px;}
+
+  .sprongknoppen{display:flex; flex-wrap:wrap; gap:9px; justify-content:center; margin-top:14px;}
+  .spring{font:inherit; font-family:"Baloo 2",system-ui,sans-serif; font-weight:800;
+    font-size:clamp(17px,3.4vw,23px); min-width:74px; padding:12px 14px; border-radius:16px;
+    border:2px solid var(--accent2); background:#fff; color:var(--accent2); cursor:pointer; transition:transform .1s ease;}
+  .spring:hover{transform:translateY(-2px);}
+  .spring.terug{border-color:#c0397e; color:#c0397e;}
+  .spring.corrigeer{border-color:var(--line-2); color:var(--muted); font-size:clamp(14px,2.6vw,17px); min-width:58px; padding:9px 11px;}
+
+  .knoppen{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:16px;}
+  .knop{font:inherit; font-size:16px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:16px; padding:13px 20px; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent; min-width:170px; font-size:18px; padding:15px 26px;}
+
+  .titelrij{display:flex; align-items:baseline; gap:10px; margin-bottom:10px; flex-wrap:wrap;}
+  .titelrij h2{font-size:18px;} .titelrij .klein{font-size:13.5px; color:var(--muted);}
+  .rij{display:flex; flex-wrap:wrap; gap:9px; align-items:center;}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .bron{font-size:13.5px; line-height:1.5; color:#4b5563; padding-left:22px; text-indent:-22px; margin-top:6px;}
+  .bron a{color:var(--accent); word-break:break-word;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  body.digibord{background:#0f1430; --ink:#eef1ff;}
+  body.digibord .kaart{background:#161c3d; border-color:rgba(255,255,255,.1); color:#eef1ff;}
+  body.digibord .knop, body.digibord .chip, body.digibord .seg, body.digibord .spring{background:#1e2650; border-color:rgba(255,255,255,.22);}
+  body.digibord .spring{color:#6fe3e1;} body.digibord .spring.terug{color:#f09ac4;} body.digibord .spring.corrigeer{color:#a9b2d6;}
+  body.digibord .knop{color:#eef1ff;}
+  body.digibord .chip.aan{background:rgba(129,140,248,.25); border-color:#a5b4fc;}
+  body.digibord .gesprongen, body.digibord .teller, body.digibord .titelrij .klein, body.digibord .voet{color:#a9b2d6;}
+  body.digibord details.uitleg p, body.digibord details.uitleg li{color:#dbe2ff;}
+
+  body.alleenlijn .instellingen, body.alleenlijn details.uitleg, body.alleenlijn .voet, body.alleenlijn .kop{display:none;}
+  body.alleenlijn .app{padding-top:3vh;}
+
+  .printkop{display:none;}
+  @media print{
+    body{background:#fff !important;} body.digibord{background:#fff !important; --ink:#1c2433;}
+    .app{max-width:none; padding:0;}
+    .kop, .instellingen, details.uitleg, .voet, .sprongknoppen, .knoppen{display:none !important;}
+    .printkop{display:flex !important; align-items:flex-end; gap:16px; border-bottom:2px solid #d9dded; padding-bottom:10px; margin-bottom:16px;}
+    .printkop h2{font-family:"Baloo 2",system-ui,sans-serif; font-size:22px;}
+    .printkop .regels{margin-left:auto; display:flex; gap:20px; font-size:13px; color:#5b647f;}
+    .printkop .regels span{display:inline-block; min-width:135px; border-bottom:1.5px dotted #b8c0d8;}
+    .kaart{box-shadow:none !important; border:1px solid #dfe3f0 !important;}
+    @page{size:A4 landscape; margin:14mm;}
+  }
+  @media (prefers-reduced-motion:reduce){ .spring:hover, .knop:hover{transform:none;} }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="printkop" aria-hidden="true">
+    <h2>Sprongen op de getallenlijn</h2>
+    <div class="regels"><div>Naam <span></span></div><div>Datum <span></span></div></div>
+  </div>
+
+  <header class="kop">
+    <span class="logo" aria-hidden="true">🐸</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · groep 4 en 5</div>
+      <h1>Sprongen op de getallenlijn</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="digibordKnop" type="button">🌙 Digibord</button>
+      <button id="alleenKnop" type="button">🔍 Alleen de lijn</button>
+      <button id="schermKnop" type="button">⛶ Volledig scherm</button>
+      <button id="printKnop" type="button">🖨 Afdrukken</button>
+      <a href="index.html">← Lesmateriaal</a>
+    </div>
+  </header>
+
+  <section class="kaart" aria-label="De getallenlijn">
+    <div class="som" id="som"></div>
+    <div class="lijnvak">
+      <svg viewBox="0 0 1000 260" role="img" aria-label="getallenlijn met sprongen"><g id="lijn"></g></svg>
+    </div>
+    <div class="spoor" id="spoor"></div>
+    <div class="gesprongen" id="gesprongen"></div>
+    <div class="melding" id="melding"></div>
+
+    <div class="sprongknoppen" id="sprongknoppen"></div>
+
+    <div class="knoppen">
+      <button class="knop primair" id="nieuwKnop" type="button">🐸 Nieuwe som</button>
+      <button class="knop" id="terugKnop" type="button">↶ Sprong terug</button>
+      <button class="knop" id="gevenKnop" type="button">💡 Laat zien</button>
+    </div>
+    <p class="teller" id="teller"></p>
+  </section>
+
+  <section class="kaart instellingen" aria-label="Instellingen">
+    <div class="titelrij"><h2>Tot welk getal?</h2></div>
+    <div class="seg" id="totSeg">
+      <button type="button" data-tot="20">tot 20</button>
+      <button type="button" data-tot="100" class="aan">tot 100</button>
+      <button type="button" data-tot="1000">tot 1000</button>
+    </div>
+
+    <div class="titelrij" style="margin-top:20px;"><h2>Welke sommen?</h2></div>
+    <div class="rij">
+      <div class="seg" id="soortSeg">
+        <button type="button" data-soort="plus" class="aan">erbij</button>
+        <button type="button" data-soort="min">eraf</button>
+        <button type="button" data-soort="beide">door elkaar</button>
+      </div>
+      <button class="chip aan" type="button" id="geluidChip"><span class="bol"></span>Geluid aan</button>
+    </div>
+    <p class="klein" style="margin-top:9px; font-size:13.5px; color:var(--muted);">
+      Met de spatiebalk krijg je een nieuwe som. Met Backspace haal je je laatste sprong terug.</p>
+  </section>
+
+  <details class="uitleg">
+    <summary>Waarom dit spel (voor de leerkracht)</summary>
+    <p>De kikker staat op 38 en moet naar 38 + 27. De kinderen laten hem springen: tien erbij, nog eens tien, dan vijf, dan twee. Boven de lijn verschijnen de bogen met de sprongen erin, en eronder groeit het spoor: 38 → 48 → 58 → 63 → 65.</p>
+    <h3>Waarom juist de getallenlijn</h3>
+    <p>Dit is de rijgstrategie, en die hoort bij de kern van groep 4. Leerlingen verkennen optellen en aftrekken tot 100 met hulpmiddelen als het kralensnoer en de lege getallenlijn, en leren daarmee de rijgstrategie, de splitsstrategie en handig rekenen (SLO, 2025). De getallenlijn is het model dat laat zien wat er gebeurt: je schuift op, je springt over het tiental heen, en je ziet hoe ver je nog moet.</p>
+    <p>Een model werkt alleen als het langzaam naar de achtergrond verdwijnt (Hickendorff, 2023). Daarom zijn de sprongen hier niet voorgekauwd: het kind kiest zelf of het in twee stappen van tien gaat of in één keer twintig. Beide zijn goed, en dat gesprek is precies wat je op het digibord wilt voeren.</p>
+    <h3>Waar ik op gelet heb</h3>
+    <ul>
+      <li><b>Je kunt niet fout springen, alleen anders.</b> Er is geen goed of fout pad. Spring je voorbij het doel, dan zegt het spel dat en kun je terug. Zo wordt het zoeken, niet gokken.</li>
+      <li><b>De sprong terug-knop.</b> Eén klik haalt je laatste sprong weg. Handig als de klas het samen doet en iemand anders het wil proberen.</li>
+      <li><b>Het spoor blijft staan.</b> Onderaan zie je alle tussenstappen, zodat je achteraf kunt bespreken welke route handig was.</li>
+      <li><b>Drie bereiken.</b> Tot 20 voor het eind van groep 3 en het begin van groep 4, tot 100 voor groep 4, en tot 1000 met sprongen van 10, 50 en 100 voor groep 5.</li>
+      <li><b>Ook eraf.</b> Dan begint de kikker bij het grootste getal en springt hij terug. De bogen worden dan roze, zodat je ziet dat je de andere kant op gaat.</li>
+    </ul>
+    <h3>Wat erbij hoort</h3>
+    <p>Naast dit spel staat de <a href="getallenlijn.html">Getallenlijn</a> op het digibord, waarmee je zelf getallen kunt plaatsen en sprongen kunt laten tekenen. Voor het oefenen op papier is er de <a href="sommenmaker.html">Sommenmaker</a>.</p>
+    <h3>Bronnen</h3>
+    <p class="bron">Hickendorff, M. (2023, 4 april). <i>Aanvankelijk en gevorderd rekenen in groep 3, 4 en 5</i>. Onderwijskennis.nl. Geraadpleegd op 24 september 2026, van <a href="https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5">https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5</a></p>
+    <p class="bron">SLO. (2025). <i>Definitieve conceptkerndoelen rekenen en wiskunde: Herziene versie 2025</i>. Geraadpleegd op 24 september 2026, van <a href="https://www.slo.nl/@24175/definitieve-conceptkerndoelen-rekenen/">https://www.slo.nl/@24175/definitieve-conceptkerndoelen-rekenen/</a></p>
+  </details>
+
+  <footer class="voet">Sprongen op de getallenlijn · onderdeel van <a href="index.html">Lesmateriaal Blink</a> · spatiebalk geeft een nieuwe som</footer>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const BEWAAR = "blink-sprongen";
+
+let staat = { modus: "zelf", tot: 100, soort: "plus", geluid: true, digibord: false };
+try { const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}"); Object.keys(staat).forEach((k) => { if (k in b) staat[k] = b[k]; }); } catch (e) {}
+const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
+
+let start = 0, stap = 0, doel = 0, plus = true;   // de som
+let nu = 0, sprongen = [], klaar = false, goed = 0, fout = 0;
+
+const tussen = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+
+function toon(hoog) {
+  if (!staat.geluid) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator(), gain = ctx.createGain();
+    osc.type = "sine"; osc.frequency.value = hoog ? 700 : 250;
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(.12, ctx.currentTime + .015);
+    gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + (hoog ? .18 : .26));
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime + .3);
+    setTimeout(() => ctx.close(), 700);
+  } catch (e) {}
+}
+
+/* ---------- de som ---------- */
+function nieuweSom() {
+  plus = staat.soort === "plus" || (staat.soort === "beide" && Math.random() < .5);
+  if (staat.tot === 20) {
+    start = tussen(2, 14);
+    stap = tussen(3, Math.min(9, 20 - start));
+  } else if (staat.tot === 100) {
+    start = tussen(12, 78);
+    stap = tussen(11, Math.min(40, 100 - start));
+  } else {
+    start = tussen(120, 780) ;
+    stap = tussen(110, Math.min(400, 1000 - start));
+    start = Math.round(start / 10) * 10;
+    stap = Math.round(stap / 10) * 10;
+  }
+  if (!plus) {
+    // bij min begint de kikker bij het grootste getal en springt terug
+    const eind = start;
+    start = eind + stap;
+    if (start > staat.tot) { start = staat.tot; stap = Math.min(stap, start - 1); }
+  }
+  doel = plus ? start + stap : start - stap;
+  nu = start; sprongen = []; klaar = false;
+  teken();
+}
+
+/* ---------- tekenen ---------- */
+const BREED = 1000, HOOG = 260, LINKS = 50, RECHTS = 950, LIJN = 190;
+const naarX = (g) => LINKS + (g / staat.tot) * (RECHTS - LINKS);
+
+function teken() {
+  const merkStap = staat.tot === 20 ? 1 : staat.tot === 100 ? 10 : 100;
+  let strepen = "";
+  for (let g = 0; g <= staat.tot; g += merkStap) {
+    const x = naarX(g);
+    strepen += `<line x1="${x.toFixed(1)}" y1="${LIJN - 8}" x2="${x.toFixed(1)}" y2="${LIJN + 8}" stroke="#9aa3bd" stroke-width="2"/>`;
+    strepen += `<text x="${x.toFixed(1)}" y="${LIJN + 30}" text-anchor="middle" font-size="15" fill="#6b7590">${g}</text>`;
+  }
+
+  // de bogen van de sprongen
+  let bogen = "";
+  let punt = start;
+  sprongen.forEach((s) => {
+    const van = naarX(punt), naar = naarX(punt + s);
+    const midden = (van + naar) / 2;
+    const hoogte = LIJN - 40 - Math.min(48, Math.abs(naar - van) * .32);
+    bogen += `<path d="M${van.toFixed(1)},${LIJN - 10} Q${midden.toFixed(1)},${hoogte.toFixed(1)} ${naar.toFixed(1)},${LIJN - 10}"
+      fill="none" stroke="${s > 0 ? "#0e9f9e" : "#c0397e"}" stroke-width="3.5" stroke-linecap="round"/>`;
+    bogen += `<text x="${midden.toFixed(1)}" y="${(hoogte - 8).toFixed(1)}" text-anchor="middle"
+      font-family="Baloo 2, system-ui, sans-serif" font-weight="800" font-size="19"
+      fill="${s > 0 ? "#0e9f9e" : "#c0397e"}">${s > 0 ? "+" : "−"}${Math.abs(s)}</text>`;
+    punt += s;
+  });
+
+  const kx = naarX(nu);
+  $("lijn").innerHTML = `
+    <line x1="${LINKS}" y1="${LIJN}" x2="${RECHTS}" y2="${LIJN}" stroke="#55607e" stroke-width="3"/>
+    ${strepen}${bogen}
+    <circle cx="${naarX(start)}" cy="${LIJN}" r="6" fill="#4f46e5"/>
+    <text x="${kx.toFixed(1)}" y="${LIJN - 14}" text-anchor="middle" font-size="34">🐸</text>
+    <text x="${kx.toFixed(1)}" y="${LIJN + 54}" text-anchor="middle"
+      font-family="Baloo 2, system-ui, sans-serif" font-weight="800" font-size="22" fill="#4f46e5">${nu}</text>`;
+
+  $("som").innerHTML = `${start} ${plus ? "+" : "−"} ${stap} = ` +
+    (klaar ? `<b class="uit">${doel}</b>` : `<span class="vak">?</span>`);
+
+  // het spoor van de sprongen
+  let spoor = String(start), punt2 = start;
+  sprongen.forEach((s) => { punt2 += s; spoor += ` <span class="pijl">${s > 0 ? "+" : "−"}${Math.abs(s)}→</span> ${punt2}`; });
+  $("spoor").innerHTML = sprongen.length ? spoor : "";
+
+  const gesprongen = sprongen.reduce((a, b) => a + b, 0);
+  $("gesprongen").textContent = sprongen.length
+    ? `Je sprong al ${Math.abs(gesprongen)} van de ${stap}.` : "";
+  $("teller").textContent = (goed + fout) ? `${goed} goed · ${fout} fout` : "";
+}
+
+/* ---------- springen ---------- */
+function spring(hoeveel) {
+  if (klaar) return;
+  const nieuw = nu + hoeveel;
+  if (nieuw < 0 || nieuw > staat.tot) { melding("Dat past niet op de lijn.", "fout"); return; }
+  nu = nieuw;
+  sprongen.push(hoeveel);
+  if (nu === doel) {
+    klaar = true; goed++;
+    melding(`Goed zo! ${start} ${plus ? "+" : "−"} ${stap} = ${doel}`, "goed");
+    toon(true);
+  } else {
+    const gesprongen = Math.abs(sprongen.reduce((a, b) => a + b, 0));
+    if ((plus && nu > doel) || (!plus && nu < doel)) {
+      melding("Je bent er voorbij. Spring een stukje terug.", "fout");
+    } else {
+      melding("", "");
+    }
+  }
+  teken();
+}
+function melding(tekst, soort) {
+  $("melding").className = "melding " + soort;
+  $("melding").textContent = tekst;
+}
+
+/* de knoppen passen zich aan het bereik aan */
+function bouwKnoppen() {
+  const maten = staat.tot === 20 ? [1, 2, 5, 10] : staat.tot === 100 ? [1, 2, 5, 10] : [10, 50, 100];
+  const teken = plus ? 1 : -1;
+  $("sprongknoppen").innerHTML = maten.map((m) =>
+    `<button type="button" data-sprong="${m * teken}" class="spring ${plus ? "vooruit" : "terug"}">
+       ${plus ? "+" : "−"}${m}</button>`).join("") +
+    maten.slice().reverse().map((m) =>
+    `<button type="button" data-sprong="${-m * teken}" class="spring corrigeer">
+       ${plus ? "−" : "+"}${m}</button>`).join("");
+}
+
+$("sprongknoppen").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-sprong]"); if (!b) return;
+  spring(Number(b.dataset.sprong));
+});
+$("nieuwKnop").addEventListener("click", () => { nieuweSom(); bouwKnoppen(); melding("", ""); });
+$("terugKnop").addEventListener("click", () => {
+  if (!sprongen.length || klaar) return;
+  nu -= sprongen.pop();
+  melding("", ""); teken();
+});
+$("gevenKnop").addEventListener("click", () => {
+  if (klaar) return;
+  fout++; klaar = true;
+  melding(`Het antwoord is ${doel}.`, "fout");
+  nu = doel; teken();
+});
+
+[["soortSeg", "soort", "soort"], ["totSeg", "tot", "tot"]].forEach(([id, data, sleutel]) => {
+  $(id).addEventListener("click", (e) => {
+    const b = e.target.closest("[data-" + data + "]"); if (!b) return;
+    staat[sleutel] = data === "tot" ? Number(b.dataset[data]) : b.dataset[data];
+    [...document.querySelectorAll("#" + id + " button")].forEach((x) =>
+      x.classList.toggle("aan", (data === "tot" ? Number(x.dataset[data]) : x.dataset[data]) === staat[sleutel]));
+    bewaar(); nieuweSom(); bouwKnoppen();
+  });
+});
+$("geluidChip").addEventListener("click", () => {
+  staat.geluid = !staat.geluid; $("geluidChip").classList.toggle("aan", staat.geluid); bewaar();
+});
+$("digibordKnop").addEventListener("click", () => {
+  staat.digibord = !staat.digibord;
+  document.body.classList.toggle("digibord", staat.digibord);
+  $("digibordKnop").textContent = staat.digibord ? "☀️ Gewoon" : "🌙 Digibord";
+  bewaar();
+});
+$("alleenKnop").addEventListener("click", () => document.body.classList.toggle("alleenlijn"));
+$("schermKnop").addEventListener("click", () => {
+  if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen?.();
+});
+$("printKnop").addEventListener("click", () => window.print());
+document.addEventListener("keydown", (e) => {
+  if (e.code === "Space") { e.preventDefault(); nieuweSom(); bouwKnoppen(); }
+  if (e.key === "Escape") document.body.classList.remove("alleenlijn");
+  if (e.key === "Backspace") { e.preventDefault(); $("terugKnop").click(); }
+});
+
+/* opstarten */
+[["soortSeg", "soort", "soort"], ["totSeg", "tot", "tot"]].forEach(([id, data, sleutel]) => {
+  [...document.querySelectorAll("#" + id + " button")].forEach((x) =>
+    x.classList.toggle("aan", (data === "tot" ? Number(x.dataset[data]) : x.dataset[data]) === staat[sleutel]));
+});
+$("geluidChip").classList.toggle("aan", staat.geluid);
+if (staat.digibord) { document.body.classList.add("digibord"); $("digibordKnop").textContent = "☀️ Gewoon"; }
+nieuweSom(); bouwKnoppen();
+
+</script>
+</body>
+</html>
