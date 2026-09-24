@@ -120,10 +120,33 @@
     body.klaar .ringvak{animation:none;}
     .knop:hover{transform:none;}
   }
+
+  /* Printen: alleen het materiaal zelf, met een regel voor naam en datum */
+  .printkop{display:none;}
+  @media print{
+    body{background:#fff !important;}
+    body.digibord{background:#fff !important; --ink:#1c2433; --ringbaan:#e7eaf7;}
+    body.digibord .kaart, body.digibord .card{background:#fff !important; color:#1c2433 !important; border-color:#dfe3f0 !important;}
+    .app{max-width:none; padding:0;}
+    .kop, details.uitleg, .voet, .instellingen{display:none !important;}
+    .printkop{display:flex !important; align-items:flex-end; gap:16px; flex-wrap:wrap;
+      border-bottom:2px solid #d9dded; padding-bottom:10px; margin-bottom:16px;}
+    .printkop h2{font-family:"Baloo 2",system-ui,sans-serif; font-size:22px; color:#1c2433;}
+    .printkop .regels{margin-left:auto; display:flex; gap:20px; font-size:13px; color:#5b647f;}
+    .printkop .regels span{display:inline-block; min-width:135px; border-bottom:1.5px dotted #b8c0d8;}
+    .kaart, .card{box-shadow:none !important; border:1px solid #dfe3f0 !important; break-inside:avoid;}
+    .vlak{display:block !important;}
+    @page{size:A4 portrait; margin:14mm;}
+  }
 </style>
 </head>
 <body>
 <div class="app">
+  <div class="printkop" aria-hidden="true">
+    <h2>Timer</h2>
+    <div class="regels"><div>Naam <span></span></div><div>Datum <span></span></div></div>
+  </div>
+
   <header class="kop">
     <span class="logo" aria-hidden="true">⏳</span>
     <div class="tekst">
@@ -131,6 +154,7 @@
       <h1>Timer</h1>
     </div>
     <div class="kopknoppen">
+      <button id="printKnop" type="button">🖨 Afdrukken</button>
       <button id="digibordKnop" type="button">🌙 Digibord</button>
       <button id="alleenKnop" type="button">🔍 Alleen de klok</button>
       <button id="schermKnop" type="button">⛶ Volledig scherm</button>
@@ -367,6 +391,7 @@ $("geluidChip").classList.toggle("aan", staat.geluid);
 $("kleurChip").classList.toggle("aan", staat.kleur);
 if (staat.digibord) { document.body.classList.add("digibord"); $("digibordKnop").textContent = "☀️ Gewoon"; }
 zetMinuten(staat.minuten);
+$("printKnop").addEventListener("click", () => window.print());
 </script>
 </body>
 </html>

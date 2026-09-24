@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Zelfgemaakt oefenmateriaal voor de basisschool: digibordtools en werkbladen voor rekenen, taal, spelling en lezen, puzzels en handige tools voor in de klas.">
 <title>Lesmateriaal Blink</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -67,6 +68,10 @@
   a.kaart .d{color:var(--muted);font-size:13.5px;line-height:1.45;flex:1;}
   a.kaart .go{margin-top:4px;color:var(--brand1);font-weight:bold;font-size:13.5px;}
   .leeg{color:var(--muted);font-size:14px;padding:10px 2px;display:none;}
+  .printlijst{display:block;margin:14px auto 0;font:inherit;font-size:14px;font-weight:800;color:#fff;
+    background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.34);border-radius:14px;padding:9px 16px;cursor:pointer;}
+  .printlijst:hover{background:rgba(255,255,255,.28);}
+  a:focus-visible, button:focus-visible, input:focus-visible{outline:3px solid rgba(255,255,255,.7);outline-offset:3px;}
   .extern{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px 20px;margin-top:16px;
     box-shadow:0 6px 20px rgba(31,41,90,.05);}
   .extern h3{font-family:"Baloo 2",system-ui,sans-serif;font-size:17px;margin-bottom:4px;}
@@ -77,6 +82,26 @@
   .extern a:hover{text-decoration:underline;}
 
   footer{text-align:center;color:var(--muted);font-size:12.5px;margin-top:44px;line-height:1.6;}
+
+  /* Printen: een nette lijst met al het materiaal, om aan een collega te geven */
+  @media print{
+    body{background:#fff;}
+    .hero{background:#fff; color:#1c2433; padding:0 0 12px; box-shadow:none; border-bottom:2px solid #d9dded; margin-bottom:14px;}
+    .hero .merk{color:#1c2433;} .hero p{color:#5b647f;}
+    .zoek, .leeg, .niveaus small{display:none !important;}
+    .wrap{max-width:none; padding:0;}
+    .sectie{break-inside:avoid; margin-top:16px;}
+    .sectie h2{font-size:15px;}
+    .grid{grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px;}
+    a.kaart{box-shadow:none; border:1px solid #dfe3f0; padding:9px 11px; break-inside:avoid; gap:2px;}
+    a.kaart .ic{display:none;} a.kaart .go{display:none;} .nieuw{display:none;}
+    a.kaart .t{font-size:13px;} a.kaart .d{font-size:10.5px; line-height:1.35;}
+    .dagstarter{box-shadow:none; border:1px solid #dfe3f0; margin-top:0; padding:11px 13px; break-inside:avoid;}
+    .dagstarter .d{font-size:11px;} .niveaus a{padding:6px 4px; font-size:11px;}
+    .extern{box-shadow:none; border:1px solid #dfe3f0; break-inside:avoid;}
+    footer{margin-top:16px; font-size:10px;}
+    @page{size:A4 portrait; margin:12mm;}
+  }
 </style>
 </head>
 <body>
@@ -86,6 +111,7 @@
     <div class="zoek"><span class="lo">🔎</span>
       <input id="zoek" type="search" placeholder="Zoek op materiaal, groep of onderwerp…" autocomplete="off">
     </div>
+    <button class="printlijst" id="printKnop" type="button">🖨 Print de lijst</button>
   </div>
 
   <div class="wrap">
@@ -400,6 +426,7 @@
   </div>
 
 <script>
+  document.getElementById("printKnop").addEventListener("click", () => window.print());
   const zoek = document.getElementById('zoek');
   const kaarten = [...document.querySelectorAll('[data-tags]')];
   // .extern telt mee als kaart in een sectie

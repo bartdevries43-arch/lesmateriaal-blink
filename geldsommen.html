@@ -321,7 +321,7 @@ function maakOpgave(r, soort) {
     const betaald = briefjes.length ? briefjes[briefjes.length - 1] : Math.ceil((prijs + 1) / 100) * 100;
     return { sleutel: "w" + prijs + "-" + betaald,
       vraag: `${naam.charAt(0).toUpperCase() + naam.slice(1)} kost ${euro(prijs)}. Je betaalt met ${euro(betaald)}. Hoeveel krijg je terug?`,
-      hint: "Reken van de prijs naar het bedrag dat je gaf.", antwoord: euro(betaald - prijs) };
+      hint: "Tel vanaf de prijs door tot het bedrag dat je gaf.", antwoord: euro(betaald - prijs) };
   }
   if (soort === "gepast") {
     const b = bedrag(r, Math.max(staat.rond, Math.round(max * 0.12)), max);

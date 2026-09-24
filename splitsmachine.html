@@ -104,10 +104,33 @@
   body.digibord .chip.aan{background:rgba(129,140,248,.25); border-color:#a5b4fc;}
   body.digibord .score, body.digibord .titelrij .klein, body.digibord .voet{color:#a9b2d6;}
   body.digibord details.uitleg p, body.digibord details.uitleg li{color:#dbe2ff;}
+
+  /* Printen: alleen het materiaal zelf, met een regel voor naam en datum */
+  .printkop{display:none;}
+  @media print{
+    body{background:#fff !important;}
+    body.digibord{background:#fff !important; --ink:#1c2433; --ringbaan:#e7eaf7;}
+    body.digibord .kaart, body.digibord .card{background:#fff !important; color:#1c2433 !important; border-color:#dfe3f0 !important;}
+    .app{max-width:none; padding:0;}
+    .kop, details.uitleg, .voet, section[aria-label="Instellingen"]{display:none !important;}
+    .printkop{display:flex !important; align-items:flex-end; gap:16px; flex-wrap:wrap;
+      border-bottom:2px solid #d9dded; padding-bottom:10px; margin-bottom:16px;}
+    .printkop h2{font-family:"Baloo 2",system-ui,sans-serif; font-size:22px; color:#1c2433;}
+    .printkop .regels{margin-left:auto; display:flex; gap:20px; font-size:13px; color:#5b647f;}
+    .printkop .regels span{display:inline-block; min-width:135px; border-bottom:1.5px dotted #b8c0d8;}
+    .kaart, .card{box-shadow:none !important; border:1px solid #dfe3f0 !important; break-inside:avoid;}
+    .vlak{display:block !important;}
+    @page{size:A4 portrait; margin:14mm;}
+  }
 </style>
 </head>
 <body>
 <div class="app">
+  <div class="printkop" aria-hidden="true">
+    <h2>Splitsen</h2>
+    <div class="regels"><div>Naam <span></span></div><div>Datum <span></span></div></div>
+  </div>
+
   <header class="kop">
     <span class="logo" aria-hidden="true">🏠</span>
     <div class="tekst">
@@ -115,6 +138,7 @@
       <h1>Splitsmachine</h1>
     </div>
     <div class="kopknoppen">
+      <button id="printKnop" type="button">🖨 Afdrukken</button>
       <button id="digibordKnop" type="button">🌙 Digibord</button>
       <button id="schermKnop" type="button">⛶ Volledig scherm</button>
       <a href="index.html">← Lesmateriaal</a>
@@ -333,6 +357,7 @@ $("schermKnop").addEventListener("click", () => {
 $("stipChip").classList.toggle("aan", staat.stippen);
 if (staat.digibord) { document.body.classList.add("digibord"); $("digibordKnop").textContent = "☀️ Gewoon"; }
 nieuweOpgave();
+$("printKnop").addEventListener("click", () => window.print());
 </script>
 </body>
 </html>

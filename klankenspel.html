@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Spelen met klanken op het digibord: rijmen, de beginklank horen en woorden hakken en plakken. Voor groep 1-2 en het begin van groep 3.">
 <title>Klankenspel · groep 1-2 en 3</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -95,10 +96,34 @@
   .bron{font-size:13.5px;padding-left:22px;text-indent:-22px;margin:7px 0;word-break:break-word;}
   .voet{text-align:center;color:var(--muted);font-size:13px;margin-top:30px;}
   .voet a{color:var(--accent);font-weight:700;text-decoration:none;}
+
+  /* Printen: alleen het materiaal zelf, met een regel voor naam en datum */
+  .printkop{display:none;}
+  @media print{
+    body{background:#fff !important;}
+    body.digibord{background:#fff !important; --ink:#1c2433; --ringbaan:#e7eaf7;}
+    body.digibord .kaart, body.digibord .card{background:#fff !important; color:#1c2433 !important; border-color:#dfe3f0 !important;}
+    .app{max-width:none; padding:0;}
+    .kop, details.uitleg, .voet, .balk{display:none !important;}
+    .printkop{display:flex !important; align-items:flex-end; gap:16px; flex-wrap:wrap;
+      border-bottom:2px solid #d9dded; padding-bottom:10px; margin-bottom:16px;}
+    .printkop h2{font-family:"Baloo 2",system-ui,sans-serif; font-size:22px; color:#1c2433;}
+    .printkop .regels{margin-left:auto; display:flex; gap:20px; font-size:13px; color:#5b647f;}
+    .printkop .regels span{display:inline-block; min-width:135px; border-bottom:1.5px dotted #b8c0d8;}
+    .kaart, .card{box-shadow:none !important; border:1px solid #dfe3f0 !important; break-inside:avoid;}
+    .vlak{display:block !important;}
+    @page{size:A4 portrait; margin:14mm;}
+  }
+  a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
 </style>
 </head>
 <body>
 <div class="app">
+  <div class="printkop" aria-hidden="true">
+    <h2>Klankenspel</h2>
+    <div class="regels"><div>Naam <span></span></div><div>Datum <span></span></div></div>
+  </div>
+
   <header class="kop">
     <div class="kop-merk">
       <span class="logo">🔤</span>
@@ -121,6 +146,7 @@
     </div>
     <span class="ruimte"></span>
     <button class="chip" id="grootKnop">⤢ Groot scherm</button>
+    <button class="chip" id="printKnop">🖨 Afdrukken</button>
   </div>
 
   <div class="card podium" id="podium">
@@ -254,6 +280,7 @@ document.addEventListener('keydown', e=>{ if(e.target.matches('input,textarea,se
   if(e.code==='ArrowRight'||e.code==='Enter'){ e.preventDefault(); ronde(); } });
 
 zetKnoppen(); ronde();
+document.getElementById("printKnop").addEventListener("click", () => window.print());
 </script>
 </body>
 </html>

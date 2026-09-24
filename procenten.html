@@ -264,6 +264,18 @@ function geheel(r, procent) {
 }
 function gcd(a, b) { return b ? gcd(b, a % b) : a; }
 
+/* een tip die past bij dit percentage, in taal die een kind snapt */
+function hintVoor(procent) {
+  if (procent === 50) return "50% is de helft.";
+  if (procent === 25) return "25% is een kwart. Deel door 4.";
+  if (procent === 75) return "Reken eerst 50% uit en tel er 25% bij op.";
+  if (procent === 10) return "10% krijg je door door 10 te delen.";
+  if (procent === 20) return "Reken eerst 10% uit en doe dat keer 2.";
+  if (procent % 10 === 0) return `Reken eerst uit hoeveel 10% is en doe dat keer ${procent / 10}.`;
+  if (procent === 5) return "Reken eerst 10% uit en neem daar de helft van.";
+  return "Reken eerst uit hoeveel 1% is. Deel daarvoor door 100.";
+}
+
 function maakOpgave(r, soort) {
   const procent = kies(r, SETS[staat.set]);
 
@@ -271,7 +283,7 @@ function maakOpgave(r, soort) {
     const g = geheel(r, procent);
     return { sleutel: "a" + procent + "-" + g,
       vraag: `${procent}% van ${getal(g)} = <span class="lijn"></span>`,
-      hint: `Reken eerst uit hoeveel 10% is, of deel door ${100 / gcd(procent, 100)}.`,
+      hint: hintVoor(procent),
       antwoord: getal(g * procent / 100) };
   }
 
@@ -280,7 +292,7 @@ function maakOpgave(r, soort) {
     const deel = g * procent / 100;
     return { sleutel: "b" + g + "-" + deel,
       vraag: `Hoeveel procent is ${getal(deel)} van ${getal(g)}?`,
-      hint: "Deel het deel door het geheel en maak er honderdsten van.",
+      hint: "Kijk hoeveel keer het deel in het geheel past. 100 gedeeld door dat getal is het antwoord.",
       antwoord: procent + "%" };
   }
 
