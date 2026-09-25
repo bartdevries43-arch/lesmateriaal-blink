@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Woordladder · Lesmateriaal Blink</title>
+<meta name="description" content="Van bal naar bus, elke stap verander je een letter en blijft het een woord. Woordladders voor groep 4 tot en met 8, op het digibord of als werkblad.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0; padding:0; box-sizing:border-box;}
+  :root{
+    --ink:#1c2433; --muted:#6b7590; --accent:#4f46e5; --accent2:#0e9f9e;
+    --line:rgba(79,70,229,.13); --line-2:rgba(79,70,229,.26);
+    --kaart:#fff; --schaduw:0 10px 30px rgba(31,41,90,.07); --radius:24px;
+    --goed:#16a34a; --fout:#e2584f;
+  }
+  body{font-family:-apple-system,system-ui,"Segoe UI",sans-serif; color:var(--ink); min-height:100vh;
+    background:
+      radial-gradient(circle at 6% 0%, rgba(14,159,158,.12), transparent 460px),
+      radial-gradient(circle at 96% 4%, rgba(79,70,229,.14), transparent 520px),
+      #f4f6fc;}
+  h1,h2,h3{font-family:"Baloo 2",system-ui,sans-serif; line-height:1.1;}
+  .app{max-width:1020px; margin:0 auto; padding:22px 18px 80px;}
+
+  .kop{position:relative; overflow:hidden; border-radius:26px; padding:20px 24px; color:#fff;
+    background:linear-gradient(125deg,#4f46e5,#3b5bdb 48%,#0e9f9e); box-shadow:0 18px 40px rgba(59,91,219,.24);
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+  .kop::before{content:""; position:absolute; width:280px; height:280px; right:-80px; top:-120px; border-radius:50%; background:rgba(255,255,255,.08);}
+  .kop .logo{position:relative; width:58px; height:58px; border-radius:19px; display:flex; align-items:center; justify-content:center;
+    font-size:29px; background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); flex:0 0 auto;}
+  .kop .tekst{position:relative; min-width:0;}
+  .kop .eyebrow{font-size:11.5px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; opacity:.86;}
+  .kop h1{font-size:clamp(1.7rem,3.4vw,2.5rem); margin-top:2px;}
+  .kop .kopknoppen{position:relative; margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;}
+  .kop .kopknoppen button, .kop .kopknoppen a{font:inherit; font-size:14.5px; font-weight:800; color:#fff; text-decoration:none;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.3); border-radius:14px; padding:10px 15px; cursor:pointer;}
+  .kop .kopknoppen button:hover, .kop .kopknoppen a:hover{background:rgba(255,255,255,.27);}
+
+  .kaart{background:var(--kaart); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--schaduw); padding:22px; margin-top:18px;}
+
+  .opdracht{text-align:center; font-family:"Baloo 2",system-ui,sans-serif; font-weight:800;
+    font-size:clamp(1.05rem,2.8vw,1.5rem); line-height:1.25; margin-bottom:4px;}
+  .onder{text-align:center; font-size:clamp(.9rem,2.2vw,1.02rem); color:var(--muted); font-weight:700; margin-bottom:16px;}
+
+  /* de ladder */
+  .ladder{display:flex; flex-direction:column; align-items:center; gap:0;}
+  .sport{display:flex; gap:clamp(5px,1.4vw,9px); align-items:center; position:relative; padding:5px 0;}
+  .sport .hok{width:clamp(44px,9.5vw,62px); height:clamp(50px,10.5vw,68px); border-radius:14px;
+    border:2.5px solid var(--line-2); background:#fff; display:flex; align-items:center; justify-content:center;
+    font-family:"Baloo 2",system-ui,sans-serif; font-weight:800; font-size:clamp(23px,5.4vw,34px);
+    text-transform:lowercase; color:var(--ink); cursor:default; transition:border-color .12s ease, background .12s ease;}
+  .sport.invul .hok{cursor:pointer;}
+  .sport.vast .hok{background:linear-gradient(160deg,#eef1fb,#e3e8f8); border-color:transparent; color:#39435a;}
+  .sport.vast.doel .hok{background:linear-gradient(160deg,#dff3e6,#c9ecd6); color:#146c35;}
+  .sport .hok.aan{border-color:var(--accent); background:rgba(79,70,229,.08); box-shadow:0 0 0 4px rgba(79,70,229,.14);}
+  .sport .hok.nieuw{border-color:var(--accent2); color:var(--accent2);}
+  .sport.klaar .hok{background:linear-gradient(160deg,#dff3e6,#c9ecd6); border-color:#7fce9e; color:#146c35;}
+  .sport .merk{position:absolute; left:calc(100% + 10px); white-space:nowrap;
+    font-size:13.5px; font-weight:800; color:var(--muted);}
+  .sport.mis .hok{border-color:var(--fout); background:#fdeceb;}
+  .stijl{width:5px; height:16px; background:var(--line-2); border-radius:99px;}
+
+  .letters{display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin-top:20px;}
+  .letters button{font:inherit; font-family:"Baloo 2",system-ui,sans-serif; font-weight:800;
+    font-size:clamp(15px,3.2vw,19px); width:clamp(36px,7vw,46px); height:clamp(38px,7.4vw,48px);
+    border-radius:12px; border:1.5px solid var(--line-2); background:#fff; color:var(--ink); cursor:pointer;}
+  .letters button:hover{border-color:var(--accent); transform:translateY(-2px);}
+  .letters button.wis{width:auto; padding:0 14px;}
+
+  .melding{text-align:center; font-weight:800; font-size:clamp(.98rem,2.5vw,1.2rem); min-height:1.6em; margin-top:14px;}
+  .melding.goed{color:var(--goed);} .melding.fout{color:var(--fout);}
+  .teller{text-align:center; font-size:13.5px; color:var(--muted); margin-top:8px;}
+
+  .knoppen{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:14px;}
+  .knop{font:inherit; font-size:16px; font-weight:800; color:var(--ink); background:#fff; border:1px solid var(--line-2);
+    border-radius:16px; padding:13px 20px; cursor:pointer; transition:transform .12s ease, box-shadow .12s ease;}
+  .knop:hover{transform:translateY(-2px); box-shadow:var(--schaduw);}
+  .knop.primair{background:linear-gradient(120deg,var(--accent),#3b5bdb); color:#fff; border-color:transparent; min-width:170px; font-size:18px; padding:15px 26px;}
+
+  .titelrij{display:flex; align-items:baseline; gap:10px; margin-bottom:10px; flex-wrap:wrap;}
+  .titelrij h2{font-size:18px;} .titelrij .klein{font-size:13.5px; color:var(--muted);}
+  .rij{display:flex; flex-wrap:wrap; gap:9px; align-items:center;}
+  .seg{display:inline-flex; padding:5px; gap:4px; background:#fff; border:1px solid var(--line-2); border-radius:17px; flex-wrap:wrap;}
+  .seg button{border:none; background:transparent; color:var(--ink); font:inherit; font-weight:800; font-size:14.5px; padding:9px 13px; border-radius:13px; cursor:pointer;}
+  .seg button.aan{background:var(--accent); color:#fff;}
+  .chip{font:inherit; font-size:14.5px; font-weight:700; background:#fff; border:1px solid var(--line-2); color:var(--ink);
+    border-radius:999px; padding:9px 15px; cursor:pointer; display:inline-flex; align-items:center; gap:9px;}
+  .chip .bol{width:11px; height:11px; border-radius:50%; background:#d7dbe8;}
+  .chip.aan{border-color:var(--accent); background:rgba(79,70,229,.07);}
+  .chip.aan .bol{background:var(--accent);}
+
+  details.uitleg{margin-top:18px;}
+  details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
+  details.uitleg h3{font-size:17px; margin:14px 0 4px;}
+  details.uitleg p, details.uitleg li{font-size:15px; line-height:1.55; color:#39435a;}
+  details.uitleg ul{margin:6px 0 0 20px;}
+  .bron{font-size:13.5px; line-height:1.5; color:#4b5563; padding-left:22px; text-indent:-22px; margin-top:6px;}
+  .bron a{color:var(--accent); word-break:break-word;}
+  .voet{text-align:center; color:var(--muted); font-size:13.5px; margin-top:28px;}
+  .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
+  a:focus-visible, button:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
+
+  body.digibord{background:#0f1430; --ink:#eef1ff;}
+  body.digibord .kaart{background:#161c3d; border-color:rgba(255,255,255,.1); color:#eef1ff;}
+  body.digibord .knop, body.digibord .chip, body.digibord .seg,
+  body.digibord .letters button, body.digibord .sport .hok{background:#1e2650; color:#eef1ff; border-color:rgba(255,255,255,.22);}
+  body.digibord .chip.aan{background:rgba(129,140,248,.25); border-color:#a5b4fc;}
+  body.digibord .sport.vast .hok{background:#252d5c; color:#c9d2ff;}
+  body.digibord .sport.vast.doel .hok, body.digibord .sport.klaar .hok{background:#173424; color:#a9e9c2; border-color:#3fbf72;}
+  body.digibord .sport .hok.aan{background:rgba(129,140,248,.3); border-color:#a5b4fc;}
+  body.digibord .sport.mis .hok{background:#3a1f22; border-color:#e2584f;}
+  body.digibord .onder, body.digibord .teller, body.digibord .sport .merk,
+  body.digibord .titelrij .klein, body.digibord .voet{color:#a9b2d6;}
+  body.digibord details.uitleg p, body.digibord details.uitleg li{color:#dbe2ff;}
+
+  body.alleenladder .instellingen, body.alleenladder details.uitleg, body.alleenladder .voet, body.alleenladder .kop{display:none;}
+  body.alleenladder .app{padding-top:3vh;}
+
+  .printblad{display:none;}
+  .printkop{display:none;}
+  @media print{
+    body{background:#fff !important;} body.digibord{background:#fff !important; --ink:#1c2433;}
+    .app{max-width:none; padding:0;}
+    .kop, .instellingen, details.uitleg, .voet, .spelkaart{display:none !important;}
+    .printkop{display:flex !important; align-items:flex-end; gap:16px; border-bottom:2px solid #d9dded; padding-bottom:10px; margin-bottom:14px;}
+    .printkop h2{font-family:"Baloo 2",system-ui,sans-serif; font-size:22px;}
+    .printkop .regels{margin-left:auto; display:flex; gap:20px; font-size:13px; color:#5b647f;}
+    .printkop .regels span{display:inline-block; min-width:135px; border-bottom:1.5px dotted #b8c0d8;}
+    .printblad{display:block !important;}
+    .printuitleg{font-size:13.5px; color:#39435a; margin-bottom:14px;}
+    .printgrid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+    .printladder{border:1.5px solid #dfe3f0; border-radius:12px; padding:10px 8px; break-inside:avoid; text-align:center;}
+    .printladder .nr{font-size:11px; color:#6b7590; font-weight:800; margin-bottom:6px;}
+    .printladder .pr{display:flex; gap:4px; justify-content:center; margin-bottom:4px;}
+    .printladder .ph{width:26px; height:30px; border:1.4px solid #aeb6cc; border-radius:6px;
+      font-family:"Baloo 2",system-ui,sans-serif; font-weight:800; font-size:16px; line-height:29px;}
+    .printladder .ph.vast{background:#eef1fb; border-color:#dfe3f0;}
+    .antwoorden{margin-top:16px; border-top:2px solid #d9dded; padding-top:10px;
+      font-size:11.5px; color:#4b5563; line-height:1.7; break-inside:avoid;}
+    .antwoorden b{font-family:"Baloo 2",system-ui,sans-serif;}
+    @page{size:A4 portrait; margin:13mm;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .letters button:hover, .knop:hover{transform:none;}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="printkop" aria-hidden="true">
+    <h2>Woordladder</h2>
+    <div class="regels"><div>Naam <span></span></div><div>Datum <span></span></div></div>
+  </div>
+
+  <header class="kop">
+    <span class="logo" aria-hidden="true">&#129692;</span>
+    <div class="tekst">
+      <div class="eyebrow">Lesmateriaal Blink · groep 4 tot en met 8</div>
+      <h1>Woordladder</h1>
+    </div>
+    <div class="kopknoppen">
+      <button id="digibordKnop" type="button">&#127769; Digibord</button>
+      <button id="alleenKnop" type="button">&#128269; Alleen de ladder</button>
+      <button id="schermKnop" type="button">&#9974; Volledig scherm</button>
+      <button id="printKnop" type="button">&#128424; Werkblad</button>
+      <a href="index.html">&#8592; Lesmateriaal</a>
+    </div>
+  </header>
+
+  <section class="kaart spelkaart" aria-label="De woordladder">
+    <p class="opdracht" id="opdracht"></p>
+    <p class="onder" id="onder"></p>
+    <div class="ladder" id="ladder"></div>
+    <div class="letters" id="letters"></div>
+    <p class="melding" id="melding" role="status" aria-live="polite"></p>
+    <div class="knoppen">
+      <button class="knop primair" id="nieuwKnop" type="button">&#129692; Nieuwe ladder</button>
+      <button class="knop" id="helpKnop" type="button">&#128161; Help me</button>
+      <button class="knop" id="wisKnop" type="button">&#8617;&#65039; Opnieuw</button>
+    </div>
+    <p class="teller" id="teller"></p>
+  </section>
+
+  <section class="kaart instellingen" aria-label="Instellingen">
+    <div class="titelrij"><h2>Hoeveel letters?</h2></div>
+    <div class="seg" id="lettersSeg">
+      <button type="button" data-lengte="3" class="aan">3 letters</button>
+      <button type="button" data-lengte="4">4 letters</button>
+    </div>
+
+    <div class="titelrij" style="margin-top:20px;"><h2>Hoeveel stappen?</h2></div>
+    <div class="rij">
+      <div class="seg" id="stappenSeg">
+        <button type="button" data-stappen="1" class="aan">1 woord invullen</button>
+        <button type="button" data-stappen="2">2 woorden</button>
+        <button type="button" data-stappen="3">3 woorden</button>
+      </div>
+      <button class="chip aan" type="button" id="geluidChip"><span class="bol"></span>Geluid aan</button>
+    </div>
+    <p class="klein" style="margin-top:9px; font-size:13.5px; color:var(--muted);">
+      Klik op een lege sport: het woord erboven komt er vanzelf in te staan. Daarna verander je een letter.
+      Met de spatiebalk krijg je een nieuwe ladder.</p>
+  </section>
+
+  <div class="printblad" id="printblad" aria-hidden="true"></div>
+
+  <details class="uitleg">
+    <summary>Waarom dit spel (voor de leerkracht)</summary>
+    <p>Bovenaan staat een woord, onderaan een ander. Elke stap verander je precies een letter, en elke tussenstap moet weer een bestaand woord zijn. Van <b>bal</b> naar <b>bus</b> gaat het bijvoorbeeld zo: bal, bol, bos, bus. De kinderen zoeken zelf een weg.</p>
+    <h3>Waar dit goed voor is</h3>
+    <p>Een woordladder dwingt kinderen om naar losse klanken en letters in een woord te kijken en er eentje te vervangen. Dat is precies wat fonemisch bewustzijn is: horen en manipuleren van klanken in woorden. Dat bewustzijn hangt sterk samen met hoe goed kinderen leren lezen en spellen (Kennistafel Effectief Leesonderwijs, 2021).</p>
+    <p>Voor kinderen die al vlot lezen werkt het als woordenschatspel: ze komen woorden tegen die ze passief kennen maar zelf nooit gebruiken.</p>
+    <h3>Waar ik op gelet heb</h3>
+    <ul>
+      <li><b>Er is altijd een oplossing.</b> De app zoekt eerst een weg tussen twee woorden en laat daarna pas de opgave zien. Een ladder zonder oplossing kan dus niet voorkomen.</li>
+      <li><b>Elke weg mag.</b> Er wordt niet gecontroleerd op mijn oplossing, maar op de regels: staat het woord in de lijst en verschilt het op precies een letter. Vindt een kind een andere route, dan is die ook goed.</li>
+      <li><b>Klikken vult voor.</b> Klik je op een lege sport, dan komt het woord erboven erin te staan. Zo hoef je maar een letter te veranderen en zie je meteen wat er verandert.</li>
+      <li><b>De woordenlijst is met de hand gemaakt.</b> Ruim zevenhonderd woorden die kinderen uit groep 4 kennen, zonder namen en zonder rare woorden uit een automatische lijst.</li>
+      <li><b>De knop Werkblad</b> maakt een A4 met negen ladders en een antwoordblad eronder.</li>
+    </ul>
+    <h3>Wat erbij hoort</h3>
+    <p>Voor spelling is er <a href="spelling.html">Spelling</a>, voor woordsoorten <a href="woordsoorten.html">Woordsoorten</a>. Wie van puzzelen houdt, kan verder bij <a href="kruiswoord.html">Kruiswoordpuzzel</a> en <a href="puzzels.html">Breinbrekers</a>.</p>
+    <h3>Bronnen</h3>
+    <p class="bron">Kennistafel Effectief Leesonderwijs. (2021). <i>Beter leesonderwijs: van weten naar doen!</i> Stichting Lezen. <a href="https://www.lezen.nl/">https://www.lezen.nl/</a></p>
+  </details>
+
+  <p class="voet">Gemaakt voor de klas · <a href="index.html">terug naar het lesmateriaal</a></p>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const BEWAAR = "blink-woordladder";
+
+const DRIE = (
+  "aal aan aap aas bad bak bal ban bar bas bed bel ben bes bij bil bit bod bok bol bom bon bos " +
+  "bot bui bus dag dak dal dam dan das dat dek den dik dip dit doe dof dok dom dop dor dot duf " +
+  "duw een eer eet eik eis elf elk erf erg ets fee fel fit fut gal gas gat gek gel gif gil gom " +
+  "gum had hak hal ham hap hei hek hel hem hen het hik hip hit hoe hof hok hol hop hou hut ijs " +
+  "jas jij jou juf kaf kam kan kap kar kas kat kei ken kil kin kip koe kok kom kon kop kou kus " +
+  "lak lam lap las lat lei lek les let lig lik lip lof log lok lol los lot lui lus mag mak mal " +
+  "man map mat mee mei men mep mes met mij min mis moe mol mop mos mot mug mus nat nee nek nep " +
+  "net nis nog non nou nul oma oog oom oor oud pad pak pan pap pas pen per pet pil pin pit pop " +
+  "pot put rad ram rap ras rat ree rek ren rib rij ril rit rob rok rol rot rug sap set sik sip " +
+  "sis sla sok som sop tak tam tap tas tel ten tik til tin tip toe tof tol ton top tor tot uil " +
+  "uit uur vak val van vat vee vel ver vet vin vis vla vod vol vos vul wal was wat web wee weg " +
+  "wei wel wet wie wij wil win wip wit wol won wou zak zal zat zee zeg zei zes zet zie zij zin " +
+  "zit zon zot zou zus "
+).trim().split(/\s+/);
+
+const VIER = (
+  "aard adem alle arts auto baal baan baas band bang bank beek been beer beet bent berg best " +
+  "bier bijl bijt bind blad blij boek boer bond bont boom boon boos boot bord bout bouw brak " +
+  "brok brom brug buik buis buit bult buur cent daad dame damp dans darm deeg deel deur dief " +
+  "dier dijk ding doek doel doen doet dons dood door doos dorp draf drie drop druk duim duin " +
+  "duur eend eeuw feit fijn film fles fout fris gaaf gaan gang gans gast gauw geel geen geit " +
+  "geld geur gids giet glad glas goed gooi goud grap gras haai haak haal haan haar haas hals " +
+  "hand hang hard hart heel heen heer heet held helm hemd hert hier hoed hoef hoek hond honk " +
+  "hoog hoop hout huis hulp huur idee iets inkt jaar jeuk jong juli juni jurk kaak kaal kaap " +
+  "kaas kade kalf kalk kamp kant kast keel keer kern kers keus kiel kies kijk kind klap klas " +
+  "klei klem klim klok knie knop koek koel komt kook kool koor kort kost koud kous krab kras " +
+  "kuil kuit kurk kust kwal kwam laag laan laat lach lamp land lang last leeg leek leer lees " +
+  "lied lief liep lift lijk lijm lijn lint long lont lood loon loop luid luik luis maag maak " +
+  "maal maan maar maat mand mast meel meer mees meet melk mens merk mest mier mijl mijn mist " +
+  "moed mond mooi muil muis muts muur naad naam naar neef neem neer nest neus niet nood noot " +
+  "ogen olie onze oost open oren over paal paar pand park past pech peer perk pers pest piek " +
+  "pier pijl pijn pijp plan plas plat poel poes pols pond poot post prei pret prik punt raad " +
+  "raaf raak raam rand reep reis rest riem riet rijk rijm rijp ring rits roer rond rood rook " +
+  "roos rots ruil ruim ruit rust saai slag slee slim slot smal snel snor soep spel spin spul " +
+  "stad stal stam stap stem ster stil stof stok stom stuk taai taak taal tand tank teen tent " +
+  "thee tien toen toon touw trap tuin tulp uien vaak vaas vals vang vast veel veer veld verf " +
+  "vers vest vier vies vijf vijl vind vlag vlak vlek vlot voel voet vond voor vorm vuil vuur " +
+  "waar wand wang want warm week weer weet wens werk west wiel wijk wijn wijs wild wind wolk " +
+  "wond woon worm zaad zaag zaak zaal zang zeep zeer zeil zelf ziek zien zijn zing zoek zoen " +
+  "zoet zoon zorg zout zuid zuur zwak "
+).trim().split(/\s+/);
+
+const LIJSTEN = { 3: DRIE, 4: VIER };
+
+/* buurwoorden: verschillen op precies een letter */
+function maakBuren(lijst) {
+  const patroon = new Map();
+  for (const w of lijst) {
+    for (let i = 0; i < w.length; i++) {
+      const sleutel = w.slice(0, i) + "_" + w.slice(i + 1);
+      if (!patroon.has(sleutel)) patroon.set(sleutel, []);
+      patroon.get(sleutel).push(w);
+    }
+  }
+  const b = new Map();
+  for (const groep of patroon.values()) {
+    for (const a of groep) {
+      if (!b.has(a)) b.set(a, new Set());
+      for (const c of groep) if (c !== a) b.get(a).add(c);
+    }
+  }
+  const uit = new Map();
+  for (const [k, v] of b) uit.set(k, [...v]);
+  return uit;
+}
+const BUREN = { 3: maakBuren(DRIE), 4: maakBuren(VIER) };
+const INLIJST = { 3: new Set(DRIE), 4: new Set(VIER) };
+
+let staat = { lengte: 3, stappen: 1, geluid: true, digibord: false };
+try {
+  const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}");
+  Object.keys(staat).forEach((k) => { if (k in b) staat[k] = b[k]; });
+} catch (e) {}
+const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
+
+let start = "", doel = "", sporten = [], gekozen = null, klaar = false, goed = 0, hulp = 0;
+
+const kiesUit = (l) => l[Math.floor(Math.random() * l.length)];
+const verschil = (a, b) => {
+  if (!a || !b || a.length !== b.length) return 99;
+  let n = 0;
+  for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) n++;
+  return n;
+};
+
+function piep(hoog) {
+  if (!staat.geluid) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator(), gain = ctx.createGain();
+    osc.type = "sine"; osc.frequency.value = hoog ? 720 : 250;
+    gain.gain.setValueAtTime(0, ctx.currentTime);
+    gain.gain.linearRampToValueAtTime(.1, ctx.currentTime + .015);
+    gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + (hoog ? .16 : .25));
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime + .3);
+    setTimeout(() => ctx.close(), 700);
+  } catch (e) {}
+}
+
+/* afstanden vanaf een woord, met het pad erbij */
+function verken(woord, buren) {
+  const afstand = new Map([[woord, 0]]);
+  const vorig = new Map();
+  const rij = [woord];
+  for (let i = 0; i < rij.length; i++) {
+    const w = rij[i];
+    for (const v of buren.get(w) || []) {
+      if (afstand.has(v)) continue;
+      afstand.set(v, afstand.get(w) + 1);
+      vorig.set(v, w);
+      rij.push(v);
+    }
+  }
+  return { afstand, vorig };
+}
+function pad(eind, vorig) {
+  const p = [eind];
+  while (vorig.has(p[0])) p.unshift(vorig.get(p[0]));
+  return p;
+}
+
+/* de opgave: eerst een weg zoeken, dan pas de opgave tonen */
+function nieuweLadder() {
+  const lijst = LIJSTEN[staat.lengte], buren = BUREN[staat.lengte];
+  const stappen = staat.stappen + 1;           // aantal stappen tussen start en doel
+  const metBuren = lijst.filter((w) => buren.has(w));
+  let gevonden = null;
+  for (let poging = 0; poging < 400 && !gevonden; poging++) {
+    const a = kiesUit(metBuren);
+    const { afstand, vorig } = verken(a, buren);
+    const opMaat = [...afstand.keys()].filter((w) => afstand.get(w) === stappen);
+    if (!opMaat.length) continue;
+    const b = kiesUit(opMaat);
+    gevonden = { a, b, weg: pad(b, vorig) };
+  }
+  if (!gevonden) { melding("Geen ladder gevonden, probeer een andere instelling.", "fout"); return; }
+  start = gevonden.a; doel = gevonden.b;
+  sporten = new Array(staat.stappen).fill("");
+  gekozen = null; klaar = false;
+  melding("", ""); teken();
+}
+
+/* ---------- tekenen ---------- */
+function teken() {
+  const rijen = [];
+  const alles = [start, ...sporten, doel];
+  alles.forEach((woord, i) => {
+    const vast = i === 0 || i === alles.length - 1;
+    const doelRij = i === alles.length - 1;
+    const index = i - 1;
+    let fout = false, af = false;
+    if (!vast && woord) {
+      const boven = alles[i - 1];
+      af = INLIJST[staat.lengte].has(woord) && verschil(boven, woord) === 1;
+      // net voorgevuld en nog niets veranderd: dat is nog geen fout
+      fout = !af && woord !== boven;
+    }
+    const klassen = ["sport"];
+    if (vast) klassen.push("vast");
+    if (doelRij) klassen.push("doel");
+    if (!vast) klassen.push("invul");
+    if (af) klassen.push("klaar");
+    if (fout) klassen.push("mis");
+    const hokken = [];
+    for (let j = 0; j < staat.lengte; j++) {
+      const letter = woord ? woord[j] : "";
+      const aan = gekozen && gekozen.rij === index && gekozen.kolom === j;
+      const anders = !vast && woord && alles[i - 1] && woord[j] !== alles[i - 1][j];
+      hokken.push('<span class="hok' + (aan ? " aan" : "") + (anders && !af ? " nieuw" : "") + '"'
+        + (vast ? "" : ' data-rij="' + index + '" data-kolom="' + j + '"') + ">" + (letter || "") + "</span>");
+    }
+    const merk = i === 0 ? "start" : doelRij ? "doel" : "";
+    rijen.push('<div class="' + klassen.join(" ") + '">' + hokken.join("")
+      + (merk ? '<span class="merk">' + merk + "</span>" : "") + "</div>");
+    if (i < alles.length - 1) rijen.push('<div class="stijl"></div>');
+  });
+  $("ladder").innerHTML = rijen.join("");
+
+  $("opdracht").textContent = "Van " + start + " naar " + doel + ".";
+  $("onder").textContent = klaar
+    ? "Gelukt!"
+    : "Verander elke stap precies een letter. Elke stap moet een woord zijn.";
+
+  const az = "abcdefghijklmnopqrstuvwxyz".split("");
+  $("letters").innerHTML = az.map((l) => '<button type="button" data-letter="' + l + '">' + l + "</button>").join("")
+    + '<button type="button" class="wis" data-letter="">wis</button>';
+  $("teller").textContent = goed ? goed + (goed === 1 ? " ladder klaar" : " ladders klaar")
+    + (hulp ? " · " + hulp + " keer hulp gebruikt" : "") : "";
+}
+function melding(tekst, soort) {
+  $("melding").className = "melding " + soort;
+  $("melding").textContent = tekst;
+}
+
+/* ---------- spelen ---------- */
+function alles() { return [start, ...sporten, doel]; }
+
+function zetLetter(letter) {
+  if (!gekozen || klaar) return;
+  const r = gekozen.rij;
+  let woord = sporten[r] || alles()[r];        // leeg? neem het woord erboven
+  const arr = woord.split("");
+  arr[gekozen.kolom] = letter || alles()[r][gekozen.kolom];
+  sporten[r] = arr.join("");
+  controleer();
+}
+
+function controleer() {
+  const rij = alles();
+  let allesGoed = true;
+  for (let i = 1; i < rij.length; i++) {
+    const w = rij[i];
+    if (!w) { allesGoed = false; continue; }
+    if (!INLIJST[staat.lengte].has(w)) { allesGoed = false; continue; }
+    if (verschil(rij[i - 1], w) !== 1) allesGoed = false;
+  }
+  teken();
+  if (allesGoed) {
+    klaar = true; goed++; gekozen = null; piep(true); teken();
+    melding("Goed zo! Je hebt de ladder af.", "goed");
+    return;
+  }
+  // gerichte hulp bij de laatst ingevulde sport
+  for (let i = 1; i < rij.length - 1; i++) {
+    const w = sporten[i - 1];
+    if (!w) continue;
+    if (!INLIJST[staat.lengte].has(w)) { melding('"' + w + '" ken ik niet als woord.', "fout"); return; }
+    const n = verschil(rij[i - 1], w);
+    if (n === 0) { melding("Dat is hetzelfde woord. Verander een letter.", "fout"); return; }
+    if (n > 1) { melding("Je veranderde " + n + " letters. Het mag er maar een zijn.", "fout"); return; }
+  }
+  const laatste = sporten[sporten.length - 1];
+  if (laatste && INLIJST[staat.lengte].has(laatste) && verschil(laatste, doel) !== 1)
+    melding("Vanaf hier kom je nog niet bij " + doel + ". Probeer een ander woord.", "fout");
+  else melding("", "");
+}
+
+$("ladder").addEventListener("click", (e) => {
+  const h = e.target.closest("[data-rij]");
+  if (!h || klaar) return;
+  const r = Number(h.dataset.rij);
+  if (!sporten[r]) sporten[r] = alles()[r];   // leeg? vul voor met het woord erboven
+  gekozen = { rij: r, kolom: Number(h.dataset.kolom) };
+  melding("", ""); teken();
+});
+$("letters").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-letter]");
+  if (!b || klaar) return;
+  if (!gekozen) { melding("Klik eerst op een vakje in de ladder.", ""); return; }
+  zetLetter(b.dataset.letter);
+});
+$("nieuwKnop").addEventListener("click", nieuweLadder);
+$("wisKnop").addEventListener("click", () => {
+  if (klaar) return;
+  sporten = sporten.map(() => ""); gekozen = null; melding("", ""); teken();
+});
+$("helpKnop").addEventListener("click", () => {
+  if (klaar) return;
+  // zoek een weg die past bij wat er al staat
+  const rij = alles();
+  let vanaf = start, vanafIndex = 0;
+  for (let i = 1; i < rij.length - 1; i++) {
+    const w = sporten[i - 1];
+    if (w && INLIJST[staat.lengte].has(w) && verschil(rij[i - 1], w) === 1) { vanaf = w; vanafIndex = i; }
+    else break;
+  }
+  const over = staat.stappen + 1 - vanafIndex;
+  const { afstand, vorig } = verken(doel, BUREN[staat.lengte]);
+  const kandidaten = (BUREN[staat.lengte].get(vanaf) || [])
+    .filter((w) => afstand.get(w) === over - 1);
+  if (!kandidaten.length) { melding("Wis eerst even, dan zoek ik opnieuw mee.", ""); return; }
+  sporten[vanafIndex] = kiesUit(kandidaten);
+  hulp++;
+  gekozen = null;
+  controleer();
+  if (!klaar) melding("Ik heb er een voor je ingevuld.", "");
+});
+
+[["lettersSeg", "lengte"], ["stappenSeg", "stappen"]].forEach(([id, sleutel]) => {
+  $(id).addEventListener("click", (e) => {
+    const b = e.target.closest("[data-" + (sleutel === "lengte" ? "lengte" : "stappen") + "]");
+    if (!b) return;
+    staat[sleutel] = Number(sleutel === "lengte" ? b.dataset.lengte : b.dataset.stappen);
+    zetKnoppen(); bewaar(); nieuweLadder();
+  });
+});
+function zetKnoppen() {
+  [...document.querySelectorAll("#lettersSeg button")].forEach((x) =>
+    x.classList.toggle("aan", Number(x.dataset.lengte) === staat.lengte));
+  [...document.querySelectorAll("#stappenSeg button")].forEach((x) =>
+    x.classList.toggle("aan", Number(x.dataset.stappen) === staat.stappen));
+}
+$("geluidChip").addEventListener("click", () => {
+  staat.geluid = !staat.geluid;
+  $("geluidChip").classList.toggle("aan", staat.geluid);
+  $("geluidChip").lastChild.textContent = staat.geluid ? "Geluid aan" : "Geluid uit";
+  bewaar();
+});
+$("digibordKnop").addEventListener("click", () => {
+  staat.digibord = !staat.digibord;
+  document.body.classList.toggle("digibord", staat.digibord);
+  $("digibordKnop").textContent = staat.digibord ? "☀️ Gewoon" : "🌙 Digibord";
+  bewaar();
+});
+$("alleenKnop").addEventListener("click", () => document.body.classList.toggle("alleenladder"));
+$("schermKnop").addEventListener("click", () => {
+  if (document.fullscreenElement) document.exitFullscreen();
+  else document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+});
+
+/* ---------- werkblad ---------- */
+function maakOpgave(lengte, stappen) {
+  const lijst = LIJSTEN[lengte], buren = BUREN[lengte];
+  const metBuren = lijst.filter((w) => buren.has(w));
+  for (let poging = 0; poging < 400; poging++) {
+    const a = kiesUit(metBuren);
+    const { afstand, vorig } = verken(a, buren);
+    const opMaat = [...afstand.keys()].filter((w) => afstand.get(w) === stappen + 1);
+    if (!opMaat.length) continue;
+    const b = kiesUit(opMaat);
+    return { weg: pad(b, vorig) };
+  }
+  return null;
+}
+function vulPrintblad() {
+  const vakken = [], antwoorden = [];
+  const gezien = new Set();
+  let n = 0;
+  while (vakken.length < 9 && n++ < 400) {
+    const o = maakOpgave(staat.lengte, staat.stappen);
+    if (!o) break;
+    const sleutel = o.weg[0] + ">" + o.weg[o.weg.length - 1];
+    if (gezien.has(sleutel)) continue;
+    gezien.add(sleutel);
+    const nr = vakken.length + 1;
+    const rijen = o.weg.map((w, i) => {
+      const vast = i === 0 || i === o.weg.length - 1;
+      const hokken = [];
+      for (let j = 0; j < staat.lengte; j++)
+        hokken.push('<span class="ph' + (vast ? " vast" : "") + '">' + (vast ? w[j] : "") + "</span>");
+      return '<div class="pr">' + hokken.join("") + "</div>";
+    }).join("");
+    vakken.push('<div class="printladder"><div class="nr">ladder ' + nr + "</div>" + rijen + "</div>");
+    antwoorden.push("<b>" + nr + ".</b> " + o.weg.join(" &#8594; "));
+  }
+  $("printblad").innerHTML =
+    '<p class="printuitleg">Verander elke stap precies een letter, zodat er steeds weer een woord staat. '
+    + "Het bovenste en het onderste woord zijn al ingevuld. Er is soms meer dan een goede weg.</p>"
+    + '<div class="printgrid">' + vakken.join("") + "</div>"
+    + '<div class="antwoorden"><b>Antwoorden (een mogelijke weg):</b><br>' + antwoorden.join(" &nbsp;&nbsp; ") + "</div>";
+}
+$("printKnop").addEventListener("click", () => { vulPrintblad(); window.print(); });
+window.addEventListener("beforeprint", vulPrintblad);
+
+document.addEventListener("keydown", (e) => {
+  if (e.target.closest("input, textarea")) return;
+  if (e.code === "Space") { e.preventDefault(); nieuweLadder(); return; }
+  if (e.key === "Escape") { document.body.classList.remove("alleenladder"); gekozen = null; teken(); return; }
+  if (e.key === "Backspace") { e.preventDefault(); zetLetter(""); return; }
+  if (/^[a-z]$/i.test(e.key)) { e.preventDefault(); zetLetter(e.key.toLowerCase()); return; }
+  if (gekozen && (e.key === "ArrowLeft" || e.key === "ArrowRight")) {
+    e.preventDefault();
+    const stap = e.key === "ArrowLeft" ? -1 : 1;
+    gekozen.kolom = (gekozen.kolom + stap + staat.lengte) % staat.lengte;
+    teken();
+  }
+  if (gekozen && (e.key === "ArrowUp" || e.key === "ArrowDown")) {
+    e.preventDefault();
+    const stap = e.key === "ArrowUp" ? -1 : 1;
+    gekozen.rij = Math.max(0, Math.min(staat.stappen - 1, gekozen.rij + stap));
+    teken();
+  }
+});
+
+zetKnoppen();
+$("geluidChip").classList.toggle("aan", staat.geluid);
+$("geluidChip").lastChild.textContent = staat.geluid ? "Geluid aan" : "Geluid uit";
+if (staat.digibord) { document.body.classList.add("digibord"); $("digibordKnop").textContent = "☀️ Gewoon"; }
+nieuweLadder();
+</script>
+</body>
+</html>
