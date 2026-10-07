@@ -13,221 +13,206 @@
     --brand1:#4f46e5;--brand2:#0e9f9e;--bg:#eef1f8;
     --len:#4f46e5;--inh:#0e9f9e;--gew:#e08a1e;--opp:#2f9d6e;}
   body{font-family:-apple-system,system-ui,"Segoe UI",Verdana,sans-serif;color:var(--ink);background:var(--bg);}
-  h1,h2,h3,.chip,.prefix b{font-family:"Baloo 2",system-ui,sans-serif;}
+  h1,h2,h3,.uu,.ph b,.ezel b{font-family:"Baloo 2",system-ui,sans-serif;}
 
   .schermbalk{max-width:210mm;margin:14px auto;padding:11px 16px;background:#fff;border-radius:12px;
     font-size:13px;color:#51607a;box-shadow:0 1px 6px rgba(0,0,0,.1);}
   .printknop{position:fixed;top:14px;right:14px;z-index:50;border:none;cursor:pointer;background:var(--brand1);
     color:#fff;font-family:inherit;font-weight:800;font-size:15px;padding:12px 18px;border-radius:12px;box-shadow:0 6px 18px rgba(79,70,229,.3);}
 
-  .vel{width:210mm;min-height:297mm;margin:0 auto 18px;background:#fff;padding:0 0 14mm;overflow:hidden;
+  .vel{width:210mm;min-height:297mm;margin:0 auto 18px;background:#fff;padding:0 0 16mm;overflow:hidden;
     box-shadow:0 2px 16px rgba(30,40,80,.14);display:flex;flex-direction:column;}
   .kop{background:linear-gradient(125deg,var(--brand1) 0%,#3b5bdb 48%,var(--brand2) 100%);color:#fff;
-    padding:16mm 14mm 13mm;position:relative;overflow:hidden;}
-  .kop::before{content:"";position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,.09);right:-80px;top:-120px;}
-  .kop .merk{font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;opacity:.9;position:relative;}
-  .kop h1{font-size:34px;font-weight:800;line-height:1.05;margin-top:3px;position:relative;}
-  .kop p{margin-top:6px;font-size:14.5px;opacity:.95;max-width:150mm;position:relative;}
-  .body{padding:9mm 14mm 0;flex:1;}
+    padding:17mm 14mm 14mm;position:relative;overflow:hidden;}
+  .kop::before{content:"";position:absolute;width:320px;height:320px;border-radius:50%;background:rgba(255,255,255,.09);right:-90px;top:-130px;}
+  .kop .merk{font-size:12px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;opacity:.9;position:relative;}
+  .kop h1{font-size:40px;font-weight:800;line-height:1.03;margin-top:4px;position:relative;}
+  .kop p{margin-top:8px;font-size:18px;font-weight:700;position:relative;}
+  .body{padding:12mm 14mm 0;flex:1;}
 
-  .regel-band{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:0 0 12px;}
-  .pijl{font-weight:800;font-size:14px;padding:9px 16px;border-radius:12px;font-family:"Baloo 2",sans-serif;}
-  .pijl.rechts{background:#eceafe;color:var(--brand1);}
-  .pijl.links{background:#e6f6f5;color:var(--brand2);}
+  /* ezelsbruggetje */
+  .ezel{background:#f5f6ff;border:1.5px solid #d7daf7;border-radius:16px;padding:11px 16px;text-align:center;margin-bottom:16px;}
+  .ezel .lab{font-size:12.5px;color:var(--muted);font-weight:700;}
+  .ezel b{font-size:20px;display:inline-block;margin-top:2px;}
+  .ezel b span{color:var(--len);}
 
-  table.trap{width:100%;border-collapse:separate;border-spacing:5px;table-layout:fixed;}
-  table.trap th,table.trap td{text-align:center;}
-  .prefix{padding:7px 2px;}
-  .prefix b{display:block;font-size:19px;color:#33405a;}
-  .prefix small{display:block;font-size:10.5px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.3px;}
-  .rijlabel{text-align:left;font-weight:800;font-size:13.5px;white-space:nowrap;padding-right:4px;}
-  .rijlabel small{display:block;font-weight:600;color:var(--muted);font-size:11px;}
-  .unit{border-radius:12px;padding:12px 2px;font-weight:800;font-size:19px;font-family:"Baloo 2",sans-serif;
+  /* kleurenschema */
+  .schema{display:grid;grid-template-columns:90px repeat(7,1fr);gap:6px;align-items:stretch;}
+  .ph{text-align:center;padding:4px 2px 2px;}
+  .ph b{display:block;font-size:18px;color:#33405a;}
+  .ph small{display:block;font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.3px;}
+  .rl{display:flex;flex-direction:column;justify-content:center;font-weight:800;font-size:14px;}
+  .rl small{display:block;font-weight:600;color:var(--muted);font-size:11px;}
+  .uu{border-radius:12px;padding:14px 2px;text-align:center;font-weight:800;font-size:20px;
     -webkit-print-color-adjust:exact;print-color-adjust:exact;}
-  .len .unit{color:var(--len);background:color-mix(in srgb,var(--len) 12%,#fff);border:1.5px solid color-mix(in srgb,var(--len) 30%,#fff);}
-  .inh .unit{color:var(--inh);background:color-mix(in srgb,var(--inh) 12%,#fff);border:1.5px solid color-mix(in srgb,var(--inh) 30%,#fff);}
-  .gew .unit{color:var(--gew);background:color-mix(in srgb,var(--gew) 13%,#fff);border:1.5px solid color-mix(in srgb,var(--gew) 32%,#fff);}
-  .opp .unit{color:var(--opp);background:color-mix(in srgb,var(--opp) 13%,#fff);border:1.5px solid color-mix(in srgb,var(--opp) 32%,#fff);}
-  .basis{outline:3px solid #ffd54a;outline-offset:1px;border-radius:12px;}
+  .len .uu{color:var(--len);background:color-mix(in srgb,var(--len) 12%,#fff);border:1.5px solid color-mix(in srgb,var(--len) 30%,#fff);}
+  .inh .uu{color:var(--inh);background:color-mix(in srgb,var(--inh) 12%,#fff);border:1.5px solid color-mix(in srgb,var(--inh) 30%,#fff);}
+  .gew .uu{color:var(--gew);background:color-mix(in srgb,var(--gew) 14%,#fff);border:1.5px solid color-mix(in srgb,var(--gew) 32%,#fff);}
+  .opp .uu{color:var(--opp);background:color-mix(in srgb,var(--opp) 14%,#fff);border:1.5px solid color-mix(in srgb,var(--opp) 32%,#fff);}
+  .uu.mid{outline:4px solid #ffd54a;outline-offset:1px;}
 
-  .twee{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
-  .box{border:1px solid var(--line);border-radius:16px;padding:14px 16px;background:#fcfdff;}
-  .box h3{font-size:16px;margin-bottom:8px;display:flex;align-items:center;gap:8px;}
-  .box ul{list-style:none;display:flex;flex-direction:column;gap:7px;}
-  .box li{font-size:14.5px;line-height:1.3;}
-  .box li b{font-weight:800;}
-  .tag{display:inline-block;width:12px;height:12px;border-radius:4px;vertical-align:middle;margin-right:2px;}
+  .pijlen{display:flex;justify-content:space-between;margin:12px 0 0;padding:0 2px;font-weight:800;font-size:15px;font-family:"Baloo 2",sans-serif;}
+  .pijlen .op{color:var(--brand2);} .pijlen .af{color:var(--len);}
 
-  .vb{background:#f5f7ff;border:1px dashed #c7cdfa;border-radius:14px;padding:12px 16px;margin-top:14px;font-size:14.5px;line-height:1.5;}
-  .vb b{color:var(--brand1);}
+  .weet{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px;}
+  .weet span{background:#f3f5fb;border:1px solid var(--line);border-radius:999px;padding:9px 16px;font-weight:700;font-size:15px;}
 
-  /* oppervlakte-pagina */
-  .formules{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:4px;}
-  .fcard{border:1px solid var(--line);border-radius:16px;padding:16px;background:#fcfdff;}
-  .fcard h3{font-size:19px;margin-bottom:4px;}
-  .fcard .wat{color:var(--muted);font-size:13.5px;margin-bottom:10px;}
-  .fcard .formule{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:17px;margin:8px 0 2px;}
-  .fcard .vbtje{font-size:14px;color:#2a3550;margin-top:4px;}
-  .omtrek h3{color:#e2534a;} .oppv h3{color:var(--opp);}
-  svg{display:block;margin:6px auto 0;max-width:100%;}
-  .voet{text-align:center;color:#9aa4b8;font-size:11.5px;margin-top:auto;padding-top:10mm;}
+  /* oppervlakte formules */
+  .formules{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px;}
+  .fcard{border:1.5px solid var(--line);border-radius:18px;padding:16px;text-align:center;}
+  .fcard h3{font-size:20px;margin-bottom:2px;}
+  .fcard .wat{color:var(--muted);font-size:14px;margin-bottom:6px;}
+  .fcard .formule{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:18px;margin:6px 0 2px;}
+  .fcard .vbtje{font-size:15px;color:#2a3550;}
+  .omtrek{border-color:#f3b8b3;} .omtrek h3{color:#e2534a;}
+  .oppv{border-color:#bfe6cf;} .oppv h3{color:var(--opp);}
+  svg{display:block;margin:4px auto;max-width:100%;}
+  .voet{text-align:center;color:#9aa4b8;font-size:11.5px;margin-top:auto;padding-top:12mm;}
 
   @media print{
     body{background:#fff;} .schermbalk,.printknop{display:none;}
     .vel{margin:0;min-height:auto;height:297mm;box-shadow:none;page-break-after:always;}
-    .kop,.unit,.pijl,.basis{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .kop,.uu,.ezel,.weet span{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
     @page{size:A4 portrait;margin:0;}
   }
 </style>
 </head>
 <body>
-<button class="printknop" onclick="window.print()">🖨 Print dit blad</button>
-<div class="schermbalk">Opzoekblad voor de bovenbouw. Druk op Ctrl/Cmd + P om te printen (A4, "achtergrondafbeeldingen" aan voor de kleuren). Blad 1 = maten omrekenen, blad 2 = oppervlakte.</div>
+<button class="printknop" onclick="window.print()">🖨 Print</button>
+<div class="schermbalk">Opzoekblad voor de bovenbouw. Ctrl/Cmd + P om te printen (A4, "achtergrondafbeeldingen" aan). Blad 1 = maten, blad 2 = oppervlakte.</div>
 
-<!-- BLAD 1: MATEN OMREKENEN -->
+<!-- BLAD 1 -->
 <section class="vel">
   <div class="kop">
-    <div class="merk">Lesmateriaal Blink · Meetkunde</div>
+    <div class="merk">Lesmateriaal Blink · Meten</div>
     <h1>📏 Maten omrekenen</h1>
-    <p>De omrekentrap voor lengte, inhoud en gewicht. Elke stap naar rechts is <b>× 10</b>, elke stap naar links is <b>: 10</b>.</p>
+    <p>Een stap naar rechts = × 10 &nbsp;·&nbsp; een stap naar links = : 10</p>
   </div>
   <div class="body">
-    <div class="regel-band">
-      <span class="pijl rechts">naar rechts (kleiner) = × 10 →</span>
-      <span class="pijl links">← naar links (groter) = : 10</span>
+
+    <div class="ezel">
+      <div class="lab">Onthoud de volgorde met dit zinnetje:</div>
+      <b><span>K</span>an <span>H</span>et <span>Da</span>metje <span>M</span>et <span>D</span>e <span>C</span>entimeter <span>M</span>eten</b>
     </div>
 
-    <table class="trap">
-      <tr>
-        <th></th>
-        <th class="prefix"><b>k</b><small>kilo</small></th>
-        <th class="prefix"><b>h</b><small>hecto</small></th>
-        <th class="prefix"><b>da</b><small>deca</small></th>
-        <th class="prefix"><b>1</b><small>eenheid</small></th>
-        <th class="prefix"><b>d</b><small>deci</small></th>
-        <th class="prefix"><b>c</b><small>centi</small></th>
-        <th class="prefix"><b>m</b><small>milli</small></th>
-      </tr>
-      <tr class="len">
-        <td class="rijlabel">Lengte<small>meter (m)</small></td>
-        <td class="unit">km</td><td class="unit">hm</td><td class="unit">dam</td>
-        <td class="unit basis">m</td><td class="unit">dm</td><td class="unit">cm</td><td class="unit">mm</td>
-      </tr>
-      <tr class="inh">
-        <td class="rijlabel">Inhoud<small>liter (l)</small></td>
-        <td class="unit">kl</td><td class="unit">hl</td><td class="unit">dal</td>
-        <td class="unit basis">l</td><td class="unit">dl</td><td class="unit">cl</td><td class="unit">ml</td>
-      </tr>
-      <tr class="gew">
-        <td class="rijlabel">Gewicht<small>gram (g)</small></td>
-        <td class="unit">kg</td><td class="unit">hg</td><td class="unit">dag</td>
-        <td class="unit basis">g</td><td class="unit">dg</td><td class="unit">cg</td><td class="unit">mg</td>
-      </tr>
-    </table>
+    <div class="schema">
+      <div class="ph"></div>
+      <div class="ph"><b>k</b><small>kilo</small></div>
+      <div class="ph"><b>h</b><small>hecto</small></div>
+      <div class="ph"><b>da</b><small>deca</small></div>
+      <div class="ph"><b>1</b><small>eenheid</small></div>
+      <div class="ph"><b>d</b><small>deci</small></div>
+      <div class="ph"><b>c</b><small>centi</small></div>
+      <div class="ph"><b>m</b><small>milli</small></div>
 
-    <div class="vb">
-      <b>Zo doe je het:</b> tel hoeveel stappen je in de trap zet.<br>
-      3 m = ? cm &rarr; van m naar cm is 2 stappen naar rechts = × 100 &rarr; 3 × 100 = <b>300 cm</b>.<br>
-      2500 ml = ? l &rarr; van ml naar l is 3 stappen naar links = : 1000 &rarr; 2500 : 1000 = <b>2,5 l</b>.
+      <div class="rl len" style="color:var(--len)">Lengte<small>meter</small></div>
+      <div class="len"><div class="uu">km</div></div>
+      <div class="len"><div class="uu">hm</div></div>
+      <div class="len"><div class="uu">dam</div></div>
+      <div class="len"><div class="uu mid">m</div></div>
+      <div class="len"><div class="uu">dm</div></div>
+      <div class="len"><div class="uu">cm</div></div>
+      <div class="len"><div class="uu">mm</div></div>
+
+      <div class="rl inh" style="color:var(--inh)">Inhoud<small>liter</small></div>
+      <div class="inh"><div class="uu">kl</div></div>
+      <div class="inh"><div class="uu">hl</div></div>
+      <div class="inh"><div class="uu">dal</div></div>
+      <div class="inh"><div class="uu mid">l</div></div>
+      <div class="inh"><div class="uu">dl</div></div>
+      <div class="inh"><div class="uu">cl</div></div>
+      <div class="inh"><div class="uu">ml</div></div>
+
+      <div class="rl gew" style="color:var(--gew)">Gewicht<small>gram</small></div>
+      <div class="gew"><div class="uu">kg</div></div>
+      <div class="gew"><div class="uu">hg</div></div>
+      <div class="gew"><div class="uu">dag</div></div>
+      <div class="gew"><div class="uu mid">g</div></div>
+      <div class="gew"><div class="uu">dg</div></div>
+      <div class="gew"><div class="uu">cg</div></div>
+      <div class="gew"><div class="uu">mg</div></div>
     </div>
+    <div class="pijlen"><span class="op">◀ : 10 &nbsp;groter</span><span class="af">kleiner&nbsp; × 10 ▶</span></div>
 
-    <div class="twee">
-      <div class="box">
-        <h3><span class="tag" style="background:var(--len)"></span> Lengte, inhoud &amp; gewicht</h3>
-        <ul>
-          <li><b>1 km</b> = 1.000 m &nbsp;·&nbsp; <b>1 m</b> = 100 cm = 1.000 mm &nbsp;·&nbsp; <b>1 cm</b> = 10 mm</li>
-          <li><b>1 l</b> = 10 dl = 100 cl = 1.000 ml</li>
-          <li><b>1 kg</b> = 1.000 g &nbsp;·&nbsp; <b>1 g</b> = 1.000 mg</li>
-          <li><b>1 ons</b> = 100 g (= 1 hg) &nbsp;·&nbsp; <b>1 pond</b> = 500 g</li>
-        </ul>
-      </div>
-      <div class="box">
-        <h3>🔁 Handig om te onthouden</h3>
-        <ul>
-          <li><b>1 l</b> = 1 dm³ &nbsp;·&nbsp; <b>1 ml</b> = 1 cm³</li>
-          <li>Een flesje water is vaak <b>500 ml</b> = 0,5 l.</li>
-          <li>Een pak melk is <b>1 l</b>. Een zak suiker is <b>1 kg</b>.</li>
-          <li>De <b>gele streep</b> in de trap is de eenheid: m, l of g.</li>
-        </ul>
-      </div>
+    <div class="weet">
+      <span>1 m = 100 cm</span>
+      <span>1 km = 1000 m</span>
+      <span>1 l = 1000 ml</span>
+      <span>1 kg = 1000 g</span>
     </div>
   </div>
-  <div class="voet">Lesmateriaal Blink · maten omrekenen · zelf te printen</div>
+  <div class="voet">Lesmateriaal Blink · maten omrekenen</div>
 </section>
 
-<!-- BLAD 2: OPPERVLAKTE -->
+<!-- BLAD 2 -->
 <section class="vel">
   <div class="kop" style="background:linear-gradient(125deg,#2f9d6e 0%,#1f8f7e 50%,#0e9f9e 100%);">
-    <div class="merk">Lesmateriaal Blink · Meetkunde</div>
+    <div class="merk">Lesmateriaal Blink · Meten</div>
     <h1>🟩 Oppervlakte</h1>
-    <p>Oppervlakte reken je om met stappen van <b>× 100</b> en <b>: 100</b>, want je rekent in vierkanten (lengte én breedte).</p>
+    <p>Stappen van × 100 en : 100 &nbsp;·&nbsp; want oppervlakte heeft ²</p>
   </div>
   <div class="body">
-    <div class="regel-band">
-      <span class="pijl rechts" style="background:#e6f6ef;color:var(--opp);">naar rechts (kleiner) = × 100 →</span>
-      <span class="pijl links" style="background:#e6f6ef;color:var(--opp);">← naar links (groter) = : 100</span>
+
+    <div class="schema">
+      <div class="ph"></div>
+      <div class="ph"><b>km²</b><small>&nbsp;</small></div>
+      <div class="ph"><b>hm²</b><small>hectare</small></div>
+      <div class="ph"><b>dam²</b><small>are</small></div>
+      <div class="ph"><b>m²</b><small>eenheid</small></div>
+      <div class="ph"><b>dm²</b><small>&nbsp;</small></div>
+      <div class="ph"><b>cm²</b><small>&nbsp;</small></div>
+      <div class="ph"><b>mm²</b><small>&nbsp;</small></div>
+
+      <div class="rl opp" style="color:var(--opp)">Opper-<br>vlakte<small>m²</small></div>
+      <div class="opp"><div class="uu">km²</div></div>
+      <div class="opp"><div class="uu">hm²</div></div>
+      <div class="opp"><div class="uu">dam²</div></div>
+      <div class="opp"><div class="uu mid">m²</div></div>
+      <div class="opp"><div class="uu">dm²</div></div>
+      <div class="opp"><div class="uu">cm²</div></div>
+      <div class="opp"><div class="uu">mm²</div></div>
+    </div>
+    <div class="pijlen"><span class="op" style="color:var(--opp)">◀ : 100 &nbsp;groter</span><span class="af" style="color:var(--opp)">kleiner&nbsp; × 100 ▶</span></div>
+
+    <div class="weet">
+      <span>1 m² = 100 dm²</span>
+      <span>1 hectare = 10.000 m²</span>
     </div>
 
-    <table class="trap">
-      <tr>
-        <th></th>
-        <th class="prefix"><b>km²</b><small>km²</small></th>
-        <th class="prefix"><b>hm²</b><small>hectare</small></th>
-        <th class="prefix"><b>dam²</b><small>are</small></th>
-        <th class="prefix"><b>1</b><small>eenheid</small></th>
-        <th class="prefix"><b>dm²</b><small>dm²</small></th>
-        <th class="prefix"><b>cm²</b><small>cm²</small></th>
-        <th class="prefix"><b>mm²</b><small>mm²</small></th>
-      </tr>
-      <tr class="opp">
-        <td class="rijlabel">Oppervlakte<small>m² (vierkante meter)</small></td>
-        <td class="unit">km²</td><td class="unit">hm²</td><td class="unit">dam²</td>
-        <td class="unit basis">m²</td><td class="unit">dm²</td><td class="unit">cm²</td><td class="unit">mm²</td>
-      </tr>
-    </table>
-
-    <div class="vb" style="background:#eef8f2;border-color:#bfe6cf;">
-      <b style="color:var(--opp);">Zo doe je het:</b> elke stap telt voor × 100 of : 100.<br>
-      2 m² = ? dm² &rarr; 1 stap naar rechts = × 100 &rarr; 2 × 100 = <b>200 dm²</b>.<br>
-      Weetjes: <b>1 m²</b> = 100 dm² = 10.000 cm² &nbsp;·&nbsp; <b>1 ha</b> = 10.000 m² &nbsp;·&nbsp; <b>1 km²</b> = 100 ha.
-    </div>
-
-    <h2 style="font-size:20px;margin:18px 0 6px;color:#33405a;">Omtrek en oppervlakte van een rechthoek</h2>
+    <h2 style="font-size:22px;margin:28px 0 2px;color:#33405a;text-align:center;">Rechthoek: omtrek en oppervlakte</h2>
     <div class="formules">
       <div class="fcard omtrek">
         <h3>Omtrek</h3>
-        <div class="wat">De omtrek is de lijn er helemaal omheen. Je telt op.</div>
-        <svg viewBox="0 0 220 150" width="220" height="150" aria-label="rechthoek omtrek">
-          <rect x="30" y="35" width="150" height="80" fill="#eef8f2" stroke="#e2534a" stroke-width="4" rx="4"/>
-          <text x="105" y="28" text-anchor="middle" font-size="14" fill="#2a3550" font-weight="700">lengte = 5 cm</text>
-          <text x="105" y="134" text-anchor="middle" font-size="14" fill="#2a3550" font-weight="700">5 cm</text>
-          <text x="16" y="79" text-anchor="middle" font-size="14" fill="#2a3550" font-weight="700" transform="rotate(-90 16 79)">3 cm</text>
-          <text x="196" y="79" text-anchor="middle" font-size="14" fill="#2a3550" font-weight="700" transform="rotate(90 196 79)">3 cm</text>
+        <div class="wat">de rand eromheen</div>
+        <svg viewBox="0 0 220 130" width="220" height="130" aria-label="rechthoek">
+          <rect x="35" y="30" width="150" height="70" fill="#fdeeed" stroke="#e2534a" stroke-width="4" rx="4"/>
+          <text x="110" y="22" text-anchor="middle" font-size="15" fill="#2a3550" font-weight="700">5 cm</text>
+          <text x="110" y="120" text-anchor="middle" font-size="15" fill="#2a3550" font-weight="700">5 cm</text>
+          <text x="22" y="69" text-anchor="middle" font-size="15" fill="#2a3550" font-weight="700" transform="rotate(-90 22 69)">3 cm</text>
+          <text x="200" y="69" text-anchor="middle" font-size="15" fill="#2a3550" font-weight="700" transform="rotate(90 200 69)">3 cm</text>
         </svg>
         <div class="formule" style="color:#e2534a;">lengte + breedte + lengte + breedte</div>
-        <div class="vbtje">5 + 3 + 5 + 3 = <b>16 cm</b> &nbsp;(of: 2 × (5 + 3) = 16 cm)</div>
+        <div class="vbtje">5 + 3 + 5 + 3 = <b>16 cm</b></div>
       </div>
       <div class="fcard oppv">
         <h3>Oppervlakte</h3>
-        <div class="wat">De oppervlakte is wat erop past, in vierkantjes. Je vermenigvuldigt.</div>
-        <svg viewBox="0 0 220 150" width="220" height="150" aria-label="rechthoek oppervlakte">
-          <g fill="#d9f0e4" stroke="#2f9d6e" stroke-width="2">
-            <rect x="30" y="45" width="150" height="75"/>
+        <div class="wat">de vlakte erbinnen</div>
+        <svg viewBox="0 0 220 130" width="220" height="130" aria-label="rechthoek met hokjes">
+          <rect x="35" y="35" width="150" height="75" fill="#e2f4ea" stroke="#2f9d6e" stroke-width="2"/>
+          <g stroke="#2f9d6e" stroke-width="1.5" opacity=".85">
+            <line x1="65" y1="35" x2="65" y2="110"/><line x1="95" y1="35" x2="95" y2="110"/>
+            <line x1="125" y1="35" x2="125" y2="110"/><line x1="155" y1="35" x2="155" y2="110"/>
+            <line x1="35" y1="60" x2="185" y2="60"/><line x1="35" y1="85" x2="185" y2="85"/>
           </g>
-          <g stroke="#2f9d6e" stroke-width="1.5" opacity=".8">
-            <line x1="60" y1="45" x2="60" y2="120"/><line x1="90" y1="45" x2="90" y2="120"/>
-            <line x1="120" y1="45" x2="120" y2="120"/><line x1="150" y1="45" x2="150" y2="120"/>
-            <line x1="30" y1="70" x2="180" y2="70"/><line x1="30" y1="95" x2="180" y2="95"/>
-          </g>
-          <text x="105" y="38" text-anchor="middle" font-size="14" fill="#2a3550" font-weight="700">5 hokjes</text>
-          <text x="18" y="84" text-anchor="middle" font-size="14" fill="#2a3550" font-weight="700" transform="rotate(-90 18 84)">3 hokjes</text>
+          <text x="110" y="26" text-anchor="middle" font-size="15" fill="#2a3550" font-weight="700">5</text>
+          <text x="22" y="74" text-anchor="middle" font-size="15" fill="#2a3550" font-weight="700" transform="rotate(-90 22 74)">3</text>
         </svg>
         <div class="formule" style="color:var(--opp);">lengte × breedte</div>
-        <div class="vbtje">5 × 3 = <b>15 cm²</b> &nbsp;(15 vierkante hokjes)</div>
+        <div class="vbtje">5 × 3 = <b>15 cm²</b></div>
       </div>
     </div>
   </div>
-  <div class="voet">Lesmateriaal Blink · oppervlakte · zelf te printen</div>
+  <div class="voet">Lesmateriaal Blink · oppervlakte</div>
 </section>
 </body>
 </html>
