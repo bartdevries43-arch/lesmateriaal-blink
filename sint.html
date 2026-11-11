@@ -195,6 +195,102 @@
   .doolhofuitleg{display:flex; align-items:center; justify-content:center; gap:14px; font-family:"Baloo 2",system-ui,sans-serif; font-size:19px; font-weight:700; color:#7a2a20; margin-bottom:14px;}
   .doolhofuitleg svg{width:46px; height:46px;}
 
+  /* slinger met vlaggetjes, op elk blad en in de kop */
+  .slinger{display:block; width:100%; height:auto;}
+  .bladslinger{margin:-8px 0 6px;}
+  .kop{padding-top:34px;}
+  .kop .kopslinger{position:absolute; left:10px; right:10px; top:-2px; pointer-events:none; opacity:.95;}
+  .speurkaart .slinger{position:absolute; top:-.4cqw; left:6cqw; right:6cqw; width:auto;}
+  .speurkaart .hoek{top:9cqw !important;}
+
+  /* menu in twee groepen */
+  .menukop{grid-column:1/-1; font-family:"Baloo 2",system-ui,sans-serif; font-size:14px; font-weight:800; letter-spacing:.6px; text-transform:uppercase;
+    color:#9b2c22; display:flex; align-items:center; gap:10px; margin-top:6px;}
+  .menukop:first-child{margin-top:0;}
+  .menukop::after{content:""; flex:1; height:2px; border-radius:2px; background:linear-gradient(90deg,rgba(198,40,40,.25),transparent);}
+  .menukop .pil{font-size:11px; letter-spacing:.4px; color:#fff; background:linear-gradient(120deg,#c62828,#d4a017); border-radius:999px; padding:3px 9px;}
+
+  /* groep 4 t/m 8: speurtocht met geheim woord */
+  .speurkaart .somtekst{white-space:nowrap; text-align:center;}
+  .speurkaart .tientalvraag{display:flex; flex-direction:column; align-items:center; gap:3cqw;}
+  .speurkaart .tientalvraag .groot{font-size:26cqw; line-height:1;}
+  .speurkaart .tientalvraag small{font-size:8.5cqw; font-weight:700; color:#7a2a20; display:flex; align-items:center; gap:2cqw;}
+  .speurkaart .tientalvraag .vak{font-size:7cqw; width:2.6em; height:2em; border-width:.6cqw;}
+  .speurregel .vak{min-width:2.4em; width:auto; padding:0 .3em;}
+  .speurregel .pijl{color:#c9b3ad; font-weight:800; font-size:20px;}
+  .speurregel .vak.letter{border-color:#c62828; min-width:1.8em;}
+  .speurregel .en{font-weight:700; color:#8a7c78;}
+  .kader{margin-top:18px; padding:14px 16px; border:2px dashed #f0c9c1; border-radius:18px; background:#fffaf8; break-inside:avoid;}
+  .kader h3{font-size:17px; color:#9b2c22; margin-bottom:8px;}
+  .geheimwoord{display:flex; flex-wrap:wrap; gap:8px;}
+  .geheimwoord .letterplek{display:flex; flex-direction:column; align-items:center; gap:4px;}
+  .geheimwoord .letterplek svg{width:30px; height:30px;}
+  .geheimwoord .vak{font-size:22px;}
+  .sleutel{display:grid; grid-template-columns:repeat(auto-fill,minmax(74px,1fr)); gap:6px;}
+  .sleutel div{border:1.5px solid #e8d2cb; border-radius:10px; text-align:center; padding:4px 2px; font-family:"Baloo 2",system-ui,sans-serif; font-weight:800; background:#fff;}
+  .sleutel div b{display:block; font-size:16px; color:#3a2a28; line-height:1.3;}
+  .sleutel div span{display:block; font-size:20px; color:#c62828; border-top:1px dashed #e8d2cb; line-height:1.4;}
+
+  /* codekraker */
+  .codesommen{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:4px 20px;}
+  .codesom{display:flex; align-items:center; gap:7px; padding:7px 2px; border-bottom:1px dotted #eadbd6; font-family:"Baloo 2",system-ui,sans-serif; font-weight:700; font-size:18px; break-inside:avoid; white-space:nowrap;}
+  .codesom .nr{font-size:12px; color:#b0a3a0; width:20px; flex:0 0 auto; font-family:-apple-system,system-ui,sans-serif; font-weight:400;}
+  .codesom .vak{font-size:15px; min-width:2.8em; width:auto; padding:0 .3em;}
+  .codesom .vak.letter{min-width:1.9em; border-color:#c62828;}
+  .codesom .pijl{color:#c9b3ad;}
+  .codezin{display:flex; flex-wrap:wrap; gap:16px 22px;}
+  .codezin .woord{display:flex; gap:5px;}
+  .codezin .plek{display:flex; flex-direction:column; align-items:center; gap:3px;}
+  .codezin .plek .vak{font-size:20px; width:1.7em; height:1.9em;}
+  .codezin .plek small{font-size:11.5px; color:#8a7c78; font-weight:700;}
+
+  /* verhaalsommen */
+  .verhalen{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px;}
+  .verhaal{border:1.5px solid #eadbd6; border-radius:16px; padding:12px 14px; break-inside:avoid;
+    display:flex; flex-direction:column; gap:8px; background:#fff;}
+  .verhaal .nrbol{width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,#c62828,#d4a017); color:#fff; float:left; margin:0 9px 2px 0;
+    font-family:"Baloo 2",system-ui,sans-serif; font-weight:800; display:flex; align-items:center; justify-content:center; font-size:17px;}
+  .verhaal p{font-size:15px; line-height:1.5;}
+  .verhaal .klad{flex:1; min-height:90px; border-radius:10px; border:1px solid #eadbd6;
+    background-image:linear-gradient(#f3e8e4 1px,transparent 1px),linear-gradient(90deg,#f3e8e4 1px,transparent 1px); background-size:14px 14px;}
+  .verhaal .antw{font-weight:700; font-size:15px; display:flex; align-items:flex-end; gap:8px; flex-wrap:wrap;}
+  .verhaal .antw .lijntje{display:inline-block; flex:1; min-width:90px; border-bottom:1.5px solid #b9a9a4; height:1.3em;}
+  .verhaal .antw b{color:#c62828; font-size:17px;}
+  .verhaal .antw small{color:#8a7c78; font-weight:600;}
+
+  /* vier op een rij */
+  .spelregels{display:grid; grid-template-columns:auto 1fr; gap:6px 14px; align-items:center; margin-bottom:14px; font-size:15px; line-height:1.5;}
+  .spelregels svg{width:60px; height:60px; grid-row:span 2;}
+  .spelregels ol{margin-left:18px;}
+  .bord{display:grid; gap:2.4mm; margin:0 auto; max-width:600px; padding:12px; border-radius:22px; background:#fbeee6; border:2px solid #efd2c3;}
+  .bordvak{aspect-ratio:1; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    background:radial-gradient(circle at 34% 30%,#f6dcbd,#e7b483 72%); border:2px solid #b9763d;
+    font-family:"Baloo 2",system-ui,sans-serif; font-weight:800; font-size:24px; color:#4a2512;}
+  .knipkaartjes{display:grid; grid-template-columns:repeat(5,minmax(0,1fr));}
+  .knipkaartje{border:1.5px dashed #c9b8b2; margin:-.75px; height:17mm; display:flex; align-items:center; justify-content:center; gap:6px;
+    font-family:"Baloo 2",system-ui,sans-serif; font-weight:800; font-size:21px; color:#3a2a28; break-inside:avoid;}
+  .knipkaartje svg{width:22px; height:22px;}
+
+  /* sinterklaasgedicht */
+  .rijmregel{display:flex; align-items:center; gap:14px; padding:9px 4px; border-bottom:1px dotted #eadbd6; break-inside:avoid;}
+  .rijmregel .rijmwoord{font-family:"Baloo 2",system-ui,sans-serif; font-weight:800; font-size:23px; min-width:120px; color:#7a2a20;}
+  .rijmregel .lijnen{display:flex; gap:14px; flex:1;}
+  .rijmregel .lijnen span{flex:1; border-bottom:1.5px solid #c9b8b2; height:1.7em; font-size:15px; color:#c62828; font-weight:700;}
+  .rijmregel .opties{flex:1; color:#c62828; font-weight:700; font-size:15px;}
+  .gedichtvel{border:2px solid #f0c9c1; border-radius:18px; padding:12px 22px 12px; background:#fffdfb; break-inside:avoid;}
+  .gedichtvel .voor{font-family:"Baloo 2",system-ui,sans-serif; font-weight:700; font-size:19px; margin-bottom:6px;}
+  .gedichtvel .voor span{display:inline-block; min-width:220px; border-bottom:1.5px solid #c9b8b2;}
+  .gedichtvel .regel{display:flex; align-items:flex-end; gap:10px; height:31px; border-bottom:1.5px solid #ddcdc8;}
+  .gedichtvel .regel small{font-family:"Baloo 2",system-ui,sans-serif; font-weight:800; color:#d0a29a; width:16px; font-size:14px;}
+  .gedichtvel .regel.leeg{border-bottom-color:transparent; height:14px;}
+  .tips{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px 14px; font-size:13.5px; line-height:1.4; margin-bottom:8px;}
+  .tips div{background:#fff7e6; border:1px solid #f3e0b0; border-radius:12px; padding:8px 10px;}
+  .tips b{color:#9b2c22;}
+  .starters{font-size:14.5px; line-height:1.5; margin:4px 0 10px; padding-left:20px;}
+  .starters li{font-style:italic;}
+  .woordbank{display:flex; flex-wrap:wrap; gap:6px;}
+  .woordbank span{border:1.5px solid #e8d2cb; border-radius:999px; padding:3px 11px; font-size:14px; background:#fff;}
+
   details.uitleg{margin-top:18px;}
   details.uitleg summary{cursor:pointer; font-weight:800; font-size:16px; color:var(--accent); padding:12px 0;}
   details.uitleg h3{font-size:17px; margin:14px 0 4px;}
@@ -222,9 +318,10 @@
 <body>
 <div class="app">
   <header class="kop">
+    <div class="kopslinger" id="kopSlinger" aria-hidden="true"></div>
     <span class="logo" id="kopLogo" aria-hidden="true"></span>
     <div class="tekst">
-      <div class="eyebrow">Lesmateriaal Blink · groep 3</div>
+      <div class="eyebrow">Lesmateriaal Blink · groep 3 t/m 8</div>
       <h1>Sinterklaas</h1>
     </div>
     <div class="kopknoppen">
@@ -400,6 +497,161 @@
         </div>
       </div>
 
+      <!-- ===== Groep 4 t/m 8 ===== -->
+      <!-- Speurtocht met geheim woord -->
+      <div class="paneel" data-paneel="speurtocht2">
+        <div class="groep">
+          <h2>Wat staat er op de kaartjes?</h2>
+          <div class="seg" data-zet="sp2.som">
+            <button type="button" data-v="tafels">keersommen</button>
+            <button type="button" data-v="delen">deelsommen</button>
+            <button type="button" data-v="pm100">plus en min tot 100</button>
+            <button type="button" data-v="pm1000">tot 1000</button>
+            <button type="button" data-v="tiental">tussen welke tientallen</button>
+          </div>
+        </div>
+        <div class="groep" data-alleen="sp2.som=tafels|delen">
+          <h2>Welke tafels?</h2>
+          <div class="chips" data-lijst="sp2.tafels"><button type="button" class="chip" data-v="1"><span class="bol"></span>1</button><button type="button" class="chip" data-v="2"><span class="bol"></span>2</button><button type="button" class="chip" data-v="3"><span class="bol"></span>3</button><button type="button" class="chip" data-v="4"><span class="bol"></span>4</button><button type="button" class="chip" data-v="5"><span class="bol"></span>5</button><button type="button" class="chip" data-v="6"><span class="bol"></span>6</button><button type="button" class="chip" data-v="7"><span class="bol"></span>7</button><button type="button" class="chip" data-v="8"><span class="bol"></span>8</button><button type="button" class="chip" data-v="9"><span class="bol"></span>9</button><button type="button" class="chip" data-v="10"><span class="bol"></span>10</button></div>
+        </div>
+        <div class="groep">
+          <h2>Met een geheim woord?</h2>
+          <div class="seg" data-zet="sp2.geheim">
+            <button type="button" data-v="ja">ja, met sleutel</button>
+            <button type="button" data-v="nee">nee</button>
+          </div>
+          <div class="velden" data-alleen="sp2.geheim=ja" style="margin-top:10px;">
+            <div class="veld"><label for="sp2Woord">Geheim woord (max. 12 letters)</label>
+              <input id="sp2Woord" type="text" maxlength="12" data-zet="sp2.woord" list="woordenlijst" autocomplete="off"></div>
+          </div>
+          <datalist id="woordenlijst"><option value="PEPERNOOT"><option value="STOOMBOOT"><option value="CHOCOLADE"><option value="SURPRISE"><option value="SCHOORSTEEN"><option value="PAKJESAVOND"><option value="KRUIDNOTEN"><option value="SINTERKLAAS"><option value="TAAITAAI"><option value="MIJTER"></datalist>
+          <p class="klein" data-alleen="sp2.geheim=ja">Elk kaartje hoort bij een letter. De kinderen zoeken hun antwoord op in de sleutel en vinden zo het woord. In de sleutel staan ook een paar foute antwoorden, zodat gokken niet werkt.</p>
+        </div>
+        <div class="groep" data-alleen="sp2.geheim=nee">
+          <h2>Hoeveel kaartjes?</h2>
+          <div class="seg" data-zet="sp2.aantal">
+            <button type="button" data-v="8">8 (2 vellen)</button>
+            <button type="button" data-v="12">12 (3 vellen)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Zaklampbingo hoger -->
+      <div class="paneel" data-paneel="bingo2">
+        <div class="groep">
+          <h2>Wat zit er achter het mutsje?</h2>
+          <div class="seg" data-zet="bi2.som">
+            <button type="button" data-v="tafels">keersommen</button>
+            <button type="button" data-v="delen">deelsommen</button>
+            <button type="button" data-v="pm100">plus en min tot 100</button>
+            <button type="button" data-v="tiental">tussen welke tientallen</button>
+            <button type="button" data-v="honderdtal">tussen welke honderdtallen</button>
+          </div>
+        </div>
+        <div class="groep" data-alleen="bi2.som=tafels|delen">
+          <h2>Welke tafels?</h2>
+          <div class="chips" data-lijst="bi2.tafels"><button type="button" class="chip" data-v="1"><span class="bol"></span>1</button><button type="button" class="chip" data-v="2"><span class="bol"></span>2</button><button type="button" class="chip" data-v="3"><span class="bol"></span>3</button><button type="button" class="chip" data-v="4"><span class="bol"></span>4</button><button type="button" class="chip" data-v="5"><span class="bol"></span>5</button><button type="button" class="chip" data-v="6"><span class="bol"></span>6</button><button type="button" class="chip" data-v="7"><span class="bol"></span>7</button><button type="button" class="chip" data-v="8"><span class="bol"></span>8</button><button type="button" class="chip" data-v="9"><span class="bol"></span>9</button><button type="button" class="chip" data-v="10"><span class="bol"></span>10</button></div>
+        </div>
+        <div class="groep">
+          <h2>Hoeveel mutsjes en kaarten?</h2>
+          <div class="velden">
+            <div class="veld"><label for="bi2Mutsen">Mutsjes</label>
+              <select id="bi2Mutsen" data-zet="bi2.mutsen"><option value="12">12 (2 vellen)</option><option value="18">18 (3 vellen)</option><option value="24">24 (4 vellen)</option></select></div>
+            <div class="veld"><label for="bi2Kaarten">Bingokaarten</label>
+              <input id="bi2Kaarten" type="number" min="1" max="40" data-zet="bi2.kaarten"></div>
+            <div class="veld"><label for="bi2Vakken">Vakjes per kaart</label>
+              <select id="bi2Vakken" data-zet="bi2.vakken"><option value="9">9 (3 × 3)</option><option value="12">12 (3 × 4)</option></select></div>
+          </div>
+          <p class="klein">Bij "tussen welke tientallen" zit er een getal achter het mutsje, bijvoorbeeld 47. De kinderen zoeken "40 en 50" op hun kaart.</p>
+        </div>
+      </div>
+
+      <!-- Codekraker -->
+      <div class="paneel" data-paneel="codekraker">
+        <div class="groep">
+          <h2>Welke sommen?</h2>
+          <div class="seg" data-zet="ck.som">
+            <button type="button" data-v="tafels">keersommen</button>
+            <button type="button" data-v="delen">deelsommen</button>
+            <button type="button" data-v="pm100">plus en min tot 100</button>
+            <button type="button" data-v="pm1000">tot 1000</button>
+            <button type="button" data-v="keergroot">keer met grote getallen</button>
+          </div>
+        </div>
+        <div class="groep" data-alleen="ck.som=tafels|delen">
+          <h2>Welke tafels?</h2>
+          <div class="chips" data-lijst="ck.tafels"><button type="button" class="chip" data-v="1"><span class="bol"></span>1</button><button type="button" class="chip" data-v="2"><span class="bol"></span>2</button><button type="button" class="chip" data-v="3"><span class="bol"></span>3</button><button type="button" class="chip" data-v="4"><span class="bol"></span>4</button><button type="button" class="chip" data-v="5"><span class="bol"></span>5</button><button type="button" class="chip" data-v="6"><span class="bol"></span>6</button><button type="button" class="chip" data-v="7"><span class="bol"></span>7</button><button type="button" class="chip" data-v="8"><span class="bol"></span>8</button><button type="button" class="chip" data-v="9"><span class="bol"></span>9</button><button type="button" class="chip" data-v="10"><span class="bol"></span>10</button></div>
+          <p class="klein">Elke letter heeft een eigen antwoord nodig. Kies dus genoeg tafels: met één tafel zijn er maar tien antwoorden.</p>
+        </div>
+        <div class="groep">
+          <h2>De geheime zin</h2>
+          <div class="velden">
+            <div class="veld"><label for="ckZin">Kies of typ een zin</label>
+              <input id="ckZin" type="text" maxlength="40" data-zet="ck.zin" list="zinnenlijst" autocomplete="off"></div>
+          </div>
+          <datalist id="zinnenlijst"></datalist>
+        </div>
+      </div>
+
+      <!-- Verhaalsommen -->
+      <div class="paneel" data-paneel="verhaal">
+        <div class="groep">
+          <h2>Voor welke groep?</h2>
+          <div class="seg" data-zet="vh.groep">
+            <button type="button" data-v="4">groep 4</button>
+            <button type="button" data-v="5">groep 5</button>
+            <button type="button" data-v="6">groep 6</button>
+            <button type="button" data-v="7">groep 7</button>
+            <button type="button" data-v="8">groep 8</button>
+          </div>
+          <p class="klein">Van erbij en eraf tot 100 in groep 4 tot geld, procenten, schaal en gemiddelde in groep 8. De getallen zijn elke keer anders.</p>
+        </div>
+        <div class="groep">
+          <h2>Aantal verhaalsommen</h2>
+          <div class="seg" data-zet="vh.aantal">
+            <button type="button" data-v="4">4</button>
+            <button type="button" data-v="6">6</button>
+            <button type="button" data-v="8">8</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Vier op een rij -->
+      <div class="paneel" data-paneel="vieropeenrij">
+        <div class="groep">
+          <h2>Welke tafels?</h2>
+          <div class="chips" data-lijst="vr.tafels"><button type="button" class="chip" data-v="1"><span class="bol"></span>1</button><button type="button" class="chip" data-v="2"><span class="bol"></span>2</button><button type="button" class="chip" data-v="3"><span class="bol"></span>3</button><button type="button" class="chip" data-v="4"><span class="bol"></span>4</button><button type="button" class="chip" data-v="5"><span class="bol"></span>5</button><button type="button" class="chip" data-v="6"><span class="bol"></span>6</button><button type="button" class="chip" data-v="7"><span class="bol"></span>7</button><button type="button" class="chip" data-v="8"><span class="bol"></span>8</button><button type="button" class="chip" data-v="9"><span class="bol"></span>9</button><button type="button" class="chip" data-v="10"><span class="bol"></span>10</button></div>
+          <p class="klein">Kies twee of meer tafels, dan zijn er genoeg verschillende antwoorden voor het bord.</p>
+        </div>
+        <div class="groep">
+          <h2>Hoe groot is het bord?</h2>
+          <div class="seg" data-zet="vr.maat">
+            <button type="button" data-v="5">5 × 5</button>
+            <button type="button" data-v="6">6 × 6</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sinterklaasgedicht -->
+      <div class="paneel" data-paneel="gedicht">
+        <div class="groep">
+          <h2>Wat komt er op het blad?</h2>
+          <div class="seg" data-zet="ge.modus">
+            <button type="button" data-v="beide">rijmen en gedicht</button>
+            <button type="button" data-v="rijmen">alleen rijmwoorden</button>
+            <button type="button" data-v="gedicht">alleen het gedicht</button>
+          </div>
+        </div>
+        <div class="groep" data-alleen="ge.modus!=rijmen">
+          <h2>Woordbank met rijmwoorden?</h2>
+          <div class="seg" data-zet="ge.woordbank">
+            <button type="button" data-v="ja">ja</button>
+            <button type="button" data-v="nee">nee</button>
+          </div>
+          <p class="klein">Handig bij lootjes trekken. Met de woordbank komen ook kinderen die het lastig vinden aan een rijmend gedicht.</p>
+        </div>
+      </div>
+
       <!-- Voor alle werkbladen -->
       <div class="groep">
         <h2>Het blad</h2>
@@ -427,7 +679,7 @@
 
   <details class="uitleg">
     <summary>Waarom deze werkbladen (voor de leerkracht)</summary>
-    <p>Rond Sinterklaas is de klas vol verwachting. Dat enthousiasme kun je gebruiken om te oefenen wat groep 3 in november leert: tellen, splitsen tot 10, erbij en eraf, en de eerste woorden hakken en plakken. Alle tekeningen zijn zelf gemaakt. Pieten staan er alleen als mutsje in, zodat de bladen op elke school passen.</p>
+    <p>Rond Sinterklaas is de klas vol verwachting. Dat enthousiasme kun je gebruiken om te oefenen wat groep 3 in november leert: tellen, splitsen tot 10, erbij en eraf, en de eerste woorden hakken en plakken. Alle tekeningen zijn zelf gemaakt. Pieten staan er alleen als mutsje in, zodat de bladen op elke school passen. Er is een blok voor groep 3 en een blok voor groep 4 t/m 8.</p>
     <h3>De werkbladen</h3>
     <ul>
       <li><b>Speurtocht.</b> Hang de kaartjes op. De kinderen lopen rond, zoeken het plaatje op hun blad en schrijven het antwoord op. Bewegend leren werkt: kinderen die drie keer per week bewegend rekenen en spellen kregen, gingen daar na twee jaar meer op vooruit dan hun klasgenoten zonder die lessen (Mullender-Wijnsma et al., 2016).</li>
@@ -437,6 +689,15 @@
       <li><b>Woorden.</b> Eén vakje per klank, zoals bij hakken en plakken. Met hulp staat de eerste klank er al, of liggen de letters door elkaar boven de vakjes.</li>
       <li><b>Doolhof.</b> Voor als je klaar bent. Er is altijd precies één goede weg.</li>
     </ul>
+    <h3>Groep 4 t/m 8</h3>
+    <ul>
+      <li><b>Speurtocht met geheim woord.</b> Elk antwoord hoort bij een letter in de sleutel. In de sleutel staan ook foute antwoorden, dus alleen wie goed rekent, vindt het woord.</li>
+      <li><b>Pietenmutsbingo.</b> Dezelfde zaklamptruc, met tafels, deelsommen, plus en min tot 100 of "tussen welke tientallen". Tafels moeten uiteindelijk vlot en zonder tellen gaan; kort en vaak oefenen helpt daarbij (Hickendorff, 2023).</li>
+      <li><b>Codekraker.</b> Reken de sommen uit, zoek de letters op en kraak de sinterklaaszin.</li>
+      <li><b>Verhaalsommen.</b> Per groep andere verhalen. Laat de kinderen eerst opschrijven wat er gebeurt en welke kale som erbij hoort. Een tekening of schema in het kladvak helpt om de goede bewerking te kiezen (Van Luit, 2022).</li>
+      <li><b>Vier op een rij.</b> Een spel voor twee met de tafels die je kiest, met somkaartjes om te knippen.</li>
+      <li><b>Sinterklaasgedicht.</b> Eerst rijmwoorden zoeken, dan het gedicht schrijven met tips, beginzinnen en een woordbank. Handig bij lootjes trekken.</li>
+    </ul>
     <h3>Hoe het werkt</h3>
     <ul>
       <li>Met de <b>herhaalcode</b> krijg je precies hetzelfde blad terug, bijvoorbeeld voor een collega of de andere helft van de klas.</li>
@@ -445,6 +706,7 @@
     <h3>Bronnen</h3>
     <p class="bron">Hickendorff, M. (2023, 4 april). <i>Aanvankelijk en gevorderd rekenen in groep 3, 4 en 5</i>. Onderwijskennis.nl. Geraadpleegd op 11 november 2026, van <a href="https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5">https://www.onderwijskennis.nl/kennisbank/aanvankelijk-en-gevorderd-rekenen-in-groep-3-4-en-5</a></p>
     <p class="bron">Mullender-Wijnsma, M. J., Hartman, E., de Greeff, J. W., Doolaard, S., Bosker, R. J., &amp; Visscher, C. (2016). Physically active math and language lessons improve academic achievement: A cluster randomized controlled trial. <i>Pediatrics, 137</i>(3), e20152743. <a href="https://doi.org/10.1542/peds.2015-2743">https://doi.org/10.1542/peds.2015-2743</a></p>
+    <p class="bron">Van Luit, H. (2022, 14 oktober). <i>Wat zijn effectieve manieren om leerlingen te leren de juiste kale som uit een redactiesom te halen?</i> (VRAAG-1452). Kennisrotonde. Geraadpleegd op 11 november 2026, van <a href="https://www.kennisrotonde.nl/vraag-en-antwoord/redactiesom-leren-omzetten-naar-kale-som">https://www.kennisrotonde.nl/vraag-en-antwoord/redactiesom-leren-omzetten-naar-kale-som</a></p>
   </details>
 
   <footer class="voet">Sinterklaas · onderdeel van <a href="index.html">Lesmateriaal Blink</a> · groep 3</footer>
@@ -583,12 +845,18 @@ const WOORDEN = [
 ];
 
 const SOORTEN = [
-  { id: "speurtocht", naam: "Speurtocht", uitleg: "kaartjes in de klas", ic: "zak", titel: "Speurtocht van de Sint" },
-  { id: "bingo", naam: "Mutsjesbingo", uitleg: "met de zaklamp", ic: "muts", titel: "Pietenmutsbingo" },
-  { id: "tellen", naam: "Tellen", uitleg: "tel of kleur", ic: "pepernoot", titel: "Tellen met de Sint" },
-  { id: "sommen", naam: "Sommen", uitleg: "erbij en eraf", ic: "cadeau", titel: "Sommen met de Sint" },
-  { id: "woorden", naam: "Woorden", uitleg: "hakken en schrijven", ic: "boot", titel: "Sint-woorden" },
-  { id: "doolhof", naam: "Doolhof", uitleg: "één goede weg", ic: "dak", titel: "Sint-doolhof" },
+  { id: "speurtocht", groep: "3", naam: "Speurtocht", uitleg: "kaartjes in de klas", ic: "zak", titel: "Speurtocht van de Sint" },
+  { id: "bingo", groep: "3", naam: "Mutsjesbingo", uitleg: "met de zaklamp", ic: "muts", titel: "Pietenmutsbingo" },
+  { id: "tellen", groep: "3", naam: "Tellen", uitleg: "tel of kleur", ic: "pepernoot", titel: "Tellen met de Sint" },
+  { id: "sommen", groep: "3", naam: "Sommen", uitleg: "erbij en eraf", ic: "cadeau", titel: "Sommen met de Sint" },
+  { id: "woorden", groep: "3", naam: "Woorden", uitleg: "hakken en schrijven", ic: "boot", titel: "Sint-woorden" },
+  { id: "doolhof", groep: "3", naam: "Doolhof", uitleg: "één goede weg", ic: "dak", titel: "Sint-doolhof" },
+  { id: "speurtocht2", groep: "4-8", naam: "Geheime speurtocht", uitleg: "tafels, sommen, geheim woord", ic: "mijter", titel: "De geheime speurtocht van de Sint" },
+  { id: "bingo2", groep: "4-8", naam: "Mutsjesbingo", uitleg: "tafels en tientallen", ic: "muts", titel: "Pietenmutsbingo" },
+  { id: "codekraker", groep: "4-8", naam: "Codekraker", uitleg: "kraak de sinterklaaszin", ic: "letter", titel: "Sint-codekraker" },
+  { id: "verhaal", groep: "4-8", naam: "Verhaalsommen", uitleg: "per groep 4 t/m 8", ic: "boot", titel: "Verhaalsommen van de Sint" },
+  { id: "vieropeenrij", groep: "4-8", naam: "Vier op een rij", uitleg: "tafelspel voor twee", ic: "pepernoten", titel: "Pepernoten vier op een rij" },
+  { id: "gedicht", groep: "4-8", naam: "Sinterklaasgedicht", uitleg: "rijmen en schrijven", ic: "staf", titel: "Mijn sinterklaasgedicht" },
 ];
 
 /* ---------- instellingen ---------- */
@@ -600,6 +868,12 @@ let staat = {
   so: { soort: "beide", tot: 10, aantal: 8 },
   wo: { modus: "leeg", woorden: ["zak", "boot", "muts", "sint", "maan", "dak", "bal", "staf"] },
   dh: { thema: "piet", maat: "makkelijk", aantal: 1 },
+  sp2: { som: "tafels", tafels: [2, 3, 4, 5, 10], geheim: "ja", woord: "PEPERNOOT", aantal: 8 },
+  bi2: { som: "tafels", tafels: [2, 3, 4, 5, 10], mutsen: 18, kaarten: 24, vakken: 9 },
+  ck: { som: "tafels", tafels: [3, 4, 6, 7, 8, 9], zin: "DE STOOMBOOT KOMT ERAAN" },
+  vh: { groep: 5, aantal: 6 },
+  vr: { tafels: [3, 4, 6, 7, 8, 9], maat: 6 },
+  ge: { modus: "beide", woordbank: "ja" },
 };
 try {
   const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}");
@@ -681,7 +955,19 @@ function opgavenReeks(r, n, som, tot) {
 
 /* ---------- stukjes HTML ---------- */
 const naamregel = () => staat.naam ? `<div class="regels"><div>Naam <span></span></div><div>Datum <span></span></div></div>` : "";
-const bladkop = (titel, icoon, metNaam = true) => `<div class="bladkop"><h2>${icoon ? teken(icoon) : ""}${titel}</h2>${metNaam ? naamregel() : ""}</div>`;
+/* vlaggenlijn: een touwtje met driehoekige vlaggetjes in sinterklaaskleuren */
+const VLAGKLEUREN = ["#d62f2f", "#f1c84b", "#2f55c8", "#2f9e58", "#ef8a1f", "#7b45c6"];
+function slinger(n, cls = "slinger") {
+  const b = n * 40;
+  let vlaggen = "";
+  for (let i = 0; i < n; i++) {
+    const x = i * 40 + 6, zak = 5 * Math.sin(Math.PI * (i + .5) / n);
+    vlaggen += `<path d="M${x} ${4 + zak} L${x + 28} ${4 + zak} L${x + 14} ${28 + zak}Z" fill="${VLAGKLEUREN[i % VLAGKLEUREN.length]}"/>`;
+  }
+  return `<svg class="${cls}" viewBox="0 0 ${b} 36" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0 3 Q${b / 2} 14 ${b} 3" fill="none" stroke="#8a7c78" stroke-width="1.5"/>${vlaggen}</svg>`;
+}
+const bladkop = (titel, icoon, metNaam = true) => `${slinger(22, "slinger bladslinger")}<div class="bladkop"><h2>${icoon ? teken(icoon) : ""}${titel}</h2>${metNaam ? naamregel() : ""}</div>`;
 const voet = (links, code) => `<div class="bladvoet"><span>Lesmateriaal Blink · ${links}</span><span>code ${code}</span></div>`;
 const vak = (inhoud = "", vol = false) => `<span class="vak${vol ? " vol" : ""}">${inhoud}</span>`;
 
@@ -699,6 +985,18 @@ function vijfStructuur(n, plaatje, metGat = false) {
 const RIJ_VAN_TIEN = "repeat(5,1fr) 14px repeat(5,1fr)";
 
 /* ---------- 1. speurtocht ---------- */
+function speurkaartHtml(midden, plaatje, i) {
+  return `<div class="speurkaart${i % 2 ? " goud" : ""}"><div class="binnen">${slinger(7)}<span class="hoek">${i + 1}</span>
+    <div class="opgave">${midden}</div><div class="plaatje">${teken(plaatje, "", 0)}</div></div></div>`;
+}
+function kaartVellen(kaarten) {
+  let html = "";
+  for (let v = 0; v < kaarten.length; v += 4) {
+    if (v) html += `<div class="paginabreak"></div><div class="scheiding"></div>`;
+    html += `<div class="vel twee">${kaarten.slice(v, v + 4).join("")}</div>`;
+  }
+  return html;
+}
 function speurtocht(r, code) {
   const s = staat.sp;
   const opgaven = opgavenReeks(r, s.aantal, s.som, s.som === "harten" ? 10 : s.tot);
@@ -711,8 +1009,7 @@ function speurtocht(r, code) {
     else if (o.soort === "hart") midden = svg(TEKENING.hart(o.getal), "hart");
     else if (o.soort === "tel") midden = `<div class="telveld">${vijfStructuur(o.antwoord, "pepernoot")}</div>`;
     else midden = `<span class="som">${o.a} ${o.soort === "plus" ? "+" : "−"} ${o.b} = ${vak()}</span>`;
-    return `<div class="speurkaart${i % 2 ? " goud" : ""}"><div class="binnen"><span class="hoek">${i + 1}</span>
-      <div class="opgave">${midden}</div><div class="plaatje">${teken(plaatjes[i], "", 0)}</div></div></div>`;
+    return speurkaartHtml(midden, plaatjes[i], i);
   };
   let html = `<p class="tip alleenscherm">Druk alles af. De kaartjes hang je op, het blad met de plaatjes krijgt elk kind.</p>`;
   for (let v = 0; v < opgaven.length; v += 4) {
@@ -732,11 +1029,13 @@ function speurtocht(r, code) {
 }
 
 /* ---------- 2. pietenmutsbingo ---------- */
-function bingo(r, code) {
-  const s = staat.bi;
-  const opgaven = opgavenReeks(r, s.mutsen, s.som, 10);
+function bingo(r, code, hoog = false) {
+  const s = hoog ? staat.bi2 : staat.bi;
+  const opgaven = hoog ? hogeReeks(r, s.mutsen, s.som, s.tafels, "liefst") : opgavenReeks(r, s.mutsen, s.som, 10);
   const titel = huidigeTitel();
-  const achterkant = (o) => o.soort === "splitsen" ? huisjeHtml(o, false)
+  const achterkant = (o) => o.vraag !== undefined
+    ? `<span style="font-size:${Math.min(22, 120 / (o.vraag.length + 1))}cqw">${o.vraag}</span>`
+    : o.soort === "splitsen" ? huisjeHtml(o, false)
     : o.soort === "hart" ? `<svg viewBox="0 0 100 100" style="width:46cqw; display:block;" aria-hidden="true"><path d="M50 90 C14 66 4 46 12 28 C20 10 42 10 50 28 C58 10 80 10 88 28 C96 46 86 66 50 90Z" fill="none" stroke="#111" stroke-width="6"/><text x="50" y="62" text-anchor="middle" font-family="'Baloo 2',system-ui,sans-serif" font-weight="800" font-size="38" fill="#111">${o.getal}</text></svg>`
     : `${o.a} ${o.soort === "plus" ? "+" : "−"} ${o.b}`;
   let html = `<p class="tip alleenscherm">Knip de mutsjes uit en vouw ze dubbel op de stippellijn, met de som naar achteren. Schijn met een zaklamp achter het mutsje: dan verschijnt de som. De kinderen strepen het antwoord weg op hun bingokaart. Vol? Bingo!</p>`;
@@ -748,9 +1047,10 @@ function bingo(r, code) {
       <div class="achter"><span class="verstopt">${achterkant(o)}</span></div></div></div>`).join("")}</div>`;
   }
   /* bingokaarten: alleen getallen die echt achter een mutsje zitten */
-  const getallen = [...new Set(opgaven.map((o) => o.antwoord))].sort((a, b) => a - b);
+  const getallen = [...new Set(opgaven.map((o) => o.antwoord))].sort((a, b) => parseInt(a) - parseInt(b));
   const k = Math.min(s.vakken, getallen.length);
-  const kolommen = k === 9 ? 3 : 2;
+  const kolommen = k >= 9 ? 3 : 2;
+  const letter = (g) => { const len = String(g).length, basis = kolommen === 3 ? 13 : 17; return len <= 3 ? basis : Math.max(5.5, basis * 3 / len); };
   const kaarten = [], gezien = new Set();
   for (let i = 0; i < s.kaarten; i++) {
     let keuze;
@@ -765,13 +1065,13 @@ function bingo(r, code) {
     html += `<div class="paginabreak"></div><div class="scheiding"></div><div class="vel twee">${kaarten.slice(v, v + 4).map((kaart, j) => `
       <div class="bingokaart${(v + j) % 2 ? " goud" : ""}"><div class="binnen"><div class="bkop">${teken("muts", "", v + j)}Bingo!</div>
       <div class="bnaam">Naam</div>
-      <div class="bvakken" style="grid-template-columns:repeat(${kolommen},1fr);">${kaart.map((g) => `<div class="bvak">${g}</div>`).join("")}</div></div></div>`).join("")}</div>`;
+      <div class="bvakken" style="grid-template-columns:repeat(${kolommen},1fr);">${kaart.map((g) => `<div class="bvak" style="font-size:${letter(g)}cqw">${toon(g)}</div>`).join("")}</div></div></div>`).join("")}</div>`;
   }
   if (staat.antwoord) {
     html += `<div class="paginabreak"></div><div class="scheiding"></div>${bladkop("Trekkingslijst · " + titel, "muts", false)}
       <p class="tip">Vink af welke mutsjes je hebt laten zien. Zo kun je een bingo snel controleren. Print de mutsjes op gewoon printpapier, want op dik papier schijnt de som niet door.</p>
       <table class="trekking"><thead><tr><th></th><th>Mutsje</th><th>Achter het mutsje</th><th>Antwoord</th></tr></thead><tbody>
-      ${opgaven.map((o, i) => `<tr><td class="af"><span></span></td><td>${teken("muts", "mutsje", i)} ${i + 1}</td><td>${o.soort === "hart" ? `hart met ${o.getal}` : o.tekst.replace(/ = \d+$/, "").replace(/ en \d+$/, " en ?")}</td><td><b>${o.antwoord}</b></td></tr>`).join("")}
+      ${opgaven.map((o, i) => `<tr><td class="af"><span></span></td><td>${teken("muts", "mutsje", i)} ${i + 1}</td><td>${o.vraag !== undefined ? (o.n ? `${o.vraag} (tussen welke ${o.wat}?)` : o.vraag) : o.soort === "hart" ? `hart met ${o.getal}` : o.tekst.replace(/ = \d+$/, "").replace(/ en \d+$/, " en ?")}</td><td><b>${toon(o.antwoord)}</b></td></tr>`).join("")}
       </tbody></table>${voet("trekkingslijst", code)}`;
   }
   return html;
@@ -976,15 +1276,310 @@ function doolhof(r, code) {
   return html;
 }
 
+/* ================================================================
+   Groep 4 t/m 8
+   ================================================================ */
+const kies = (r, lijst) => lijst[Math.floor(r() * lijst.length)];
+const getal = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+const toon = (w) => typeof w === "number" ? getal(w) : w;
+const sorteerwaarde = (w) => typeof w === "number" ? w : parseInt(w);
+
+/* Eén som voor de hogere groepen. Bij "tussen welke tientallen" is het antwoord
+   tekst (40 en 50) en bewaar ik ook de grenzen apart. */
+function hogeOpgave(r, soort, tafels) {
+  const t = kies(r, tafels && tafels.length ? tafels : [2, 3, 4, 5, 10]);
+  if (soort === "tafels") { const a = tussen(r, 2, 10); return { vraag: `${a} × ${t}`, antwoord: a * t }; }
+  if (soort === "delen") { const a = tussen(r, 2, 10); return { vraag: `${a * t} : ${t}`, antwoord: a }; }
+  if (soort === "pm100") {
+    if (r() < .5) { const a = tussen(r, 11, 87), b = tussen(r, 2, 99 - a); return { vraag: `${a} + ${b}`, antwoord: a + b }; }
+    const a = tussen(r, 21, 99), b = tussen(r, 2, a - 1);
+    return { vraag: `${a} − ${b}`, antwoord: a - b };
+  }
+  if (soort === "pm1000") {
+    if (r() < .5) { const a = tussen(r, 11, 88) * 10, b = tussen(r, 1, 99 - a / 10) * 10; return { vraag: `${a} + ${b}`, antwoord: a + b }; }
+    const a = tussen(r, 21, 99) * 10, b = tussen(r, 1, a / 10 - 1) * 10;
+    return { vraag: `${a} − ${b}`, antwoord: a - b };
+  }
+  if (soort === "keergroot") {
+    const a = tussen(r, 2, 9), b = tussen(r, 2, 9), vorm = tussen(r, 0, 2);
+    if (vorm === 0) return { vraag: `${a * 10} × ${b}`, antwoord: a * 10 * b };
+    if (vorm === 1) return { vraag: `${a} × ${b * 100}`, antwoord: a * b * 100 };
+    return { vraag: `${a * 10} × ${b * 10}`, antwoord: a * b * 100 };
+  }
+  const stap = soort === "honderdtal" ? 100 : 10;
+  let n;
+  do n = stap === 100 ? tussen(r, 101, 999) : tussen(r, 11, 99); while (n % stap === 0);
+  const lo = Math.floor(n / stap) * stap;
+  return { vraag: `${n}`, antwoord: `${lo} en ${lo + stap}`, n, lo, hi: lo + stap, wat: stap === 100 ? "honderdtallen" : "tientallen" };
+}
+/* Een rij sommen zonder dubbele. "streng": elk antwoord maar één keer (nodig voor een
+   sleutel met letters). "liefst": eerst verschillende antwoorden, daarna mag het dubbel. */
+function hogeReeks(r, n, soort, tafels, uniek) {
+  const uit = [], vragen = new Set(), antwoorden = new Set();
+  const voegToe = (o) => {
+    vragen.add(o.vraag); antwoorden.add(String(o.antwoord));
+    o.tekst = o.n ? `${o.vraag} ligt tussen ${o.antwoord}` : `${o.vraag} = ${toon(o.antwoord)}`;
+    uit.push(o);
+  };
+  for (let p = 0; uit.length < n && p < 4000; p++) {
+    const o = hogeOpgave(r, soort, tafels);
+    if (vragen.has(o.vraag) || (uniek && antwoorden.has(String(o.antwoord)))) continue;
+    voegToe(o);
+  }
+  if (uniek === "liefst") {
+    for (let p = 0; uit.length < n && p < 4000; p++) {
+      const o = hogeOpgave(r, soort, tafels);
+      if (!vragen.has(o.vraag)) voegToe(o);
+    }
+  }
+  return uit;
+}
+const LETTERS = "ABDEGHIKLMNOPRSTUVWZ";
+function sleutelHtml(paren) {
+  return `<div class="sleutel">${[...paren].sort((a, b) => sorteerwaarde(a.antwoord) - sorteerwaarde(b.antwoord))
+    .map((p) => `<div><b>${toon(p.antwoord)}</b><span>${p.letter}</span></div>`).join("")}</div>`;
+}
+
+/* ---------- 7. speurtocht met geheim woord ---------- */
+function speurtocht2(r, code) {
+  const s = staat.sp2, titel = huidigeTitel();
+  const geheim = s.geheim === "ja";
+  const woord = geheim ? ((s.woord || "").toUpperCase().replace(/[^A-Z]/g, "").slice(0, 12) || "PEPERNOOT") : "";
+  const n = geheim ? woord.length : s.aantal;
+  const tiental = s.som === "tiental";
+  const opgaven = hogeReeks(r, n, s.som, s.tafels, geheim ? "streng" : "liefst");
+  if (opgaven.length < n) {
+    melding("Er zijn niet genoeg verschillende sommen voor dit woord. Kies meer tafels of een korter woord.");
+    return `<p class="tip">Er zijn niet genoeg verschillende sommen voor dit woord. Kies meer tafels of een korter woord.</p>`;
+  }
+  const plaatjes = schud(r, SPEURPLAATJES).slice(0, n);
+  const kaarten = opgaven.map((o, i) => {
+    const midden = tiental
+      ? `<div class="tientalvraag"><span class="groot">${o.vraag}</span><small>ligt tussen ${vak()} en ${vak()}</small></div>`
+      : `<span class="som somtekst" style="font-size:${Math.min(17, 150 / (o.vraag.length + 4))}cqw">${o.vraag} = ${vak()}</span>`;
+    return speurkaartHtml(midden, plaatjes[i], i);
+  });
+  let html = `<p class="tip alleenscherm">Druk alles af. Hang de kaartjes door elkaar op in de klas of de gang. Elk kind krijgt het blad met de plaatjes${geheim ? " en de sleutel" : ""}.</p>` + kaartVellen(kaarten);
+
+  /* sleutel: de echte antwoorden met hun letter, plus een paar foute antwoorden */
+  let paren = [];
+  if (geheim) {
+    paren = opgaven.map((o, i) => ({ antwoord: o.antwoord, letter: woord[i] }));
+    const bezet = new Set(opgaven.map((o) => String(o.antwoord)));
+    const nep = hogeReeks(r, n + 10, s.som, s.tafels, "streng").filter((o) => !bezet.has(String(o.antwoord))).slice(0, Math.min(6, Math.max(3, Math.round(n / 2))));
+    nep.forEach((o) => paren.push({ antwoord: o.antwoord, letter: kies(r, LETTERS.split("")) }));
+  }
+  const antwoordvak = (o, met) => tiental
+    ? `${vak(met ? o.lo : "", met)}<span class="en">en</span>${vak(met ? o.hi : "", met)}`
+    : vak(met ? toon(o.antwoord) : "", met);
+  const lijst = (met) => `<div class="speurlijst">${opgaven.map((o, i) => `
+      <div class="speurregel">${teken(plaatjes[i], "ic", 0)}${antwoordvak(o, met)}
+      ${geheim ? `<span class="pijl">→</span><span class="vak letter${met ? " vol" : ""}">${met ? woord[i] : ""}</span>` : ""}
+      ${met ? `<span class="uitkomst" style="font-size:15px;">${o.tekst}</span>` : ""}</div>`).join("")}</div>`;
+  const opdracht = geheim
+    ? "Zoek elk kaartje en reken uit. Zoek je antwoord op in de sleutel en schrijf de letter erachter."
+    : tiental ? "Zoek elk kaartje. Tussen welke tientallen ligt het getal?" : "Zoek elk kaartje en reken de som uit.";
+  const geheimvak = (met) => geheim ? `<div class="kader"><h3>Het geheime woord</h3><div class="geheimwoord">${woord.split("").map((l, i) =>
+      `<div class="letterplek">${teken(plaatjes[i], "", 0)}<span class="vak${met ? " vol" : ""}">${met ? l : ""}</span></div>`).join("")}</div></div>` : "";
+  html += `<div class="paginabreak"></div><div class="scheiding"></div>
+    ${bladkop(titel, "mijter")}<p class="opdracht">${opdracht}</p>${lijst(false)}
+    ${geheim ? `<div class="kader"><h3>De sleutel</h3>${sleutelHtml(paren)}</div>` : ""}${geheimvak(false)}${voet("speurtocht", code)}`;
+  if (staat.antwoord) html += `<div class="paginabreak"></div><div class="scheiding"></div>
+    ${bladkop("Antwoorden · " + titel, "", false)}${lijst(true)}${geheimvak(true)}${voet("antwoordblad", code)}`;
+  return html;
+}
+
+/* ---------- 8. codekraker ---------- */
+const ZINNEN = ["DE STOOMBOOT KOMT ERAAN", "PIET ZIT OP HET DAK", "ZET JE SCHOEN MAAR NEER", "SINT LEEST JOUW BRIEF",
+  "PEPERNOTEN IN DE ZAK", "WAT ZIT ER IN DE ZAK", "HOOR DE WIND WAAIT", "WIE ZOET IS KRIJGT LEKKERS"];
+function codekraker(r, code) {
+  const s = staat.ck, titel = huidigeTitel();
+  const zin = (s.zin || "").toUpperCase().replace(/[^A-Z ]/g, "").replace(/\s+/g, " ").trim() || ZINNEN[0];
+  const letters = schud(r, [...new Set(zin.replace(/ /g, ""))]);
+  const opgaven = hogeReeks(r, letters.length + 6, s.som, s.tafels, "streng");
+  if (opgaven.length < letters.length) {
+    melding(`Deze zin heeft ${letters.length} verschillende letters. Kies meer tafels of een andere soort som.`);
+    return `<p class="tip">Deze zin heeft ${letters.length} verschillende letters, en er zijn niet genoeg sommen met verschillende antwoorden. Kies meer tafels of een andere soort som.</p>`;
+  }
+  const echt = opgaven.slice(0, letters.length).map((o, i) => ({ ...o, letter: letters[i], nr: i + 1 }));
+  const nummer = Object.fromEntries(echt.map((o) => [o.letter, o.nr]));
+  const nep = opgaven.slice(letters.length).map((o) => ({ antwoord: o.antwoord, letter: kies(r, LETTERS.split("").filter((l) => !letters.includes(l)).concat(letters)) }));
+
+  const sommenlijst = (met) => `<div class="codesommen">${echt.map((o) => `
+    <div class="codesom"><span class="nr">${o.nr}.</span>${o.vraag} = <span class="vak${met ? " vol" : ""}">${met ? toon(o.antwoord) : ""}</span>
+    <span class="pijl">→</span><span class="vak letter${met ? " vol" : ""}">${met ? o.letter : ""}</span></div>`).join("")}</div>`;
+  const zinvak = (met) => `<div class="kader"><h3>De geheime zin</h3><div class="codezin">${zin.split(" ").map((w) =>
+    `<div class="woord">${w.split("").map((l) => `<div class="plek"><span class="vak${met ? " vol" : ""}">${met ? l : ""}</span><small>${nummer[l]}</small></div>`).join("")}</div>`).join("")}</div></div>`;
+  let html = `${bladkop(titel, "letter")}
+    <p class="opdracht">Reken elke som uit. Zoek het antwoord in de sleutel en schrijf de letter erachter. Zet dan de letters in de zin: onder elk vakje staat het nummer van de som.</p>
+    ${sommenlijst(false)}<div class="kader"><h3>De sleutel</h3>${sleutelHtml([...echt, ...nep])}</div>${zinvak(false)}${voet("codekraker", code)}`;
+  if (staat.antwoord) html += `<div class="paginabreak"></div><div class="scheiding"></div>${bladkop("Antwoorden · " + titel, "", false)}
+    ${sommenlijst(true)}${zinvak(true)}${voet("antwoordblad", code)}`;
+  return html;
+}
+
+/* ---------- 9. verhaalsommen ----------
+   Elk verhaal kiest eerst getallen die mooi uitkomen en rekent dan het antwoord uit.
+   Bedragen reken ik in centen, zodat er nooit afrondingsfouten ontstaan. */
+const NAMEN = ["Noor", "Daan", "Yara", "Sem", "Aya", "Milan", "Lotte", "Mohammed", "Zoë", "Bram", "Fatima", "Liam", "Sara", "Jesse", "Ilias", "Femke"];
+const euro = (cent) => "€ " + Math.floor(cent / 100) + "," + String(cent % 100).padStart(2, "0");
+const klok = (min) => `${Math.floor(min / 60) % 24}.${String(min % 60).padStart(2, "0")}`;
+const komma = (x) => String(x).replace(".", ",");
+const DELEN = { "1/2": "de helft", "1/4": "een kwart", "3/4": "drie kwart", "1/3": "een derde", "2/3": "twee derde", "1/5": "een vijfde" };
+const VERHALEN = {
+  4: [
+    (r) => { const a = tussen(r, 35, 95), b = tussen(r, 12, a - 10); return { t: `Piet heeft ${a} pepernoten in zijn zak. Hij strooit er ${b} in de klas. Hoeveel pepernoten zitten er nog in zijn zak?`, a: `${a - b} pepernoten`, s: `${a} − ${b} = ${a - b}` }; },
+    (r) => { const n = kies(r, NAMEN), a = tussen(r, 12, 48), b = tussen(r, 11, 100 - a - 5); return { t: `In de schoen van ${n} liggen ${a} kruidnoten. Piet doet er nog ${b} bij. Hoeveel kruidnoten liggen er nu in de schoen?`, a: `${a + b} kruidnoten`, s: `${a} + ${b} = ${a + b}` }; },
+    (r) => { const a = tussen(r, 40, 90), b = tussen(r, 11, a - 15); return { t: `Op de stoomboot zijn ${a} pieten. Bij de kade stappen er ${b} uit. Hoeveel pieten zijn er nog op de boot?`, a: `${a - b} pieten`, s: `${a} − ${b} = ${a - b}` }; },
+    (r) => { const z = tussen(r, 2, 6), k = kies(r, [2, 5, 10]); return { t: `Sinterklaas heeft ${z} zakjes. In elk zakje zitten ${k} chocolademunten. Hoeveel chocolademunten zijn dat samen?`, a: `${z * k} chocolademunten`, s: `${z} × ${k} = ${z * k}` }; },
+    (r) => { const n = kies(r, NAMEN), p = tussen(r, 3, 9), q = tussen(r, 2, 8); return { t: `${n} koopt een chocoladeletter van € ${p} en een zak kruidnoten van € ${q}. Hoeveel moet ${n} betalen?`, a: `€ ${p + q}`, s: `${p} + ${q} = ${p + q}` }; },
+    (r) => { const a = tussen(r, 25, 85); return { t: `In de grote zak van Sint passen 100 cadeautjes. Er zitten er al ${a} in. Hoeveel cadeautjes kunnen er nog bij?`, a: `${100 - a} cadeautjes`, s: `${a} + ... = 100, dus 100 − ${a} = ${100 - a}` }; },
+  ],
+  5: [
+    (r) => { const n = tussen(r, 3, 9), k = tussen(r, 3, 9); return { t: `Piet verdeelt ${n * k} pepernoten eerlijk over ${n} kinderen. Hoeveel pepernoten krijgt elk kind?`, a: `${k} pepernoten`, s: `${n * k} : ${n} = ${k}` }; },
+    (r) => { const p = tussen(r, 3, 9), n = tussen(r, 3, 8); return { t: `Een doos chocoladeletters kost € ${p}. De juf koopt ${n} dozen voor de klas. Hoeveel moet ze betalen?`, a: `€ ${p * n}`, s: `${n} × ${p} = ${p * n}` }; },
+    (r) => { const a = tussen(r, 120, 480), b = tussen(r, 110, 990 - a); return { t: `Op het verlanglijstje van Sint staan ${a} kinderen uit het dorp en ${b} kinderen uit de stad. Hoeveel kinderen zijn dat samen?`, a: `${a + b} kinderen`, s: `${a} + ${b} = ${a + b}` }; },
+    (r) => { const v = kies(r, [7, 8, 9, 10, 13, 14]) * 60 + kies(r, [0, 15, 30]), d = kies(r, [45, 75, 90, 120]); return { t: `De stoomboot vertrekt om ${klok(v)} uur uit de haven. De reis duurt ${d} minuten. Hoe laat komt de boot aan?`, a: `om ${klok(v + d)} uur`, s: `${klok(v)} + ${d} minuten = ${klok(v + d)}` }; },
+    (r) => { const z = tussen(r, 4, 9), k = tussen(r, 6, 12); return { t: `Piet heeft ${z} zakken. In elke zak zitten ${k} cadeautjes. Hoeveel cadeautjes heeft Piet?`, a: `${z * k} cadeautjes`, s: `${z} × ${k} = ${z * k}` }; },
+    (r) => { const a = tussen(r, 300, 900), b = tussen(r, 120, a - 50); return { t: `In de pakjesboot liggen ${a} cadeaus. Vannacht bezorgen de pieten er ${b}. Hoeveel cadeaus liggen er nog in de boot?`, a: `${a - b} cadeaus`, s: `${a} − ${b} = ${a - b}` }; },
+  ],
+  6: [
+    (r) => { const n = tussen(r, 22, 31), p = tussen(r, 4, 8); return { t: `In de klas zitten ${n} kinderen. Iedereen koopt een cadeautje van € ${p} voor zijn lootje. Hoeveel geld wordt er samen uitgegeven?`, a: `€ ${n * p}`, s: `${n} × ${p} = ${n * p}` }; },
+    (r) => { const p = kies(r, [400, 600, 800, 1200]), g = kies(r, [500, 250]); return { t: `Een kilo pepernoten kost ${euro(p)}. De juf koopt ${g} gram. Hoeveel moet ze betalen?`, a: euro(p * g / 1000), s: `${g} gram is ${g === 500 ? "de helft" : "een kwart"} van een kilo, dus ${euro(p)} : ${g === 500 ? 2 : 4}` }; },
+    (r) => { const k = tussen(r, 4, 8), per = tussen(r, 25, 60); return { t: `Piet heeft ${k * per} pepernoten. Hij verdeelt ze eerlijk over ${k} klassen. Hoeveel pepernoten krijgt elke klas?`, a: `${per} pepernoten`, s: `${k * per} : ${k} = ${per}` }; },
+    (r) => { const v = tussen(r, 12, 24), u = tussen(r, 3, 8); return { t: `De stoomboot vaart ${v} kilometer per uur. Hoe ver komt de boot in ${u} uur?`, a: `${v * u} kilometer`, s: `${u} × ${v} = ${v * u}` }; },
+    (r) => { const d = tussen(r, 12, 25); return { t: `Sinterklaas rijdt met zijn paard over ${d} daken in een kwartier. Hoeveel daken zijn dat in een heel uur?`, a: `${d * 4} daken`, s: `een uur is 4 kwartier, dus 4 × ${d} = ${d * 4}` }; },
+    (r) => { const a = tussen(r, 24, 96) * 50, b = tussen(r, 12, 60) * 25; return { t: `In het pakhuis van Sint liggen ${getal(a)} cadeaus. Er komen nog ${getal(b)} cadeaus bij. Hoeveel cadeaus liggen er nu in het pakhuis?`, a: `${getal(a + b)} cadeaus`, s: `${getal(a)} + ${getal(b)} = ${getal(a + b)}` }; },
+  ],
+  7: [
+    (r) => { const b = kies(r, [500, 700, 1000, 1500]), x = tussen(r, 4, Math.floor(b / 2 / 25)) * 25, y = tussen(r, 2, Math.floor((b - x - 50) / 25)) * 25; return { t: `Voor je surprise heb je ${euro(b)}. Je koopt lijm voor ${euro(x)} en gekleurd papier voor ${euro(y)}. Hoeveel geld houd je over?`, a: euro(b - x - y), s: `${euro(b)} − ${euro(x)} − ${euro(y)} = ${euro(b - x - y)}` }; },
+    (r) => { const deel = kies(r, Object.keys(DELEN)), [t, n] = deel.split("/").map(Number); const g = n === 3 ? kies(r, [150, 240, 300]) : n === 5 ? kies(r, [200, 250, 300]) : kies(r, [200, 240, 280]); const naam = kies(r, NAMEN); return { t: `Een chocoladeletter weegt ${g} gram. ${naam} eet ${DELEN[deel]} van de letter op. Hoeveel gram chocola is dat?`, a: `${g * t / n} gram`, s: `${deel} van ${g} = ${g} : ${n} × ${t} = ${g * t / n}` }; },
+    (r) => { const pct = kies(r, [10, 20, 25, 50]), p = kies(r, [400, 600, 800, 1000, 1200]); return { t: `De winkel geeft ${pct}% korting op een grote zak pepernoten van ${euro(p)}. Hoeveel betaal je nu?`, a: euro(p * (100 - pct) / 100), s: `${pct}% van ${euro(p)} is ${euro(p * pct / 100)}, dus ${euro(p)} − ${euro(p * pct / 100)}` }; },
+    (r) => { const n = kies(r, [4, 5, 6]), m = n * kies(r, [20, 25, 30]), k = tussen(r, 2, 5); return { t: `Voor ${n} taaitaaipoppen heb je ${m} gram meel nodig. Hoeveel meel heb je nodig voor ${n * k} taaitaaipoppen?`, a: `${m * k} gram`, s: `${n * k} is ${k} keer zoveel als ${n}, dus ${k} × ${m} = ${m * k}` }; },
+    (r) => { const aan = kies(r, [9, 10, 11, 13, 14]) * 60 + kies(r, [10, 20, 35, 45]), d = kies(r, [25, 40, 55, 75, 95]); return { t: `Sinterklaas komt om ${klok(aan)} uur op school. Hij blijft ${d} minuten. Hoe laat gaat hij weer weg?`, a: `om ${klok(aan + d)} uur`, s: `${klok(aan)} + ${d} minuten = ${klok(aan + d)}` }; },
+    (r) => { const doos = kies(r, [6, 8, 12]), dozen = tussen(r, 12, 30); return { t: `In een doos zitten ${doos} chocoladeletters. De school bestelt ${dozen} dozen. Hoeveel chocoladeletters zijn dat?`, a: `${doos * dozen} chocoladeletters`, s: `${dozen} × ${doos} = ${doos * dozen}` }; },
+  ],
+  8: [
+    (r) => { const n = tussen(r, 24, 32), p = kies(r, [500, 600, 750]), q = kies(r, [100, 150, 200]); return { t: `De klas van ${n} kinderen trekt lootjes. Iedereen besteedt ${euro(p)} aan een cadeau. De school geeft per kind ook nog ${euro(q)} voor knutselspullen. Hoeveel geld is er in totaal uitgegeven?`, a: euro(n * (p + q)), s: `${n} × (${euro(p)} + ${euro(q)}) = ${n} × ${euro(p + q)} = ${euro(n * (p + q))}` }; },
+    (r) => { const a = kies(r, [40, 60, 80, 120, 200]), pct = kies(r, [25, 40, 60, 75]); return { t: `Op de stoomboot zijn ${a} pieten. ${pct}% daarvan is pakjespiet. Hoeveel pakjespieten zijn er?`, a: `${a * pct / 100} pakjespieten`, s: `${pct}% van ${a} = ${a * pct / 100}` }; },
+    (r) => { const n = kies(r, [4, 5, 8, 10]), stuk = kies(r, [125, 150, 175, 225, 250]); return { t: `Een doos met ${n} chocoladeletters kost ${euro(n * stuk)}. Hoeveel kost één chocoladeletter?`, a: euro(stuk), s: `${euro(n * stuk)} : ${n} = ${euro(stuk)}` }; },
+    (r) => { const schaal = kies(r, [100000, 250000, 500000]), cm = schaal === 250000 ? tussen(r, 2, 6) * 2 : tussen(r, 4, 12); const km = cm * schaal / 100000; return { t: `Op de kaart is de route van de stoomboot ${cm} cm lang. De schaal is 1 : ${getal(schaal)}. Hoeveel kilometer vaart de boot in het echt?`, a: `${komma(km)} kilometer`, s: `1 cm is ${komma(schaal / 100000)} km, dus ${cm} × ${komma(schaal / 100000)} = ${komma(km)}` }; },
+    (r) => { const m = tussen(r, 80, 200), d1 = tussen(r, 5, 30), d2 = tussen(r, 5, 30); const a = m + d1, b = m + d2, c = m - d1 - d2; return { t: `Piet strooit op maandag ${a} pepernoten, op dinsdag ${b} en op woensdag ${c}. Hoeveel pepernoten strooit hij gemiddeld per dag?`, a: `${m} pepernoten`, s: `(${a} + ${b} + ${c}) : 3 = ${3 * m} : 3 = ${m}` }; },
+    (r) => { const u = tussen(r, 2, 4), per = kies(r, [4, 5, 6, 10, 12, 15]), h = u * 60 / per; return { t: `Sinterklaas heeft ${u} uur de tijd om ${h} huizen te bezoeken. Hij blijft bij elk huis even lang. Hoeveel minuten heeft hij per huis?`, a: `${per} minuten`, s: `${u} uur = ${u * 60} minuten, ${u * 60} : ${h} = ${per}` }; },
+  ],
+};
+function verhaal(r, code) {
+  const s = staat.vh, titel = huidigeTitel();
+  const sjablonen = VERHALEN[s.groep];
+  let volgorde = [];
+  const sommen = [];
+  for (let i = 0; i < s.aantal; i++) {
+    if (!volgorde.length) volgorde = schud(r, sjablonen.map((_, j) => j));
+    sommen.push(sjablonen[volgorde.pop()](r));
+  }
+  const kaart = (o, i, met) => `<div class="verhaal"><p><span class="nrbol">${i + 1}</span>${o.t}</p>
+    ${met ? "" : `<div class="klad" aria-label="kladruimte"></div>`}
+    <div class="antw">Antwoord: ${met ? `<b>${o.a}</b><small>${o.s}</small>` : `<span class="lijntje"></span>`}</div></div>`;
+  let html = `${bladkop(titel, "boot")}<p class="opdracht">Lees het verhaal goed. Wat gebeurt er? Maak een tekening of schema in het vak en schrijf de som op.</p>
+    <div class="verhalen">${sommen.map((o, i) => kaart(o, i, false)).join("")}</div>${voet("verhaalsommen groep " + s.groep, code)}`;
+  if (staat.antwoord) html += `<div class="paginabreak"></div><div class="scheiding"></div>${bladkop("Antwoorden · " + titel, "", false)}
+    <div class="verhalen">${sommen.map((o, i) => kaart(o, i, true)).join("")}</div>${voet("antwoordblad", code)}`;
+  return html;
+}
+
+/* ---------- 10. vier op een rij ---------- */
+function vieropeenrij(r, code) {
+  const s = staat.vr, titel = huidigeTitel();
+  const sommen = [];
+  s.tafels.forEach((t) => { for (let a = 1; a <= 10; a++) sommen.push({ vraag: `${a} × ${t}`, antwoord: a * t }); });
+  const vakken = s.maat * s.maat;
+  /* eerst zoveel mogelijk verschillende antwoorden op het bord, daarna mag een getal vaker */
+  const uniek = [...new Map(sommen.map((o) => [o.antwoord, o])).values()];
+  let bord = schud(r, uniek).slice(0, vakken).map((o) => o.antwoord);
+  while (bord.length < vakken) bord.push(kies(r, uniek).antwoord);
+  bord = schud(r, bord);
+  const opBord = new Set(bord);
+  const kaartjes = schud(r, sommen.filter((o) => opBord.has(o.antwoord)));
+  let html = `${bladkop(titel, "pepernoten", false)}
+    <div class="spelregels">${teken("pepernoot")}<b>Een spel voor twee. Jullie hebben elk een andere kleur potlood.</b>
+      <ol><li>Leg de somkaartjes omgekeerd op een stapel.</li><li>Pak om de beurt een kaartje en reken de som uit.</li>
+      <li>Kleur een pepernoot met dat antwoord in jouw kleur. Is hij al gekleurd? Dan is je beurt voorbij.</li>
+      <li>Wie het eerst vier pepernoten op een rij heeft (recht, schuin of naar beneden), wint!</li></ol></div>
+    <div class="bord" style="grid-template-columns:repeat(${s.maat},1fr);">${bord.map((g) => `<div class="bordvak">${g}</div>`).join("")}</div>
+    ${voet("vier op een rij · tafels van " + s.tafels.join(", "), code)}`;
+  if (staat.antwoord) html += `<div class="paginabreak"></div><div class="scheiding"></div>${bladkop("Somkaartjes · knip ze uit", "", false)}
+    <div class="knipkaartjes">${kaartjes.map((o, i) => `<div class="knipkaartje">${teken("muts", "", i)}${o.vraag}</div>`).join("")}</div>
+    <p class="tip" style="margin-top:10px;">Knip de kaartjes los. Bij elke som staat het antwoord op het bord. Geef elk tweetal een bord en een stapel kaartjes.</p>
+    ${voet("somkaartjes", code)}`;
+  return html;
+}
+
+/* ---------- 11. sinterklaasgedicht ----------
+   De rijmwoorden zijn met de hand gekozen: ze rijmen echt als je ze uitspreekt
+   (zoet en goed, vlag en lach), en ze zijn bekend voor kinderen. */
+const RIJM = [
+  ["Sint", ["kind", "vindt", "wind", "lint", "begint"]],
+  ["Piet", ["niet", "ziet", "liet", "lied", "verdriet"]],
+  ["boot", ["groot", "rood", "brood", "sloot", "poot"]],
+  ["schoen", ["doen", "zoen", "groen", "toen", "citroen"]],
+  ["zak", ["dak", "pak", "vak", "gemak", "tak"]],
+  ["paard", ["staart", "haard", "kaart", "baard", "waard"]],
+  ["cadeau", ["zo", "bureau", "niveau", "plateau"]],
+  ["snoep", ["groep", "soep", "stoep", "roep"]],
+  ["gedicht", ["licht", "dicht", "zicht", "gezicht", "bericht"]],
+  ["vlag", ["dag", "lach", "mag", "zag"]],
+  ["feest", ["geweest", "beest", "meest", "geest"]],
+  ["klas", ["tas", "glas", "was", "gras", "jas"]],
+  ["zoet", ["goed", "doet", "moet", "voet", "groet"]],
+  ["lootje", ["bootje", "pootje", "grootje"]],
+  ["chocola", ["ja", "na", "ga", "sta"]],
+];
+function gedicht(r, code) {
+  const s = staat.ge, titel = huidigeTitel();
+  const keuze = schud(r, RIJM).slice(0, 8);
+  const rijmblad = (met) => `<div class="rijen">${keuze.map(([w, rijm]) => `<div class="rijmregel"><span class="rijmwoord">${w}</span>
+    ${met ? `<span class="opties">${rijm.join(", ")}</span>` : `<div class="lijnen"><span></span><span></span></div>`}</div>`).join("")}</div>`;
+  const bank = schud(r, RIJM).slice(0, 8).map(([w, rijm]) => `<span>${w} · ${rijm.slice(0, 3).join(" · ")}</span>`).join("");
+  const regels = ["a", "a", "b", "b", "", "c", "c", "d", "d"].map((l) => l ? `<div class="regel"><small>${l}</small></div>` : `<div class="regel leeg"></div>`).join("");
+  const gedichtblad = `${bladkop("Mijn sinterklaasgedicht", "staf")}
+    <div class="tips">
+      <div><b>1. Voor wie?</b> Bedenk iets wat bij je lootje past: een hobby, iets grappigs dat hij of zij vaak doet.</div>
+      <div><b>2. Rijm per twee.</b> Regel 1 rijmt op regel 2 (a en a), regel 3 op regel 4 (b en b).</div>
+      <div><b>3. Hardop lezen.</b> Lees je gedicht zachtjes voor. Loopt het lekker? Tel dan de lettergrepen eens.</div>
+      <div><b>4. Netjes afsluiten.</b> Onderteken met <i>Sint en Piet</i>. Verklap niet wie het geschreven heeft!</div>
+    </div>
+    <p style="font-weight:700; font-size:15px;">Weet je niet hoe je moet beginnen? Kies een beginzin:</p>
+    <ul class="starters"><li>Sinterklaas zat lang te denken: wat zal ik ... eens schenken?</li>
+      <li>Piet klom vannacht op het dak, met een cadeautje in zijn zak.</li>
+      <li>Het is weer december, de mooiste tijd, ...</li></ul>
+    <div class="gedichtvel"><div class="voor">Voor: <span></span></div>${regels}
+      <div class="voor" style="margin-top:8px;">Groetjes van Sint en Piet</div></div>
+    ${s.woordbank === "ja" ? `<div class="kader"><h3>Woordbank: deze woorden rijmen</h3><div class="woordbank">${bank}</div></div>` : ""}
+    ${voet("sinterklaasgedicht", code)}`;
+  const rijmdeel = `${bladkop(titel === "Mijn sinterklaasgedicht" ? "Rijmwoorden voor je gedicht" : titel, "boek")}
+    <p class="opdracht">Schrijf bij elk woord twee woorden die erop rijmen.</p>${rijmblad(false)}${voet("rijmwoorden", code)}`;
+  let html = s.modus === "gedicht" ? gedichtblad
+    : s.modus === "rijmen" ? rijmdeel
+    : `${rijmdeel}<div class="paginabreak"></div><div class="scheiding"></div>${gedichtblad}`;
+  if (staat.antwoord && s.modus !== "gedicht") html += `<div class="paginabreak"></div><div class="scheiding"></div>${bladkop("Voor de juf · woorden die rijmen", "", false)}
+    ${rijmblad(true)}${voet("antwoordblad", code)}`;
+  return html;
+}
+
 /* ---------- alles aan elkaar ---------- */
-const MAKERS = { speurtocht, bingo, tellen, sommen, woorden, doolhof };
+const MAKERS = { speurtocht, bingo, tellen, sommen, woorden, doolhof,
+  speurtocht2, bingo2: (r, code) => bingo(r, code, true), codekraker, verhaal, vieropeenrij, gedicht };
+const SLEUTELS = { speurtocht: "sp", bingo: "bi", tellen: "te", sommen: "so", woorden: "wo", doolhof: "dh",
+  speurtocht2: "sp2", bingo2: "bi2", codekraker: "ck", verhaal: "vh", vieropeenrij: "vr", gedicht: "ge" };
+const melding = (tekst) => { $("melding").textContent = tekst; };
 const huidigeSoort = () => SOORTEN.find((s) => s.id === staat.soort);
 const huidigeTitel = () => (staat.titels[staat.soort] || "").trim() || huidigeSoort().titel;
 
 function maakBlad() {
   const code = staat.code.trim() || String(Math.floor(1000 + Math.random() * 9000));
   $("code").value = code; staat.code = code; bewaar();
-  const instellingen = JSON.stringify(staat[{ speurtocht: "sp", bingo: "bi", tellen: "te", sommen: "so", woorden: "wo", doolhof: "dh" }[staat.soort]]);
+  melding("");
+  const instellingen = JSON.stringify(staat[SLEUTELS[staat.soort]]);
   const r = maakRandom(zaadje(code + "|" + staat.soort + "|" + instellingen));
   $("blad").innerHTML = MAKERS[staat.soort](r, code);
 }
@@ -1000,11 +1595,16 @@ function toonInstellingen() {
   document.querySelectorAll("[data-alleen]").forEach((el) => {
     const [pad, waarde] = el.dataset.alleen.split(/!?=/);
     const ontkend = el.dataset.alleen.includes("!=");
-    el.style.display = (String(lees(pad)) === waarde) !== ontkend ? "" : "none";
+    el.style.display = waarde.split("|").includes(String(lees(pad))) !== ontkend ? "" : "none";
+  });
+  document.querySelectorAll("[data-lijst]").forEach((lijst) => {
+    const gekozen = lees(lijst.dataset.lijst);
+    lijst.querySelectorAll("[data-v]").forEach((b) => b.classList.toggle("aan", gekozen.includes(Number(b.dataset.v))));
   });
   $("woordChips").innerHTML = WOORDEN.map((w) => `<button type="button" class="chip${staat.wo.woorden.includes(w.w) ? " aan" : ""}" data-woord="${w.w}"><span class="bol"></span>${w.w}</button>`).join("");
   $("titel").value = huidigeTitel();
-  $("antwoordTekst").textContent = staat.soort === "bingo" ? "Trekkingslijst erbij" : staat.soort === "doolhof" ? "Oplossing erbij" : "Antwoordblad erbij";
+  $("antwoordTekst").textContent = { bingo: "Trekkingslijst erbij", bingo2: "Trekkingslijst erbij", doolhof: "Oplossing erbij",
+    vieropeenrij: "Somkaartjes en antwoorden erbij", gedicht: "Rijmwoorden voor de juf erbij" }[staat.soort] || "Antwoordblad erbij";
   $("antwoordChip").classList.toggle("aan", staat.antwoord);
   $("naamChip").classList.toggle("aan", staat.naam);
   document.title = `${huidigeSoort().naam} · Sinterklaas · Lesmateriaal Blink`;
@@ -1013,7 +1613,11 @@ const vernieuw = () => { toonInstellingen(); maakBlad(); };
 
 /* menu */
 $("kopLogo").innerHTML = teken("mijter");
-$("menu").innerHTML = SOORTEN.map((s) => `<button type="button" data-soort="${s.id}">${teken(s.ic, "", 0)}<span><b>${s.naam}</b><small>${s.uitleg}</small></span></button>`).join("");
+$("kopSlinger").innerHTML = slinger(30);
+$("zinnenlijst").innerHTML = ZINNEN.map((z) => `<option value="${z}">`).join("");
+const menuknop = (s) => `<button type="button" data-soort="${s.id}">${teken(s.ic, "", 0)}<span><b>${s.naam}</b><small>${s.uitleg}</small></span></button>`;
+$("menu").innerHTML = `<div class="menukop"><span class="pil">groep 3</span>Eerste getallen en woorden</div>${SOORTEN.filter((s) => s.groep === "3").map(menuknop).join("")}
+  <div class="menukop"><span class="pil">groep 4 t/m 8</span>Tafels, verhaalsommen en gedichten</div>${SOORTEN.filter((s) => s.groep === "4-8").map(menuknop).join("")}`;
 $("menu").addEventListener("click", (e) => {
   const b = e.target.closest("[data-soort]"); if (!b) return;
   staat.soort = b.dataset.soort;
@@ -1028,9 +1632,18 @@ document.querySelectorAll(".seg[data-zet]").forEach((seg) => seg.addEventListene
   vernieuw();
 }));
 document.querySelectorAll("input[data-zet], select[data-zet]").forEach((el) => el.addEventListener("change", () => {
+  if (el.type === "text") { zet(el.dataset.zet, el.value.toUpperCase()); vernieuw(); return; }
   let w = Number(el.value);
   if (el.type === "number") w = Math.max(Number(el.min), Math.min(Number(el.max), Math.round(w) || Number(el.min)));
   zet(el.dataset.zet, w);
+  vernieuw();
+}));
+document.querySelectorAll("[data-lijst]").forEach((lijst) => lijst.addEventListener("click", (e) => {
+  const b = e.target.closest("[data-v]"); if (!b) return;
+  const v = Number(b.dataset.v), oud = lees(lijst.dataset.lijst);
+  const nieuw = oud.includes(v) ? oud.filter((x) => x !== v) : [...oud, v].sort((a, c) => a - c);
+  if (!nieuw.length) return;
+  zet(lijst.dataset.lijst, nieuw);
   vernieuw();
 }));
 $("woordChips").addEventListener("click", (e) => {
