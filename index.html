@@ -53,6 +53,13 @@
     color:var(--sc,#4f46e5);margin:18px 0 10px;display:flex;align-items:center;gap:8px;}
   .subkop::after{content:"";flex:1;height:1px;background:var(--line);}
   .subkop:first-of-type{margin-top:2px;}
+  .subkop{cursor:pointer;user-select:none;border-radius:8px;padding:3px 4px;margin-left:-4px;}
+  .subkop:hover{background:rgba(79,70,229,.06);}
+  .subkop:focus-visible{outline:2px solid var(--sc,#4f46e5);outline-offset:2px;}
+  .subkop .pijl{display:inline-block;font-size:12px;transition:transform .18s ease;}
+  .subkop .aantal{font-size:11.5px;font-weight:700;color:var(--muted);letter-spacing:0;text-transform:none;}
+  .subkop.subdicht .pijl{transform:rotate(-90deg);}
+  @media screen{ .subkop.subdicht + .grid{display:none !important;} }
 
   /* Uitgelichte dagstarter-tegel */
   .dagstarter{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 24px;
@@ -146,10 +153,10 @@
     <div class="sectie" data-sectie style="--sc:#c62828">
       <h2>🎅 Sinterklaas</h2>
       <div class="grid">
-        <a class="kaart" data-tags="sinterklaas sint piet werkblad printen groep 3 speurtocht bingo tellen splitsen verliefde harten erbij eraf woorden hakken doolhof" href="sint.html?groep=3">
+        <a class="kaart" data-tags="sinterklaas sint piet werkblad printen groep 3 speurtocht bingo tellen splitsen verliefde harten erbij eraf kleurplaat rekenkleurplaat woorden hakken doolhof" href="sint.html?groep=3">
           <span class="nieuw">Nieuw</span>
           <span class="ic">🧮</span><span class="t">Groep 3</span>
-          <span class="d">Speurtocht met kaartjes, mutsjesbingo, tellen, sommen, woorden hakken en een doolhof.</span>
+          <span class="d">Speurtocht met kaartjes, mutsjesbingo, tellen, sommen, een rekenkleurplaat tot 10, woorden hakken en een doolhof.</span>
           <span class="go">Openen →</span>
         </a>
         <a class="kaart" data-tags="sinterklaas sint piet werkblad printen groep 4 klok klokkijken keersommen tafels groepjes geld winkel woordzoeker sudoku speurtocht verhaalsommen" href="sint.html?groep=4">
@@ -556,10 +563,39 @@
   });
   document.getElementById('allesOpen').addEventListener('click', () => { open = secties.map(naamVan); bewaarOpen(); zetKlap(); });
   document.getElementById('allesDicht').addEventListener('click', () => { open = []; bewaarOpen(); zetKlap(); });
-  zetKlap();
+
+  // Subkopjes (zoals bij Rekenen) ook los in- en uitklappen.
+  const SUBDICHT = 'blink-dichte-subkoppen';
+  let subDicht;
+  try { subDicht = JSON.parse(localStorage.getItem(SUBDICHT) || '[]'); } catch (e) { subDicht = []; }
+  const subkoppen = [...document.querySelectorAll('.subkop[data-groep]')];
+  const subNaam = kop => kop.closest('.sectie').dataset.naam + ' | ' + kop.dataset.naam;
+  const zetSubKlap = () => subkoppen.forEach(kop => {
+    const dicht = !zoek.value.trim() && subDicht.includes(subNaam(kop));
+    kop.classList.toggle('subdicht', dicht);
+    kop.setAttribute('aria-expanded', String(!dicht));
+  });
+  subkoppen.forEach(kop => {
+    kop.dataset.naam = kop.textContent.trim();
+    const n = kop.nextElementSibling ? kop.nextElementSibling.querySelectorAll('.kaart').length : 0;
+    const pijl = document.createElement('span'); pijl.className = 'pijl'; pijl.textContent = '▾'; pijl.setAttribute('aria-hidden', 'true');
+    kop.prepend(pijl);
+    if (n > 1) { const b = document.createElement('span'); b.className = 'aantal'; b.textContent = '(' + n + ')'; kop.appendChild(b); }
+    kop.tabIndex = 0; kop.setAttribute('role', 'button');
+    const klap = () => {
+      const naam = subNaam(kop);
+      subDicht = subDicht.includes(naam) ? subDicht.filter(x => x !== naam) : [...subDicht, naam];
+      try { localStorage.setItem(SUBDICHT, JSON.stringify(subDicht)); } catch (e) {}
+      zetSubKlap();
+    };
+    kop.addEventListener('click', klap);
+    kop.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); klap(); } });
+  });
+  document.getElementById('allesOpen').addEventListener('click', () => { subDicht = []; try { localStorage.setItem(SUBDICHT, '[]'); } catch (e) {} zetSubKlap(); });
+  zetKlap(); zetSubKlap();
 
   zoek.addEventListener('input', () => {
-    zetKlap();
+    zetKlap(); zetSubKlap();
     const q = zoek.value.trim().toLowerCase();
     kaarten.forEach(k => {
       const hit = !q || (k.dataset.tags + ' ' + k.textContent).toLowerCase().includes(q);
