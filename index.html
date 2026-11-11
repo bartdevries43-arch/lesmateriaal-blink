@@ -35,6 +35,20 @@
   .sectie h2::after{content:"";flex:1;height:2px;background:var(--line);border-radius:2px;}
   .sectie h2 .aantal{font-size:12.5px;font-weight:700;color:var(--muted);background:var(--card);
     border:1px solid var(--line);border-radius:999px;padding:3px 10px;}
+  /* Inklapbare secties */
+  .sectie h2{cursor:pointer;user-select:none;border-radius:12px;padding:4px 6px;margin-left:-6px;}
+  .sectie h2:hover{background:rgba(79,70,229,.06);}
+  .sectie h2:focus-visible{outline:2px solid var(--sc,#4f46e5);outline-offset:2px;}
+  .sectie h2 .pijl{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;
+    background:var(--card);border:1px solid var(--line);font-size:13px;color:var(--sc,#4f46e5);transition:transform .18s ease;flex:0 0 auto;}
+  .sectie.dicht h2 .pijl{transform:rotate(-90deg);}
+  .sectie.dicht h2{margin-bottom:0;}
+  @media screen{ .sectie.dicht > :not(h2){display:none !important;} }
+  .sectie.dicht{margin-top:14px;}
+  .klapknoppen{display:flex;justify-content:flex-end;gap:8px;margin-top:22px;}
+  .klapknoppen button{font:inherit;font-size:13.5px;font-weight:700;color:#33405a;background:var(--card);border:1px solid var(--line);
+    border-radius:999px;padding:7px 14px;cursor:pointer;}
+  .klapknoppen button:hover{border-color:#4f46e5;}
   .subkop{font-family:"Baloo 2",system-ui,sans-serif;font-size:14px;letter-spacing:.4px;text-transform:uppercase;
     color:var(--sc,#4f46e5);margin:18px 0 10px;display:flex;align-items:center;gap:8px;}
   .subkop::after{content:"";flex:1;height:1px;background:var(--line);}
@@ -88,7 +102,7 @@
     body{background:#fff;}
     .hero{background:#fff; color:#1c2433; padding:0 0 12px; box-shadow:none; border-bottom:2px solid #d9dded; margin-bottom:14px;}
     .hero .merk{color:#1c2433;} .hero p{color:#5b647f;}
-    .zoek, .leeg, .niveaus small{display:none !important;}
+    .zoek, .leeg, .niveaus small, .klapknoppen, .sectie h2 .pijl{display:none !important;}
     .wrap{max-width:none; padding:0;}
     .sectie{break-inside:avoid; margin-top:16px;}
     .sectie h2{font-size:15px;}
@@ -127,83 +141,45 @@
       </div>
     </div>
 
+    <div class="klapknoppen alleenscherm"><button type="button" id="allesOpen">Alles openklappen</button><button type="button" id="allesDicht">Alles dichtklappen</button></div>
+
     <div class="sectie" data-sectie style="--sc:#c62828">
       <h2>🎅 Sinterklaas</h2>
-      <div class="subkop" data-groep>Groep 3</div>
       <div class="grid">
-        <a class="kaart" data-tags="sinterklaas sint piet werkblad printen groep 3 speurtocht speurtocht kaartjes ophangen bewegend leren splitsen verliefde harten" href="sint.html?blad=speurtocht">
+        <a class="kaart" data-tags="sinterklaas sint piet werkblad printen groep 3 speurtocht bingo tellen splitsen verliefde harten erbij eraf woorden hakken doolhof" href="sint.html?groep=3">
           <span class="nieuw">Nieuw</span>
-          <span class="ic">🔍</span><span class="t">Speurtocht van de Sint</span>
-          <span class="d">Kaartjes om op te hangen met een splitsing, verliefde harten, een som of pepernoten om te tellen. Elk kaartje heeft een eigen plaatje. De kinderen zoeken het plaatje op hun blad en schrijven het antwoord op.</span>
+          <span class="ic">🧮</span><span class="t">Groep 3</span>
+          <span class="d">Speurtocht met kaartjes, mutsjesbingo, tellen, sommen, woorden hakken en een doolhof.</span>
           <span class="go">Openen →</span>
         </a>
-        <a class="kaart" data-tags="sinterklaas sint piet werkblad printen groep 3 bingo zaklamp pietenmuts mutsjes splitsen verliefde harten erbij eraf" href="sint.html?blad=bingo">
+        <a class="kaart" data-tags="sinterklaas sint piet werkblad printen groep 4 klok klokkijken keersommen tafels groepjes geld winkel woordzoeker sudoku speurtocht verhaalsommen" href="sint.html?groep=4">
           <span class="nieuw">Nieuw</span>
-          <span class="ic">🔦</span><span class="t">Pietenmutsbingo met de zaklamp</span>
-          <span class="d">Vouw de mutsjes dubbel en schijn er met een zaklamp achter: dan verschijnt de som. De kinderen strepen het antwoord weg op hun eigen bingokaart. Met trekkingslijst.</span>
+          <span class="ic">🕰️</span><span class="t">Groep 4</span>
+          <span class="d">Klokkijken, keersommen met pakjes, de Pietenwinkel (geld), woordzoeker, sudoku met plaatjes, geheime speurtocht en verhaalsommen.</span>
           <span class="go">Openen →</span>
         </a>
-        <a class="kaart" data-tags="sinterklaas sint piet werkblad printen groep 3 tellen pepernoten kleuren hoeveelheid vijfstructuur" href="sint.html?blad=tellen">
+        <a class="kaart" data-tags="sinterklaas sint piet werkblad printen groep 5 kleurplaat rekenkleurplaat delen met rest tafels deelsommen klok bingo codekraker woordzoeker verhaalsommen" href="sint.html?groep=5">
           <span class="nieuw">Nieuw</span>
-          <span class="ic">🍪</span><span class="t">Tellen met de Sint</span>
-          <span class="d">Tel de pepernoten, cadeautjes en mutsjes en schrijf het getal op, of kleur er precies zoveel. In rijtjes van vijf of door elkaar, tot 5, 10 of 20.</span>
+          <span class="ic">🎨</span><span class="t">Groep 5</span>
+          <span class="d">Rekenkleurplaat, pepernoten verdelen (delen met rest), klok op vijf minuten, bingo met deelsommen, codekraker, woordzoeker en verhaalsommen.</span>
           <span class="go">Openen →</span>
         </a>
-        <a class="kaart" data-tags="sinterklaas sint piet werkblad printen groep 3 sommen erbij eraf beeldsommen plus min tot 10" href="sint.html?blad=sommen">
+        <a class="kaart" data-tags="sinterklaas sint piet werkblad printen groep 6 breuken geld wisselgeld sudoku kleurplaat klok digitaal vier op een rij tafels verhaalsommen" href="sint.html?groep=6">
           <span class="nieuw">Nieuw</span>
-          <span class="ic">🎁</span><span class="t">Sommen met de Sint</span>
-          <span class="d">Beeldsommen met cadeautjes en pepernoten: erbij, eraf of door elkaar, tot 5 of 10. Bij eraf staan de weggehaalde plaatjes doorgestreept, met de kale som ernaast.</span>
+          <span class="ic">🍫</span><span class="t">Groep 6</span>
+          <span class="d">Chocoladebreuken, rekenen met centen en wisselgeld, sudoku 6 × 6, kleurplaat met grote keersommen, digitale klok, vier op een rij en verhaalsommen.</span>
           <span class="go">Openen →</span>
         </a>
-        <a class="kaart" data-tags="sinterklaas sint piet werkblad printen groep 3 woorden hakken plakken klanken schrijven lezen aanvankelijk lezen" href="sint.html?blad=woorden">
+        <a class="kaart" data-tags="sinterklaas sint piet werkblad printen groep 7 coordinaten coördinaten procenten korting surprise breuken logica puzzel gedicht rijmen verhaalsommen" href="sint.html?groep=7">
           <span class="nieuw">Nieuw</span>
-          <span class="ic">🚢</span><span class="t">Sint-woorden</span>
-          <span class="d">Zak, boot, muts, maan: bij elk plaatje een vakje per klank. Met lege vakjes, de eerste klank erbij of de letters door elkaar. Kies zelf de woorden die je klas kan lezen.</span>
+          <span class="ic">📍</span><span class="t">Groep 7</span>
+          <span class="d">Tekenen met coördinaten, Sint-sale (procenten), surpriseplan, breuken vergelijken, logische puzzel, sinterklaasgedicht en verhaalsommen.</span>
           <span class="go">Openen →</span>
         </a>
-        <a class="kaart" data-tags="sinterklaas sint piet werkblad printen groep 3 doolhof puzzel klaar extra" href="sint.html?blad=doolhof">
+        <a class="kaart" data-tags="sinterklaas sint piet werkblad printen groep 8 grafiek staafdiagram lijndiagram gemiddelde logica puzzel aanbiedingen procenten sudoku woordzoeker codekraker verhaalsommen surprise" href="sint.html?groep=8">
           <span class="nieuw">Nieuw</span>
-          <span class="ic">🏠</span><span class="t">Sint-doolhof</span>
-          <span class="d">Help het mutsje naar het dak, vaar de stoomboot naar Nederland of breng het cadeautje naar de schoen. Altijd precies één goede weg, in drie maten.</span>
-          <span class="go">Openen →</span>
-        </a>
-      </div>
-      <div class="subkop" data-groep>Groep 4 t/m 8</div>
-      <div class="grid">
-        <a class="kaart" data-tags="sinterklaas sint werkblad printen groep 4 5 6 7 8 speurtocht geheim woord sleutel tafels delen bewegend leren" href="sint.html?blad=speurtocht2">
-          <span class="nieuw">Nieuw</span>
-          <span class="ic">🕵️</span><span class="t">Geheime speurtocht</span>
-          <span class="d">Hang de somkaartjes op in de klas. Met de antwoorden en de sleutel kraken de kinderen het geheime woord. Tafels, deelsommen, plus en min tot 100 of 1000, of tussen welke tientallen.</span>
-          <span class="go">Openen →</span>
-        </a>
-        <a class="kaart" data-tags="sinterklaas sint werkblad printen groep 4 5 6 7 8 bingo zaklamp mutsjes tafels delen tientallen honderdtallen" href="sint.html?blad=bingo2">
-          <span class="nieuw">Nieuw</span>
-          <span class="ic">🔦</span><span class="t">Mutsjesbingo met tafels</span>
-          <span class="d">De zaklampbingo voor de hogere groepen: tafels, deelsommen, plus en min tot 100 of tussen welke tientallen en honderdtallen. Met trekkingslijst.</span>
-          <span class="go">Openen →</span>
-        </a>
-        <a class="kaart" data-tags="sinterklaas sint werkblad printen groep 4 5 6 7 8 code kraken geheime zin sleutel tafels keersommen" href="sint.html?blad=codekraker">
-          <span class="nieuw">Nieuw</span>
-          <span class="ic">🔐</span><span class="t">Sint-codekraker</span>
-          <span class="d">Elke som hoort bij een letter. Reken, zoek de letter in de sleutel en ontcijfer de geheime zin. Je kunt ook je eigen zin typen.</span>
-          <span class="go">Openen →</span>
-        </a>
-        <a class="kaart" data-tags="sinterklaas sint werkblad printen groep 4 5 6 7 8 verhaalsommen redactiesommen contextsommen geld tijd procenten breuken" href="sint.html?blad=verhaal">
-          <span class="nieuw">Nieuw</span>
-          <span class="ic">📖</span><span class="t">Verhaalsommen van de Sint</span>
-          <span class="d">Redactiesommen over pepernoten, de stoomboot, lootjes en surprises. Per groep (4 t/m 8) passend: van plus en min tot procenten, breuken, schaal en gemiddelde. Met kladvak en antwoordblad.</span>
-          <span class="go">Openen →</span>
-        </a>
-        <a class="kaart" data-tags="sinterklaas sint spel printen groep 4 5 6 7 8 vier op een rij tafels oefenen tweetallen" href="sint.html?blad=vieropeenrij">
-          <span class="nieuw">Nieuw</span>
-          <span class="ic">🍪</span><span class="t">Pepernoten vier op een rij</span>
-          <span class="d">Een tafelspel voor twee: pak een somkaartje, reken uit en kleur de pepernoot met het antwoord. Wie heeft het eerst vier op een rij? Met knipkaartjes.</span>
-          <span class="go">Openen →</span>
-        </a>
-        <a class="kaart" data-tags="sinterklaas sint werkblad printen groep 4 5 6 7 8 gedicht rijmen surprise lootjes schrijven taal" href="sint.html?blad=gedicht">
-          <span class="nieuw">Nieuw</span>
-          <span class="ic">✍️</span><span class="t">Sinterklaasgedicht schrijven</span>
-          <span class="d">Een rijmblad en een schrijfvel met tips, beginzinnen en een woordbank. Handig bij het lootjes trekken in groep 5 t/m 8.</span>
+          <span class="ic">📊</span><span class="t">Groep 8</span>
+          <span class="d">Grafieken lezen, wie kreeg welk cadeau (logica), aanbiedingen vergelijken, sudoku 9 × 9, woordzoeker, codekraker en verhaalsommen.</span>
           <span class="go">Openen →</span>
         </a>
       </div>
@@ -553,7 +529,37 @@
     if (h2 && n > 1) { const b = document.createElement('span'); b.className = 'aantal'; b.textContent = n; h2.appendChild(b); }
   });
 
+  // Secties in- en uitklappen. Wat open staat, onthoudt de browser.
+  const OPEN = 'blink-open-secties';
+  let open;
+  try { open = JSON.parse(localStorage.getItem(OPEN) || '[]'); } catch (e) { open = []; }
+  const naamVan = s => s.dataset.naam;
+  const bewaarOpen = () => { try { localStorage.setItem(OPEN, JSON.stringify(open)); } catch (e) {} };
+  const zetKlap = () => secties.forEach(s => {
+    const dicht = !zoek.value.trim() && !open.includes(naamVan(s));
+    s.classList.toggle('dicht', dicht);
+    s.querySelector('h2').setAttribute('aria-expanded', String(!dicht));
+  });
+  secties.forEach(s => {
+    const h2 = s.querySelector('h2');
+    s.dataset.naam = h2.firstChild.textContent.trim();
+    const pijl = document.createElement('span'); pijl.className = 'pijl'; pijl.textContent = '▾'; pijl.setAttribute('aria-hidden', 'true');
+    h2.prepend(pijl);
+    h2.tabIndex = 0; h2.setAttribute('role', 'button');
+    const klap = () => {
+      const naam = naamVan(s);
+      open = s.classList.contains('dicht') ? [...open, naam] : open.filter(x => x !== naam);
+      bewaarOpen(); zetKlap();
+    };
+    h2.addEventListener('click', klap);
+    h2.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); klap(); } });
+  });
+  document.getElementById('allesOpen').addEventListener('click', () => { open = secties.map(naamVan); bewaarOpen(); zetKlap(); });
+  document.getElementById('allesDicht').addEventListener('click', () => { open = []; bewaarOpen(); zetKlap(); });
+  zetKlap();
+
   zoek.addEventListener('input', () => {
+    zetKlap();
     const q = zoek.value.trim().toLowerCase();
     kaarten.forEach(k => {
       const hit = !q || (k.dataset.tags + ' ' + k.textContent).toLowerCase().includes(q);
