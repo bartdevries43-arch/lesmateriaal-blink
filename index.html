@@ -65,6 +65,7 @@
   .dagstarter{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 24px;
     box-shadow:0 10px 30px rgba(40,50,90,.07);margin-top:-30px;position:relative;z-index:2;}
   .dagstarter .kop{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+  .sectie .dagstarter{margin-top:0;}
   .dagstarter .ic{font-size:32px;}
   .dagstarter .t{font-weight:800;font-size:20px;font-family:"Baloo 2",sans-serif;}
   .dagstarter .d{color:var(--muted);font-size:14px;line-height:1.5;margin-bottom:14px;max-width:640px;}
@@ -136,19 +137,21 @@
   </div>
 
   <div class="wrap">
-    <div class="dagstarter" style="--sc:#2f7d4f" data-tags="dagstarter rekenen taal spelling lezen groep 4 5 6 7 8 automatiseren">
-      <div class="kop"><span class="ic">📆</span><span class="t">Dagstarters</span></div>
-      <div class="d">Elke dag een korte startopdracht: automatiseren, hoofdrekenen, redactiesommen, een wisselopdracht, spelling en technisch lezen. Oplopend in moeilijkheid, met kleurplaat en antwoordenboek. Kies het niveau:</div>
-      <div class="niveaus">
-        <a href="https://bartdevries43-arch.github.io/dagstarter-groep4/" target="_blank" rel="noopener">Groep 4<small>openen &amp; printen</small></a>
-        <a href="https://bartdevries43-arch.github.io/dagstarter-groep5/" target="_blank" rel="noopener">Groep 5<small>openen &amp; printen</small></a>
-        <a href="https://bartdevries43-arch.github.io/dagstarter-groep6/" target="_blank" rel="noopener">Groep 6<small>openen &amp; printen</small></a>
-        <a href="https://bartdevries43-arch.github.io/dagstarter-groep7/" target="_blank" rel="noopener">Groep 7<small>openen &amp; printen</small></a>
-        <a href="https://bartdevries43-arch.github.io/dagstarter-groep8/" target="_blank" rel="noopener">Groep 8<small>openen &amp; printen</small></a>
+    <div class="klapknoppen alleenscherm"><button type="button" id="allesOpen">Alles openklappen</button><button type="button" id="allesDicht">Alles dichtklappen</button></div>
+
+    <div class="sectie" data-sectie style="--sc:#2f7d4f">
+      <h2>📆 Dagstarters</h2>
+      <div class="dagstarter" style="--sc:#2f7d4f" data-tags="dagstarter rekenen taal spelling lezen groep 4 5 6 7 8 automatiseren">
+        <div class="d">Elke dag een korte startopdracht: automatiseren, hoofdrekenen, redactiesommen, een wisselopdracht, spelling en technisch lezen. Oplopend in moeilijkheid, met kleurplaat en antwoordenboek. Kies het niveau:</div>
+        <div class="niveaus">
+          <a href="https://bartdevries43-arch.github.io/dagstarter-groep4/" target="_blank" rel="noopener">Groep 4<small>openen &amp; printen</small></a>
+          <a href="https://bartdevries43-arch.github.io/dagstarter-groep5/" target="_blank" rel="noopener">Groep 5<small>openen &amp; printen</small></a>
+          <a href="https://bartdevries43-arch.github.io/dagstarter-groep6/" target="_blank" rel="noopener">Groep 6<small>openen &amp; printen</small></a>
+          <a href="https://bartdevries43-arch.github.io/dagstarter-groep7/" target="_blank" rel="noopener">Groep 7<small>openen &amp; printen</small></a>
+          <a href="https://bartdevries43-arch.github.io/dagstarter-groep8/" target="_blank" rel="noopener">Groep 8<small>openen &amp; printen</small></a>
+        </div>
       </div>
     </div>
-
-    <div class="klapknoppen alleenscherm"><button type="button" id="allesOpen">Alles openklappen</button><button type="button" id="allesDicht">Alles dichtklappen</button></div>
 
     <div class="sectie" data-sectie style="--sc:#c62828">
       <h2>🎅 Sinterklaas</h2>
@@ -531,7 +534,7 @@
 
   // aantal materialen per sectie in de kop
   secties.forEach(s => {
-    const n = s.querySelectorAll('.kaart').length;
+    const n = s.querySelectorAll('.kaart, .niveaus a').length;
     const h2 = s.querySelector('h2');
     if (h2 && n > 1) { const b = document.createElement('span'); b.className = 'aantal'; b.textContent = n; h2.appendChild(b); }
   });
@@ -610,12 +613,10 @@
         kop.style.display = vol ? '' : 'none';
         if (grid) grid.style.display = vol ? '' : 'none';
       });
-      const n = [...s.querySelectorAll('.kaart, .extern')].filter(k => k.style.display !== 'none').length;
+      const n = [...s.querySelectorAll('.kaart, .extern, .dagstarter')].filter(k => k.style.display !== 'none').length;
       s.style.display = n ? '' : 'none';
       zichtbaar += n;
     });
-    const dag = document.querySelector('.dagstarter');
-    if (dag.style.display !== 'none') zichtbaar++;
     leeg.style.display = zichtbaar ? 'none' : 'block';
   });
 </script>
