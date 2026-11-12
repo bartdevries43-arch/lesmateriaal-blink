@@ -128,7 +128,7 @@
   body.digibord .scheiding{background:rgba(255,255,255,.12);}
 
   @media (prefers-reduced-motion: reduce){ *{transition-duration:.01ms !important;} }
-  @media print{ .kop .kopknoppen, .instel, details.uitleg, .voet{display:none;} }
+  @media print{ html, body{min-height:0 !important;} .kop .kopknoppen, .instel, details.uitleg, .voet{display:none;} }
 </style>
 </head>
 <body>
@@ -314,8 +314,8 @@ try {
 const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
 
 /* ---------- tijd in woorden ---------- */
-const UURNAMEN = ["twaalf","een","twee","drie","vier","vijf","zes","zeven","acht","negen","tien","elf"];
-const GETALLEN = ["nul","een","twee","drie","vier","vijf","zes","zeven","acht","negen","tien","elf","twaalf","dertien","veertien"];
+const UURNAMEN = ["twaalf","één","twee","drie","vier","vijf","zes","zeven","acht","negen","tien","elf"];
+const GETALLEN = ["nul","één","twee","drie","vier","vijf","zes","zeven","acht","negen","tien","elf","twaalf","dertien","veertien"];
 const uurNaam = (u) => UURNAMEN[((u % 12) + 12) % 12];
 
 function woordDelen(u, m) {

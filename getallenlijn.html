@@ -85,6 +85,7 @@
   /* Printen: alleen het materiaal zelf, met een regel voor naam en datum */
   .printkop{display:none;}
   @media print{
+    html, body{min-height:0 !important;}
     body{background:#fff !important;}
     body.digibord{background:#fff !important; --ink:#1c2433; --ringbaan:#e7eaf7;}
     body.digibord .kaart, body.digibord .card{background:#fff !important; color:#1c2433 !important; border-color:#dfe3f0 !important;}

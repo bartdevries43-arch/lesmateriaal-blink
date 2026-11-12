@@ -92,11 +92,16 @@
   .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
   a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
 
+  .bladkop{position:relative;}
+  .kopcode{display:none;}
   @media print{
+    html, body{min-height:0 !important;}
+    .bladvoet{display:none !important;}
+    .kopcode{display:block; position:absolute; right:0; bottom:-15px; font-size:9px; color:#9aa3bd; white-space:nowrap;}
     body{background:#fff;}
     .app{max-width:none; padding:0;}
     .kop, .instellingen, details.uitleg, .voet{display:none;}
-    .bladvak{box-shadow:none; border:none; padding:0;}
+    .bladvak{box-shadow:none; border:none; padding:0; border-radius:0;}
     .blad{padding:0; font-size:15px;}
     .paginabreak{break-before:page;}
     @page{size:A4 portrait; margin:14mm;}
@@ -219,7 +224,7 @@ tafel | hieraan zit je te werken
 stoel | hierop zit je
 krijt | hiermee schrijf je op het bord
 plein | hier speel je in de pauze
-gum | hiermee haal je een fout weg
+liniaal | hiermee trek je een rechte lijn
 lezen | wat je met een boek doet
 juf | de vrouw die lesgeeft`,
   dieren: `hond | dit dier blaft
@@ -231,7 +236,7 @@ koe | dit dier geeft melk
 kip | dit dier legt eieren
 vis | dit dier leeft in het water
 schaap | van dit dier komt wol
-beer | groot bruin bosdier`,
+olifant | groot grijs dier met een slurf`,
   rekenen: `optellen | erbij doen
 aftrekken | eraf halen
 breuk | een deel van een geheel
@@ -247,6 +252,9 @@ som | een opgave met getallen`,
 let staat = { lijst: VOORBEELDEN.school, titel: "Kruiswoordpuzzel", code: "",
   hoofdletters: true, oplossing: true, naam: true };
 try { const b = JSON.parse(localStorage.getItem(BEWAAR) || "{}"); Object.keys(staat).forEach((k) => { if (k in b) staat[k] = b[k]; }); } catch (e) {}
+/* oude voorbeeldlijsten bijwerken: gum en beer pasten nooit in de puzzel */
+if (staat.lijst.includes("gum | hiermee haal je een fout weg") && staat.lijst.includes("juf | de vrouw die lesgeeft")) staat.lijst = staat.lijst.replace("gum | hiermee haal je een fout weg", "liniaal | hiermee trek je een rechte lijn");
+if (staat.lijst.includes("beer | groot bruin bosdier") && staat.lijst.includes("schaap | van dit dier komt wol")) staat.lijst = staat.lijst.replace("beer | groot bruin bosdier", "olifant | groot grijs dier met een slurf");
 const bewaar = () => { try { localStorage.setItem(BEWAAR, JSON.stringify(staat)); } catch (e) {} };
 
 function zaadje(tekst) {
@@ -438,7 +446,7 @@ function maakBlad() {
   $("melding").textContent = "";
   if (lijst.length < 3) {
     $("blad").innerHTML = ""; $("tel").textContent = "";
-    $("melding").textContent = "Vul minstens drie woorden in, als woord | omschrijving."; return;
+    $("melding").textContent = "Vul minstens drie woorden in, als woord | omschrijving."; $("blad").innerHTML = `<p style="padding:48px 12px; text-align:center; color:#5b647f; font-weight:700;">Vul minstens drie woorden in, als woord | omschrijving.</p>`; return;
   }
   const code = staat.code.trim() || String(Math.floor(1000 + Math.random() * 9000));
   $("code").value = code; staat.code = code; bewaar();
@@ -513,8 +521,27 @@ $("printKnop2").addEventListener("click", () => window.print());
 $("lijst").value = staat.lijst; $("titel").value = staat.titel; $("code").value = staat.code;
 [["hoofdChip", "hoofdletters"], ["oplossingChip", "oplossing"], ["naamChip", "naam"]]
   .forEach(([id, sleutel]) => $(id).classList.toggle("aan", staat[sleutel]));
+/* een oude bewaarde keuze die niet meer in een keuzelijst staat: terug naar de standaard */
+document.querySelectorAll(".instellingen select").forEach((s) => { if (s.value) return; const o = [...s.options].find((x) => x.defaultSelected) || s.options[0]; if (!o) return; s.value = o.value; if (s.id in staat) staat[s.id] = isNaN(o.value) ? o.value : Number(o.value); });
+/* elke wijziging in de instellingen meteen op het blad laten zien, met dezelfde herhaalcode */
+document.querySelector(".instellingen").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b && !["maakKnop", "printKnop2"].includes(b.id)) maakBlad(); });
+document.querySelector(".instellingen").addEventListener("change", () => maakBlad());
 maakBlad();
 
+/* op papier staat de voetregel (met de code) klein onder de kop, zodat er nooit een vel met alleen de voetregel uit de printer komt */
+function kopCodes() {
+  const voeten = [...document.querySelectorAll("#blad .bladvoet")];
+  document.querySelectorAll("#blad .bladkop").forEach((kop) => {
+    if (kop.querySelector(".kopcode")) return;
+    const voet = voeten.find((v) => kop.compareDocumentPosition(v) & Node.DOCUMENT_POSITION_FOLLOWING);
+    if (!voet) return;
+    const s = document.createElement("span"); s.className = "kopcode";
+    s.textContent = [...voet.children].map((c) => c.textContent).join(" · ");
+    kop.appendChild(s);
+  });
+}
+new MutationObserver(kopCodes).observe(document.getElementById("blad"), { childList: true });
+kopCodes();
 </script>
 </body>
 </html>

@@ -127,6 +127,7 @@
   .printblad{display:none;}
   .printkop{display:none;}
   @media print{
+    html, body{min-height:0 !important;}
     body{background:#fff !important;} body.digibord{background:#fff !important; --ink:#1c2433;}
     .app{max-width:none; padding:0;}
     .kop, .instellingen, details.uitleg, .voet, .spelkaart{display:none !important;}
@@ -263,8 +264,8 @@ let spul = null, prijs = 0, betaaldMet = 0, gelegd = [], klaar = false, goed = 0
 
 const tussen = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const kiesUit = (l) => l[Math.floor(Math.random() * l.length)];
-const euro = (c) => "€ " + (c / 100).toFixed(2).replace(".", ",");
-const kort = (w) => w >= 100 ? "€ " + w / 100 : w + " cent";
+const euro = (c) => "€\u00a0" + (c / 100).toFixed(2).replace(".", ",");
+const kort = (w) => w >= 100 ? "€\u00a0" + w / 100 : w + " cent";
 const som = (l) => l.reduce((a, b) => a + b, 0);
 const doelBedrag = () => staat.modus === "betalen" ? prijs : betaaldMet - prijs;
 

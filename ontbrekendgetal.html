@@ -92,11 +92,16 @@
   .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
   a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
 
+  .bladkop{position:relative;}
+  .kopcode{display:none;}
   @media print{
+    html, body{min-height:0 !important;}
+    .bladvoet{display:none !important;}
+    .kopcode{display:block; position:absolute; right:0; bottom:-15px; font-size:9px; color:#9aa3bd; white-space:nowrap;}
     body{background:#fff;}
     .app{max-width:none; padding:0;}
     .kop, .instellingen, details.uitleg, .voet{display:none;}
-    .bladvak{box-shadow:none; border:none; padding:0;}
+    .bladvak{box-shadow:none; border:none; padding:0; border-radius:0;}
     .blad{padding:0; font-size:15px;}
     .paginabreak{break-before:page;}
     @page{size:A4 portrait; margin:14mm;}
@@ -144,6 +149,7 @@
 
       <div class="groep">
         <h2>Tot welk getal?</h2>
+        <p class="klein">Geldt voor plus en min. Keer en delen gaan over de tafels van 1 tot en met 12.</p>
         <div class="seg" id="bereikSeg">
           <button type="button" data-tot="10">tot 10</button>
           <button type="button" data-tot="20" class="aan">tot 20</button>
@@ -251,8 +257,8 @@ function maakSom(r, soort) {
 }
 
 function maakBlad() {
-  if (!staat.soorten.length) { $("melding").textContent = "Kies eerst minstens één bewerking."; return; }
-  if (!staat.plekken.length) { $("melding").textContent = "Kies eerst minstens één plek voor het lege vakje."; return; }
+  if (!staat.soorten.length) { $("melding").textContent = "Kies eerst minstens één bewerking."; $("blad").innerHTML = `<p style="padding:48px 12px; text-align:center; color:#5b647f; font-weight:700;">${"Kies eerst minstens één bewerking."}</p>`; return; }
+  if (!staat.plekken.length) { $("melding").textContent = "Kies eerst minstens één plek voor het lege vakje."; $("blad").innerHTML = `<p style="padding:48px 12px; text-align:center; color:#5b647f; font-weight:700;">${"Kies eerst minstens één plek voor het lege vakje."}</p>`; return; }
   $("melding").textContent = "";
   const code = staat.code.trim() || String(Math.floor(1000 + Math.random() * 9000));
   $("code").value = code; staat.code = code; bewaar();
@@ -332,7 +338,27 @@ $("titel").value = staat.titel; $("aantal").value = staat.aantal;
 $("kolommen").value = staat.kolommen; $("grootte").value = staat.grootte; $("code").value = staat.code;
 $("antwoordChip").classList.toggle("aan", staat.antwoord);
 $("naamChip").classList.toggle("aan", staat.naam);
+/* een oude bewaarde keuze die niet meer in een keuzelijst staat: terug naar de standaard */
+document.querySelectorAll(".instellingen select").forEach((s) => { if (s.value) return; const o = [...s.options].find((x) => x.defaultSelected) || s.options[0]; if (!o) return; s.value = o.value; if (s.id in staat) staat[s.id] = isNaN(o.value) ? o.value : Number(o.value); });
+/* elke wijziging in de instellingen meteen op het blad laten zien, met dezelfde herhaalcode */
+document.querySelector(".instellingen").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b && !["maakKnop", "printKnop2"].includes(b.id)) maakBlad(); });
+document.querySelector(".instellingen").addEventListener("change", () => maakBlad());
 maakBlad();
+
+/* op papier staat de voetregel (met de code) klein onder de kop, zodat er nooit een vel met alleen de voetregel uit de printer komt */
+function kopCodes() {
+  const voeten = [...document.querySelectorAll("#blad .bladvoet")];
+  document.querySelectorAll("#blad .bladkop").forEach((kop) => {
+    if (kop.querySelector(".kopcode")) return;
+    const voet = voeten.find((v) => kop.compareDocumentPosition(v) & Node.DOCUMENT_POSITION_FOLLOWING);
+    if (!voet) return;
+    const s = document.createElement("span"); s.className = "kopcode";
+    s.textContent = [...voet.children].map((c) => c.textContent).join(" · ");
+    kop.appendChild(s);
+  });
+}
+new MutationObserver(kopCodes).observe(document.getElementById("blad"), { childList: true });
+kopCodes();
 </script>
 </body>
 </html>

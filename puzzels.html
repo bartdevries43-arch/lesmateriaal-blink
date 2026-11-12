@@ -92,11 +92,16 @@
   .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
   a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
 
+  .bladkop{position:relative;}
+  .kopcode{display:none;}
   @media print{
+    html, body{min-height:0 !important;}
+    .bladvoet{display:none !important;}
+    .kopcode{display:block; position:absolute; right:0; bottom:-15px; font-size:9px; color:#9aa3bd; white-space:nowrap;}
     body{background:#fff;}
     .app{max-width:none; padding:0;}
     .kop, .instellingen, details.uitleg, .voet{display:none;}
-    .bladvak{box-shadow:none; border:none; padding:0;}
+    .bladvak{box-shadow:none; border:none; padding:0; border-radius:0;}
     .blad{padding:0; font-size:15px;}
     .paginabreak{break-before:page;}
     @page{size:A4 portrait; margin:14mm;}
@@ -108,7 +113,7 @@
   .opg .vraag{margin-bottom:7px;}
   .opg .antwoord{font-weight:800; color:var(--accent); margin-top:6px;}
   .opg .hint{font-size:12.5px; color:#8b93ad; margin-top:5px;}
-  .opg .lijn{display:inline-block; border-bottom:2px solid var(--accent); min-width:2.4em; text-align:center; font-weight:800;}
+  .opg .lijn{display:inline-block; border-bottom:2px solid var(--accent); min-width:2.4em; text-align:center; font-weight:800; height:auto; line-height:1.25;}
 
   table.rooster{border-collapse:collapse; font-variant-numeric:tabular-nums;}
   table.rooster td{width:1.75em; height:1.75em; text-align:center; vertical-align:middle;
@@ -126,6 +131,7 @@
   .sleutel span{white-space:nowrap;}
   .code{font-weight:800; letter-spacing:.06em; font-variant-numeric:tabular-nums; line-height:2.1;}
   .code b{font-weight:800;}
+  span.code{display:inline-block; white-space:nowrap;}
   .code .vak{display:inline-block; min-width:1.5em; border-bottom:2px solid #c9cfe3; margin:0 .12em; text-align:center;}
   .code .spatie{display:inline-block; width:1em;}
 
@@ -345,6 +351,20 @@ function roosterHtml(bord, vol, n, metAntwoord, klasse) {
 const BASIS = [[8, 1, 6], [3, 5, 7], [4, 9, 2]];
 function draai(v) { return v[0].map((_, i) => v.map((rij) => rij[i]).reverse()); }
 function spiegel(v) { return v.map((rij) => [...rij].reverse()); }
+const LIJNEN = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]];
+/* kan een kind alle lege vakjes vinden door steeds een lijn met maar één leeg vakje af te maken? */
+function magischOplosbaar(open) {
+  const leeg = new Set(open);
+  let verder = true;
+  while (verder && leeg.size) {
+    verder = false;
+    for (const l of LIJNEN) {
+      const nog = l.filter((i) => leeg.has(i));
+      if (nog.length === 1) { leeg.delete(nog[0]); verder = true; }
+    }
+  }
+  return leeg.size === 0;
+}
 function maakMagisch(r, niveau) {
   let v = BASIS.map((rij) => [...rij]);
   for (let i = 0, n = tussen(r, 0, 3); i < n; i++) v = draai(v);
@@ -354,7 +374,11 @@ function maakMagisch(r, niveau) {
   v = v.map((rij) => rij.map((w) => w * keer + erbij));
   const som = v[0][0] + v[0][1] + v[0][2];
   const leeg = niveau === 1 ? 3 : niveau === 2 ? 4 : 5;
-  const open = new Set(schud(r, Array.from({ length: 9 }, (_, i) => i)).slice(0, leeg));
+  let open;
+  for (let p = 0; p < 200; p++) {
+    open = new Set(schud(r, Array.from({ length: 9 }, (_, i) => i)).slice(0, leeg));
+    if (magischOplosbaar(open)) break;
+  }
   return { vol: v, open, som };
 }
 function magischHtml(o, metAntwoord) {
@@ -381,7 +405,7 @@ const ZINNEN = ["de zon schijnt", "wij gaan lezen", "het is stil", "morgen vrij"
   "goed gedaan", "veel plezier", "kom maar", "fijne dag", "tot ziens"];
 function maakCode(r, niveau) {
   const tekst = niveau === 3 ? kies(r, ZINNEN)
-    : niveau === 2 ? kies(r, WOORDEN) + " " + kies(r, WOORDEN)
+    : niveau === 2 ? schud(r, WOORDEN).slice(0, 2).join(" ")
     : kies(r, WOORDEN);
   const cijfers = [...tekst].map((k) => (k === " " ? "/" : String(k.charCodeAt(0) - 96)));
   return { tekst, cijfers };
@@ -421,7 +445,7 @@ function maakRij(r, niveau) {
   const soort = kies(r, soorten);
   let start, stap, rij = [], regel = "";
   if (soort === "plus") { start = tussen(r, 1, 20); stap = tussen(r, 2, 9); rij = [0,1,2,3,4,5,6].map((i) => start + i * stap); regel = `telkens + ${stap}`; }
-  else if (soort === "min") { stap = tussen(r, 2, 9); start = tussen(r, 40, 90); rij = [0,1,2,3,4,5,6].map((i) => start - i * stap); regel = `telkens − ${stap}`; }
+  else if (soort === "min") { stap = tussen(r, 2, 9); start = tussen(r, Math.max(40, 6 * stap + 1), 90); rij = [0,1,2,3,4,5,6].map((i) => start - i * stap); regel = `telkens − ${stap}`; }
   else if (soort === "keer") { stap = tussen(r, 2, 3); start = tussen(r, 1, 4); rij = [0,1,2,3,4,5,6].map((i) => start * Math.pow(stap, i)); regel = `telkens × ${stap}`; }
   else if (soort === "groei") { start = tussen(r, 1, 6); const d0 = tussen(r, 1, 3); let w = start, d = d0; rij = [w]; for (let i = 0; i < 6; i++) { w += d; d++; rij.push(w); } regel = `het verschil wordt steeds 1 groter (begin + ${d0})`; }
   else { start = tussen(r, 5, 20); const op = tussen(r, 3, 9), af = tussen(r, 1, op - 1); let w = start; rij = [w]; for (let i = 0; i < 6; i++) { w += i % 2 === 0 ? op : -af; rij.push(w); } regel = `om en om + ${op} en − ${af}`; }
@@ -432,7 +456,7 @@ function maakRij(r, niveau) {
 function rijHtml(o, metAntwoord) {
   const stukken = o.rij.slice(0, o.tonen + o.vragen).map((w, i) =>
     i < o.tonen ? `<span>${w}</span>` : `<span class="vak">${metAntwoord ? w : ""}</span>`);
-  return `<div class="rij">${stukken.join(" ,  ")} , …</div>` +
+  return `<div class="rij">${stukken.join(", ")}, …</div>` +
     (metAntwoord ? `<div class="antwoord">${o.regel}</div>` : "");
 }
 
@@ -441,10 +465,35 @@ const THEMAS = {
   school: ["POTLOOD", "SCHRIFT", "GUM", "BOEK", "TAFEL", "STOEL", "KRIJT", "LEZEN", "REKENEN", "PLEIN"],
   natuur: ["BOOM", "BLAD", "WOLK", "REGEN", "ZON", "BLOEM", "GRAS", "BERG", "RIVIER", "STRAND"],
   dieren: ["HOND", "KAT", "PAARD", "VOGEL", "VIS", "MUIS", "KOE", "SCHAAP", "KIP", "BEER"],
-  eten: ["BROOD", "KAAS", "MELK", "APPEL", "BANAAN", "SOEP", "RIJST", "EI", "BOTER", "PEER"],
+  eten: ["BROOD", "KAAS", "MELK", "APPEL", "BANAAN", "SOEP", "RIJST", "TAART", "BOTER", "PEER"],
 };
 const RICHTINGEN = [[0, 1], [1, 0], [1, 1], [1, -1]];
+const ALLE_KANTEN = [[0, 1], [1, 0], [1, 1], [1, -1], [0, -1], [-1, 0], [-1, -1], [-1, 1]];
+function telInRooster(grid, woord) {
+  const maat = grid.length; let n = 0;
+  for (let i = 0; i < maat; i++) for (let j = 0; j < maat; j++) for (const [dr, dk] of ALLE_KANTEN) {
+    let k = 0;
+    while (k < woord.length) {
+      const a = i + dr * k, b = j + dk * k;
+      if (a < 0 || b < 0 || a >= maat || b >= maat || grid[a][b] !== woord[k]) break;
+      k++;
+    }
+    if (k === woord.length) n++;
+  }
+  return n;
+}
 function maakZoeker(r, niveau) {
+  const hoeveel = niveau === 1 ? 5 : niveau === 2 ? 7 : 9;
+  let o, reserve = null;
+  for (let p = 0; p < 80; p++) {
+    o = maakZoekerPoging(r, niveau);
+    if (!o.woorden.every((w) => telInRooster(o.grid, w) === 1)) continue;
+    if (o.woorden.length >= hoeveel) return o;
+    reserve = reserve || o;
+  }
+  return reserve || o;
+}
+function maakZoekerPoging(r, niveau) {
   const maat = niveau === 1 ? 9 : niveau === 2 ? 11 : 13;
   const hoeveel = niveau === 1 ? 5 : niveau === 2 ? 7 : 9;
   const thema = kies(r, Object.keys(THEMAS));
@@ -526,12 +575,12 @@ function maakPuzzel(r, soort) {
       html: (a) => rijHtml(o, a), sleutel: "r" + o.rij.join("-") };
   }
   const o = maakZoeker(r, n);
-  return { titel: "Woordzoeker", opdracht: `Zoek de ${o.woorden.length} woorden. Ze staan horizontaal, verticaal en schuin.`,
+  return { titel: "Woordzoeker", opdracht: `Zoek de ${o.woorden.length} woorden. Ze staan horizontaal, verticaal en schuin.${n === 3 ? " Sommige staan achterstevoren." : ""}`,
     html: (a) => zoekerHtml(o, a), sleutel: "z" + o.woorden.join("-") };
 }
 
 function maakBlad() {
-  if (!staat.soorten.length) { $("melding").textContent = "Kies eerst minstens één soort puzzel."; return; }
+  if (!staat.soorten.length) { $("melding").textContent = "Kies eerst minstens één soort puzzel."; $("blad").innerHTML = `<p style="padding:48px 12px; text-align:center; color:#5b647f; font-weight:700;">${"Kies eerst minstens één soort puzzel."}</p>`; return; }
   $("melding").textContent = "";
   const code = staat.code.trim() || String(Math.floor(1000 + Math.random() * 9000));
   $("code").value = code; staat.code = code; bewaar();
@@ -601,8 +650,27 @@ $("titel").value = staat.titel; $("aantal").value = staat.aantal;
 $("kolommen").value = staat.kolommen; $("grootte").value = staat.grootte; $("code").value = staat.code;
 [["sleutelChip", "sleutel"], ["antwoordChip", "antwoord"], ["naamChip", "naam"]]
   .forEach(([id, sleutel]) => $(id).classList.toggle("aan", staat[sleutel]));
+/* een oude bewaarde keuze die niet meer in een keuzelijst staat: terug naar de standaard */
+document.querySelectorAll(".instellingen select").forEach((s) => { if (s.value) return; const o = [...s.options].find((x) => x.defaultSelected) || s.options[0]; if (!o) return; s.value = o.value; if (s.id in staat) staat[s.id] = isNaN(o.value) ? o.value : Number(o.value); });
+/* elke wijziging in de instellingen meteen op het blad laten zien, met dezelfde herhaalcode */
+document.querySelector(".instellingen").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b && !["maakKnop", "printKnop2"].includes(b.id)) maakBlad(); });
+document.querySelector(".instellingen").addEventListener("change", () => maakBlad());
 maakBlad();
 
+/* op papier staat de voetregel (met de code) klein onder de kop, zodat er nooit een vel met alleen de voetregel uit de printer komt */
+function kopCodes() {
+  const voeten = [...document.querySelectorAll("#blad .bladvoet")];
+  document.querySelectorAll("#blad .bladkop").forEach((kop) => {
+    if (kop.querySelector(".kopcode")) return;
+    const voet = voeten.find((v) => kop.compareDocumentPosition(v) & Node.DOCUMENT_POSITION_FOLLOWING);
+    if (!voet) return;
+    const s = document.createElement("span"); s.className = "kopcode";
+    s.textContent = [...voet.children].map((c) => c.textContent).join(" · ");
+    kop.appendChild(s);
+  });
+}
+new MutationObserver(kopCodes).observe(document.getElementById("blad"), { childList: true });
+kopCodes();
 </script>
 </body>
 </html>

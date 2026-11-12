@@ -139,6 +139,7 @@
   .printblad{display:none;}
   .printkop{display:none;}
   @media print{
+    html, body{min-height:0 !important;}
     body{background:#fff !important;} body.digibord{background:#fff !important; --ink:#1c2433;}
     .app{max-width:none; padding:0;}
     .kop, .instellingen, details.uitleg, .voet, .racekaart, .baankaart{display:none !important;}
@@ -270,7 +271,7 @@ const MINUTEN = {
   vijf: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55],
   alle: Array.from({ length: 60 }, (_, i) => i),
 };
-const UURNAAM = ["", "een", "twee", "drie", "vier", "vijf", "zes",
+const UURNAAM = ["", "één", "twee", "drie", "vier", "vijf", "zes",
   "zeven", "acht", "negen", "tien", "elf", "twaalf"];
 /* alle vormen staan hier voluit, er wordt niets afgeleid */
 const WOORDVORM = {

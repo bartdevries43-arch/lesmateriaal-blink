@@ -125,6 +125,7 @@
 
   .printkop{display:none;}
   @media print{
+    html, body{min-height:0 !important;}
     body{background:#fff !important;} body.digibord{background:#fff !important; --ink:#1c2433;}
     .app{max-width:none; padding:0;}
     .kop, .instellingen, details.uitleg, .voet, .knoppen{display:none !important;}

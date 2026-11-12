@@ -101,11 +101,16 @@
   .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
   a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
 
+  .bladkop{position:relative;}
+  .kopcode{display:none;}
   @media print{
+    html, body{min-height:0 !important;}
+    .bladvoet{display:none !important;}
+    .kopcode{display:block; position:absolute; right:0; bottom:-15px; font-size:9px; color:#9aa3bd; white-space:nowrap;}
     body{background:#fff;}
     .app{max-width:none; padding:0;}
     .kop, .instellingen, details.uitleg, .voet{display:none;}
-    .bladvak{box-shadow:none; border:none; padding:0;}
+    .bladvak{box-shadow:none; border:none; padding:0; border-radius:0;}
     .blad{padding:0; font-size:15px;}
     .paginabreak{break-before:page;}
     @page{size:A4 portrait; margin:14mm;}
@@ -227,9 +232,20 @@ const MATEN = {
 };
 const TRAP = {
   lengte: ["km", "hm", "dam", "m", "dm", "cm", "mm"],
-  gewicht: ["ton", "kg", "hg", "dag", "g"],
+  gewicht: ["kg", "hg", "dag", "g"],
   inhoud: ["l", "dl", "cl", "ml"],
-  oppervlakte: ["km²", "ha", "m²", "dm²", "cm²"],
+  oppervlakte: ["km²", "hm² (ha)", "dam²", "m²", "dm²", "cm²"],
+};
+const TRAPNOOT = { lengte: "", gewicht: "1 ton = 1000 kg", inhoud: "", oppervlakte: "" };
+/* de factor van elke eenheid ten opzichte van de basismaat */
+const FACTOR = { km: 1000, hm: 100, dam: 10, m: 1, dm: .1, cm: .01, mm: .001, ton: 1000, kg: 1, hg: .1, dag: .01, g: .001,
+  l: 1, dl: .1, cl: .01, ml: .001, "km²": 1000000, ha: 10000, "m²": 1, "dm²": .01, "cm²": .0001 };
+/* omrekenparen: één stap op de maattrap, of een grotere sprong */
+const PAREN = {
+  lengte: { 1: [["m", "dm"], ["dm", "cm"], ["cm", "mm"]], 2: [["m", "cm"], ["dm", "mm"], ["km", "m"], ["m", "mm"]] },
+  gewicht: { 1: [["kg", "hg"], ["hg", "dag"], ["dag", "g"]], 2: [["kg", "dag"], ["hg", "g"], ["kg", "g"], ["ton", "kg"]] },
+  inhoud: { 1: [["l", "dl"], ["dl", "cl"], ["cl", "ml"]], 2: [["l", "cl"], ["dl", "ml"], ["l", "ml"]] },
+  oppervlakte: { 1: [["m²", "dm²"], ["dm²", "cm²"], ["km²", "ha"]], 2: [["m²", "cm²"], ["ha", "m²"]] },
 };
 
 let staat = { maten: ["lengte", "gewicht"], soorten: ["omrekenen", "aflezen", "verhaal"], niveau: 2,
@@ -260,17 +276,45 @@ function getal(n) {
   return String(afgerond).replace(".", ",");
 }
 
-/* naam, eenheid, en een realistische maat: van, tot, stap */
+/* dingen met een realistische maat: van, tot, stap; "af" = er gaat een deel af, "groot" = samen in een grotere eenheid */
 const SPULLEN = {
-  lengte: [["een touw", "m", 2, 9, 1], ["een plank", "m", 2, 5, 1], ["een lint", "cm", 20, 90, 10],
-    ["een wandelpad", "km", 2, 9, 1], ["een potlood", "cm", 10, 18, 1]],
-  gewicht: [["een zak aardappelen", "kg", 2, 10, 1], ["een brood", "g", 400, 900, 50], ["een kat", "kg", 3, 6, 1],
-    ["een appel", "g", 100, 250, 50], ["een doos", "kg", 2, 9, 1]],
-  inhoud: [["een pak sap", "l", 1, 3, 1], ["een fles water", "ml", 250, 750, 250], ["een emmer", "l", 5, 10, 1],
-    ["een beker", "ml", 150, 300, 50], ["een gieter", "l", 3, 8, 1]],
-  oppervlakte: [["een tuin", "m²", 20, 90, 10], ["een tafelblad", "dm²", 40, 90, 10], ["een speelveld", "m²", 100, 900, 100],
-    ["een tegel", "dm²", 4, 9, 1], ["een weiland", "ha", 2, 9, 1]],
+  lengte: [
+    { naam: "een touw", e: "m", van: 2, tot: 9, stap: 1, af: { e: "cm", stap: 10, zin: (x) => `Je knipt er ${x} cm af.`, vraag: "Hoeveel cm touw blijft er over?" } },
+    { naam: "een plank", e: "m", van: 2, tot: 5, stap: 1, af: { e: "cm", stap: 10, zin: (x) => `Je zaagt er ${x} cm af.`, vraag: "Hoeveel cm is de plank nu nog?" } },
+    { naam: "een lint", e: "cm", van: 20, tot: 90, stap: 10, groot: "m" },
+    { naam: "een wandelpad", e: "km", van: 2, tot: 9, stap: 1, af: { e: "m", stap: 100, zin: (x) => `Je hebt al ${x} m gelopen.`, vraag: "Hoeveel m moet je nog?" } },
+    { naam: "een potlood", e: "cm", van: 10, tot: 18, stap: 1 },
+  ],
+  gewicht: [
+    { naam: "een zak aardappelen", e: "kg", van: 2, tot: 10, stap: 1, af: { e: "g", stap: 250, zin: (x) => `Je kookt er ${x} g van.`, vraag: "Hoeveel g aardappelen blijft er over?" } },
+    { naam: "een brood", e: "g", van: 400, tot: 900, stap: 50, groot: "kg" },
+    { naam: "een meloen", e: "kg", van: 1, tot: 3, stap: 1 },
+    { naam: "een appel", e: "g", van: 100, tot: 250, stap: 50, groot: "kg" },
+    { naam: "een doos boeken", e: "kg", van: 2, tot: 9, stap: 1 },
+  ],
+  inhoud: [
+    { naam: "een pak sap", e: "l", van: 1, tot: 3, stap: 1, af: { e: "ml", stap: 250, zin: (x) => `Je schenkt er ${x} ml uit.`, vraag: "Hoeveel ml sap zit er nog in?" } },
+    { naam: "een fles water", e: "ml", van: 250, tot: 750, stap: 250, groot: "l" },
+    { naam: "een emmer", e: "l", van: 5, tot: 10, stap: 1, af: { e: "ml", stap: 500, zin: (x) => `Je giet er ${x} ml uit.`, vraag: "Hoeveel ml water zit er nog in?" } },
+    { naam: "een beker", e: "ml", van: 150, tot: 300, stap: 50, groot: "l" },
+    { naam: "een gieter", e: "l", van: 3, tot: 8, stap: 1, af: { e: "ml", stap: 500, zin: (x) => `Je giet er ${x} ml uit.`, vraag: "Hoeveel ml water zit er nog in?" } },
+  ],
+  oppervlakte: [
+    { naam: "een tuin", e: "m²", van: 20, tot: 90, stap: 10 },
+    { naam: "een tafelblad", e: "dm²", van: 40, tot: 90, stap: 10, groot: "m²" },
+    { naam: "een speelveld", e: "m²", van: 100, tot: 900, stap: 100 },
+    { naam: "een tegel", e: "dm²", van: 4, tot: 9, stap: 1 },
+    { naam: "een weiland", e: "ha", van: 2, tot: 9, stap: 1 },
+  ],
 };
+const hoofdletter = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+/* een zin die bij de maat past: lang, weegt, zit erin, groot */
+function maatZin(maat, wie, x, e) {
+  if (maat === "lengte") return `${hoofdletter(wie)} is ${x} ${e} lang.`;
+  if (maat === "gewicht") return `${hoofdletter(wie)} weegt ${x} ${e}.`;
+  if (maat === "inhoud") return `In ${wie} zit ${x} ${e}.`;
+  return `${hoofdletter(wie)} is ${x} ${e} groot.`;
+}
 
 function maakOpgave(r, maat, soort) {
   const set = MATEN[maat].eenheden;
@@ -284,71 +328,72 @@ function maakOpgave(r, maat, soort) {
   }
 
   if (soort === "ordenen") {
-    const drie = [];
-    const over = [...set];
-    for (let i = 0; i < 3 && over.length; i++) {
-      const j = Math.floor(r() * over.length);
-      const [e, f] = over.splice(j, 1)[0];
-      drie.push({ tekst: tussen(r, 2, 900) + " " + e, waarde: 0, e, f });
+    for (let poging = 0; poging < 50; poging++) {
+      const drie = [];
+      const over = [...set];
+      for (let i = 0; i < 3 && over.length; i++) {
+        const j = Math.floor(r() * over.length);
+        const [e, f] = over.splice(j, 1)[0];
+        const n = tussen(r, 2, 900);
+        drie.push({ tekst: n + " " + e, waarde: n * f });
+      }
+      const rij = [...drie].sort((a, b) => b.waarde - a.waarde);
+      if (rij[0].waarde < rij[1].waarde * 1.2) continue; /* geen gelijke of bijna gelijke maten */
+      return { sleutel: "o" + drie.map((d) => d.tekst).join("|"),
+        vraag: "Welke is het grootst? " + drie.map((d) => d.tekst).join("  ·  "),
+        antwoord: rij[0].tekst };
     }
-    drie.forEach((d) => { d.waarde = parseFloat(d.tekst) * d.f; });
-    const grootste = drie.reduce((a, b) => (b.waarde > a.waarde ? b : a));
-    return { sleutel: "o" + drie.map((d) => d.tekst).join("|"),
-      vraag: "Welke is het grootst? " + drie.map((d) => d.tekst).join("  ·  "),
-      antwoord: grootste.tekst };
   }
 
   if (soort === "verhaal") {
-    const [naam, e, van, tot, stap] = kies(r, SPULLEN[maat]);
-    const idx = set.findIndex((x) => x[0] === e);
-    const f = idx >= 0 ? set[idx][1] : 1;
-    const maatVan = () => tussen(r, Math.ceil(van / stap), Math.floor(tot / stap)) * stap;
+    const ding = kies(r, SPULLEN[maat]);
+    const maatVan = () => tussen(r, Math.ceil(ding.van / ding.stap), Math.floor(ding.tot / ding.stap)) * ding.stap;
     const a = maatVan();
-    const hoofdletter = (t) => t.charAt(0).toUpperCase() + t.slice(1);
-    const soortje = r();
+    const keuze = r();
 
-    // er gaat iets af, in een kleinere eenheid, en het blijft positief
-    if (idx >= 0 && idx < set.length - 1 && soortje < .4) {
-      const [eK, fK] = set[idx + 1];
-      const totaalK = Math.round(a * f / fK);
-      const af = Math.max(1, Math.round(tussen(r, 1, Math.max(2, Math.floor(totaalK * .6))) / 5) * 5);
-      return { sleutel: "v1" + naam + a + af + eK,
-        vraag: `${hoofdletter(naam)} is ${getal(a)} ${e}. Er gaat ${getal(af)} ${eK} af. Hoeveel ${eK} blijft er over?`,
-        hint: `Reken ${getal(a)} ${e} eerst om naar ${eK}.`,
-        antwoord: getal(totaalK - af) + " " + eK };
+    // er gaat iets af, in een kleinere eenheid
+    if (ding.af && keuze < .45) {
+      const totaal = Math.round(a * FACTOR[ding.e] / FACTOR[ding.af.e]);
+      const max = Math.floor(totaal * .6 / ding.af.stap);
+      if (max >= 1) {
+        const x = tussen(r, 1, max) * ding.af.stap;
+        return { sleutel: "v1" + ding.naam + a + x,
+          vraag: `${maatZin(maat, ding.naam, a, ding.e)} ${ding.af.zin(x)} ${ding.af.vraag}`,
+          hint: `Reken ${a} ${ding.e} eerst om naar ${ding.af.e}.`,
+          antwoord: getal(totaal - x) + " " + ding.af.e };
+      }
     }
 
-    // twee stuks samen, en het antwoord in de grotere eenheid
-    if (idx > 0 && soortje < .7 && (a + maatVan()) * f / set[idx - 1][1] >= 1) {
-      const [eG, fG] = set[idx - 1];
-      const b = maatVan();
-      const samen = a + b;
-      if (samen * f / fG < 1) return maakOpgave(r, maat, "omrekenen");
-      return { sleutel: "v2" + naam + a + b,
-        vraag: `${hoofdletter(naam)} is ${getal(a)} ${e}. Een tweede is ${getal(b)} ${e}. Hoeveel ${eG} is dat samen?`,
-        hint: `Tel eerst op in ${e}, reken daarna om naar ${eG}.`,
-        antwoord: getal(samen * f / fG) + " " + eG };
+    // twee stuks samen, in een grotere eenheid (zonder kommagetal, behalve op het hoogste niveau)
+    if (ding.groot && keuze < .8) {
+      for (let p = 0; p < 30; p++) {
+        const b = maatVan();
+        const samen = (a + b) * FACTOR[ding.e] / FACTOR[ding.groot];
+        const rond = Math.round(samen * 1000000) / 1000000;
+        if (staat.niveau < 3 && !Number.isInteger(rond)) continue;
+        const ander = "een tweede " + ding.naam.replace(/^een /, "");
+        return { sleutel: "v2" + ding.naam + a + b,
+          vraag: `${maatZin(maat, ding.naam, a, ding.e)} ${maatZin(maat, ander, b, ding.e)} Hoeveel ${ding.groot} is dat samen?`,
+          hint: `Tel eerst op in ${ding.e}, reken daarna om naar ${ding.groot}.`,
+          antwoord: getal(rond) + " " + ding.groot };
+      }
     }
 
     // keersom
     const c = tussen(r, 2, 8);
-    return { sleutel: "v3" + naam + a + c,
-      vraag: `Je hebt ${c} keer ${naam} van ${getal(a)} ${e}. Hoeveel ${e} is dat samen?`,
+    return { sleutel: "v3" + ding.naam + a + c,
+      vraag: `Je hebt ${c} keer ${ding.naam} van ${a} ${ding.e}. Hoeveel ${ding.e} is dat samen?`,
       hint: "Keer eerst, schrijf daarna de maat erbij.",
-      antwoord: getal(a * c) + " " + e };
+      antwoord: getal(a * c) + " " + ding.e };
   }
 
   // omrekenen
-  let stap = staat.niveau === 1 || maat === "oppervlakte" ? 1 : 2;
-  const van = tussen(r, 0, set.length - 1 - stap);
-  const naar = Math.min(set.length - 1, van + stap);
-  const [eVan, fVan] = set[van], [eNaar, fNaar] = set[naar];
-  let waarde;
-  if (staat.niveau === 3) waarde = tussen(r, 11, 995) / 10;
-  else waarde = tussen(r, 2, 95);
-  const uit = waarde * fVan / fNaar;
-  const omgekeerd = r() < .35;
-  if (omgekeerd) {
+  const paren = staat.niveau === 1 ? PAREN[maat][1] : [...PAREN[maat][1], ...PAREN[maat][2], ...PAREN[maat][2]];
+  const [eVan, eNaar] = kies(r, paren);
+  const fVan = FACTOR[eVan], fNaar = FACTOR[eNaar];
+  const waarde = staat.niveau === 3 ? tussen(r, 11, 995) / 10 : tussen(r, 2, 95);
+  const uit = Math.round(waarde * fVan / fNaar * 1000000) / 1000000;
+  if (r() < .35) {
     return { sleutel: "r" + uit + eNaar + eVan,
       vraag: `${getal(uit)} ${eNaar} = <span class="lijn"></span> ${eVan}`,
       antwoord: getal(waarde) + " " + eVan };
@@ -380,14 +425,14 @@ function liniaalSvg(mm) {
 }
 
 function trapHtml() {
-  return `<div class="trap"><h3>Maattrap · elke stap naar rechts is keer 10</h3>
-    ${staat.maten.map((m) => `<div class="trapregel"><span class="label">${MATEN[m].naam}</span>${TRAP[m].map((e) => `<span class="trede">${e}</span>`).join("")}</div>`).join("")}
+  return `<div class="trap"><h3>Maattrap · elke stap naar rechts is keer 10${staat.maten.includes("oppervlakte") ? ", bij oppervlakte keer 100" : ""}</h3>
+    ${staat.maten.map((m) => `<div class="trapregel"><span class="label">${MATEN[m].naam}</span>${TRAP[m].map((e) => `<span class="trede">${e}</span>`).join("")}${TRAPNOOT[m] ? `<span class="label" style="margin-left:8px;">${TRAPNOOT[m]}</span>` : ""}</div>`).join("")}
   </div>`;
 }
 
 function maakBlad() {
-  if (!staat.maten.length) { $("melding").textContent = "Kies eerst minstens één maat."; return; }
-  if (!staat.soorten.length) { $("melding").textContent = "Kies eerst minstens één soort opgave."; return; }
+  if (!staat.maten.length) { $("melding").textContent = "Kies eerst minstens één maat."; $("blad").innerHTML = `<p style="padding:48px 12px; text-align:center; color:#5b647f; font-weight:700;">${"Kies eerst minstens één maat."}</p>`; return; }
+  if (!staat.soorten.length) { $("melding").textContent = "Kies eerst minstens één soort opgave."; $("blad").innerHTML = `<p style="padding:48px 12px; text-align:center; color:#5b647f; font-weight:700;">${"Kies eerst minstens één soort opgave."}</p>`; return; }
   $("melding").textContent = "";
   const code = staat.code.trim() || String(Math.floor(1000 + Math.random() * 9000));
   $("code").value = code; staat.code = code; bewaar();
@@ -468,7 +513,27 @@ $("kolommen").value = staat.kolommen; $("grootte").value = staat.grootte; $("cod
 $("trapChip").classList.toggle("aan", staat.trap);
 $("antwoordChip").classList.toggle("aan", staat.antwoord);
 $("naamChip").classList.toggle("aan", staat.naam);
+/* een oude bewaarde keuze die niet meer in een keuzelijst staat: terug naar de standaard */
+document.querySelectorAll(".instellingen select").forEach((s) => { if (s.value) return; const o = [...s.options].find((x) => x.defaultSelected) || s.options[0]; if (!o) return; s.value = o.value; if (s.id in staat) staat[s.id] = isNaN(o.value) ? o.value : Number(o.value); });
+/* elke wijziging in de instellingen meteen op het blad laten zien, met dezelfde herhaalcode */
+document.querySelector(".instellingen").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b && !["maakKnop", "printKnop2"].includes(b.id)) maakBlad(); });
+document.querySelector(".instellingen").addEventListener("change", () => maakBlad());
 maakBlad();
+
+/* op papier staat de voetregel (met de code) klein onder de kop, zodat er nooit een vel met alleen de voetregel uit de printer komt */
+function kopCodes() {
+  const voeten = [...document.querySelectorAll("#blad .bladvoet")];
+  document.querySelectorAll("#blad .bladkop").forEach((kop) => {
+    if (kop.querySelector(".kopcode")) return;
+    const voet = voeten.find((v) => kop.compareDocumentPosition(v) & Node.DOCUMENT_POSITION_FOLLOWING);
+    if (!voet) return;
+    const s = document.createElement("span"); s.className = "kopcode";
+    s.textContent = [...voet.children].map((c) => c.textContent).join(" · ");
+    kop.appendChild(s);
+  });
+}
+new MutationObserver(kopCodes).observe(document.getElementById("blad"), { childList: true });
+kopCodes();
 </script>
 </body>
 </html>

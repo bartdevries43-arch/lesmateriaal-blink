@@ -82,6 +82,7 @@
   table.som td.teken{width:1.1em; color:var(--accent); text-align:left;}
   table.som tr.streep td{border-bottom:2px solid #55607e;}
   table.som tr.leeg td.hok{border:1px dotted #d9dded;}
+  table.som tr.leeg.streep td{border-bottom:2px solid #55607e;}
   table.som td.antwoord{color:var(--accent);}
   table.som tr.onthoud td{height:.95em; font-size:.62em; color:#b3bace;}
 
@@ -106,11 +107,16 @@
   .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
   a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
 
+  .bladkop{position:relative;}
+  .kopcode{display:none;}
   @media print{
+    html, body{min-height:0 !important;}
+    .bladvoet{display:none !important;}
+    .kopcode{display:block; position:absolute; right:0; bottom:-15px; font-size:9px; color:#9aa3bd; white-space:nowrap;}
     body{background:#fff;}
     .app{max-width:none; padding:0;}
     .kop, .instellingen, details.uitleg, .voet{display:none;}
-    .bladvak{box-shadow:none; border:none; padding:0;}
+    .bladvak{box-shadow:none; border:none; padding:0; border-radius:0;}
     .blad{padding:0; font-size:15px;}
     .paginabreak{break-before:page;}
     @page{size:A4 portrait; margin:14mm;}
@@ -260,13 +266,28 @@ function maakSom(r, soort) {
       a = tussen(r, min, max); b = tussen(r, min, max);
       if (heeftOnthoud(a, b) === staat.onthoud) break;
     }
+    if (heeftOnthoud(a, b) !== staat.onthoud) {
+      /* lukt het niet door te gokken (zonder onthouden, veel cijfers)? Dan cijfer voor cijfer opbouwen */
+      a = 0; b = 0;
+      for (let i = c - 1; i >= 0; i--) {
+        const da = tussen(r, i === c - 1 ? 1 : 0, i === c - 1 ? 8 : 9), db = tussen(r, i === c - 1 ? 1 : 0, 9 - da);
+        a = a * 10 + da; b = b * 10 + db;
+      }
+    }
     return { soort, a, b, teken: "+", antwoord: a + b };
   }
   if (soort === "min") {
     let a, b;
     for (let p = 0; p < 90; p++) {
-      a = tussen(r, min, max); b = tussen(r, Math.floor(min / 2), a);
+      a = tussen(r, min + 1, max); b = tussen(r, Math.floor(min / 2), a - 1); /* nooit 0 als uitkomst */
       if (b > 0 && heeftLenen(a, b) === staat.onthoud) break;
+    }
+    if (!(b > 0 && b < a && heeftLenen(a, b) === staat.onthoud) && !staat.onthoud) {
+      a = 0; b = 0;
+      for (let i = c - 1; i >= 0; i--) {
+        const da = tussen(r, i === c - 1 ? 2 : 0, 9), db = tussen(r, i === c - 1 ? 1 : 0, i === c - 1 ? da - 1 : da);
+        a = a * 10 + da; b = b * 10 + db;
+      }
     }
     return { soort, a, b, teken: "−", antwoord: a - b };
   }
@@ -277,7 +298,7 @@ function maakSom(r, soort) {
   }
   // staartdeling, altijd zonder rest
   const deler = tussen(r, 2, c >= 4 ? 25 : 9);
-  const uitkomst = tussen(r, Math.max(11, Math.floor(min / deler)), Math.floor(max / deler));
+  const uitkomst = tussen(r, Math.max(11, Math.ceil(min / deler)), Math.floor(max / deler)); /* deeltal heeft echt het gekozen aantal cijfers */
   return { soort, a: deler * uitkomst, b: deler, teken: ":", antwoord: uitkomst };
 }
 
@@ -290,10 +311,15 @@ function somTabel(o, metAntwoord) {
   const onthoudrij = staat.onthoudrij && !metAntwoord
     ? `<tr class="onthoud"><td class="teken"></td>${Array.from({ length: breedte }, () => "<td></td>").join("")}</tr>` : "";
   const uitkomst = metAntwoord ? hokjes(o.antwoord, "antwoord") : leeg;
+  /* keer met een getal van twee cijfers: ruimte voor de twee tussenuitkomsten */
+  const tussen2 = o.soort === "keer" && o.b >= 10
+    ? `<tr class="${metAntwoord ? "" : "leeg"}"><td class="teken"></td>${metAntwoord ? hokjes(o.a * (o.b % 10), "antwoord") : leeg}</tr>
+       <tr class="streep${metAntwoord ? "" : " leeg"}"><td class="teken">+</td>${metAntwoord ? hokjes(o.a * Math.floor(o.b / 10) * 10, "antwoord") : leeg}</tr>` : "";
   return `<table class="som">
     ${onthoudrij}
     <tr><td class="teken"></td>${hokjes(o.a, "")}</tr>
     <tr class="streep"><td class="teken">${o.teken}</td>${hokjes(o.b, "")}</tr>
+    ${tussen2}
     <tr class="${metAntwoord ? "" : "leeg"}"><td class="teken"></td>${uitkomst}</tr>
   </table>`;
 }
@@ -309,7 +335,7 @@ function staartHtml(o, metAntwoord) {
 }
 
 function maakBlad() {
-  if (!staat.soorten.length) { $("melding").textContent = "Kies eerst minstens één bewerking."; return; }
+  if (!staat.soorten.length) { $("melding").textContent = "Kies eerst minstens één bewerking."; $("blad").innerHTML = `<p style="padding:48px 12px; text-align:center; color:#5b647f; font-weight:700;">${"Kies eerst minstens één bewerking."}</p>`; return; }
   $("melding").textContent = "";
   const code = staat.code.trim() || String(Math.floor(1000 + Math.random() * 9000));
   $("code").value = code; staat.code = code; bewaar();
@@ -378,7 +404,27 @@ $("kolommen").value = staat.kolommen; $("grootte").value = staat.grootte; $("cod
 [["onthoudChip", "onthoud"], ["hokChip", "hok"],
  ["onthoudrijChip", "onthoudrij"], ["antwoordChip", "antwoord"], ["naamChip", "naam"]]
   .forEach(([id, sleutel]) => $(id).classList.toggle("aan", staat[sleutel]));
+/* een oude bewaarde keuze die niet meer in een keuzelijst staat: terug naar de standaard */
+document.querySelectorAll(".instellingen select").forEach((s) => { if (s.value) return; const o = [...s.options].find((x) => x.defaultSelected) || s.options[0]; if (!o) return; s.value = o.value; if (s.id in staat) staat[s.id] = isNaN(o.value) ? o.value : Number(o.value); });
+/* elke wijziging in de instellingen meteen op het blad laten zien, met dezelfde herhaalcode */
+document.querySelector(".instellingen").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b && !["maakKnop", "printKnop2"].includes(b.id)) maakBlad(); });
+document.querySelector(".instellingen").addEventListener("change", () => maakBlad());
 maakBlad();
+
+/* op papier staat de voetregel (met de code) klein onder de kop, zodat er nooit een vel met alleen de voetregel uit de printer komt */
+function kopCodes() {
+  const voeten = [...document.querySelectorAll("#blad .bladvoet")];
+  document.querySelectorAll("#blad .bladkop").forEach((kop) => {
+    if (kop.querySelector(".kopcode")) return;
+    const voet = voeten.find((v) => kop.compareDocumentPosition(v) & Node.DOCUMENT_POSITION_FOLLOWING);
+    if (!voet) return;
+    const s = document.createElement("span"); s.className = "kopcode";
+    s.textContent = [...voet.children].map((c) => c.textContent).join(" · ");
+    kop.appendChild(s);
+  });
+}
+new MutationObserver(kopCodes).observe(document.getElementById("blad"), { childList: true });
+kopCodes();
 </script>
 </body>
 </html>

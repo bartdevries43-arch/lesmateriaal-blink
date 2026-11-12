@@ -547,6 +547,8 @@
   a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{outline:3px solid rgba(198,40,40,.45); outline-offset:3px;}
 
   @media print{
+    html, body{min-height:0 !important;}
+    .bladvoet{break-before:avoid;}
     body{background:#fff;}
     .app{max-width:none; padding:0;}
     .kop, .menu, .instellingen, details.uitleg, .voet, .alleenscherm{display:none !important;}

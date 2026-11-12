@@ -102,11 +102,16 @@
   .voet a{color:var(--accent); font-weight:700; text-decoration:none;}
   a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{outline:3px solid rgba(79,70,229,.45); outline-offset:3px;}
 
+  .bladkop{position:relative;}
+  .kopcode{display:none;}
   @media print{
+    html, body{min-height:0 !important;}
+    .bladvoet{display:none !important;}
+    .kopcode{display:block; position:absolute; right:0; bottom:-15px; font-size:9px; color:#9aa3bd; white-space:nowrap;}
     body{background:#fff;}
     .app{max-width:none; padding:0;}
     .kop, .instellingen, details.uitleg, .voet{display:none;}
-    .bladvak{box-shadow:none; border:none; padding:0;}
+    .bladvak{box-shadow:none; border:none; padding:0; border-radius:0;}
     .blad{padding:0; font-size:15px;}
     .paginabreak{break-before:page;}
     @page{size:A4 portrait; margin:14mm;}
@@ -223,8 +228,11 @@ const BEWAAR = "blink-procenten";
 const SETS = { simpel: [10, 25, 50, 75], tien: [10, 20, 30, 40, 50, 60, 70, 80, 90],
   alles: [5, 8, 12, 15, 18, 22, 24, 30, 35, 40, 45, 55, 60, 65, 70, 80, 85, 90, 95] };
 const OMZET = [[50, "1/2", "0,5"], [25, "1/4", "0,25"], [75, "3/4", "0,75"], [10, "1/10", "0,1"],
-  [20, "1/5", "0,2"], [40, "2/5", "0,4"], [60, "3/5", "0,6"], [80, "4/5", "0,8"], [100, "1", "1"], [5, "1/20", "0,05"]];
-const SPULLEN = ["een jas", "een spel", "een fiets", "een boek", "een tas", "een bal", "een telefoonhoesje", "een paar schoenen", "een kaartje"];
+  [20, "1/5", "0,2"], [40, "2/5", "0,4"], [60, "3/5", "0,6"], [80, "4/5", "0,8"], [5, "1/20", "0,05"]];
+/* [ding, laagste prijs, hoogste prijs], zodat er geen bal van € 400 komt */
+const SPULLEN = [["een bal", 4, 40], ["een boek", 4, 40], ["een kaartje", 4, 60], ["een telefoonhoesje", 4, 40], ["een spel", 8, 80],
+  ["een tas", 8, 150], ["een jas", 20, 300], ["een paar schoenen", 20, 200], ["een fiets", 100, 2000], ["een laptop", 200, 2000],
+  ["een televisie", 200, 2000], ["een bank", 300, 2000]];
 
 let staat = { soorten: ["vanHet", "welkDeel", "korting"], set: "simpel", tot: 100, heel: true, euro: false,
   titel: "Procenten", aantal: 16, kolommen: 2, grootte: 17, code: "", hulp: true, antwoord: true, naam: true };
@@ -251,7 +259,7 @@ const getalKaal = (n) => {
   const a = Math.round(n * 100) / 100;
   return Number.isInteger(a) ? String(a) : String(a).replace(".", ",");
 };
-const bedrag = (n) => "€ " + getalKaal(n) + (Number.isInteger(Math.round(n * 100) / 100) ? ",-" : "");
+const bedrag = (n) => { const c = Math.round(n * 100); return "€\u00a0" + (c % 100 === 0 ? c / 100 + ",-" : (c / 100).toFixed(2).replace(".", ",")); };
 const getal = (n) => (staat.euro ? bedrag(n) : getalKaal(n));
 
 /* een geheel dat netjes deelbaar is door het percentage */
@@ -269,7 +277,7 @@ function hintVoor(procent) {
   if (procent === 50) return "50% is de helft.";
   if (procent === 25) return "25% is een kwart. Deel door 4.";
   if (procent === 75) return "Reken eerst 50% uit en tel er 25% bij op.";
-  if (procent === 10) return "10% krijg je door door 10 te delen.";
+  if (procent === 10) return "Voor 10% deel je door 10.";
   if (procent === 20) return "Reken eerst 10% uit en doe dat keer 2.";
   if (procent % 10 === 0) return `Reken eerst uit hoeveel 10% is en doe dat keer ${procent / 10}.`;
   if (procent === 5) return "Reken eerst 10% uit en neem daar de helft van.";
@@ -292,13 +300,14 @@ function maakOpgave(r, soort) {
     const deel = g * procent / 100;
     return { sleutel: "b" + g + "-" + deel,
       vraag: `Hoeveel procent is ${getal(deel)} van ${getal(g)}?`,
-      hint: "Kijk hoeveel keer het deel in het geheel past. 100 gedeeld door dat getal is het antwoord.",
+      hint: "Reken uit hoeveel 10% van het geheel is. Hoe vaak past dat in het deel?",
       antwoord: procent + "%" };
   }
 
   if (soort === "korting") {
     const g = geheel(r, procent);
-    const spul = kies(r, SPULLEN);
+    const passend = SPULLEN.filter(([, lo, hi]) => g >= lo && g <= hi);
+    const spul = passend.length ? kies(r, passend)[0] : g < 4 ? "een snoepje" : "een fiets";
     const af = g * procent / 100;
     return { sleutel: "c" + g + "-" + procent + spul,
       vraag: `${spul.charAt(0).toUpperCase() + spul.slice(1)} kost ${bedrag(g)} en er is ${procent}% korting. Wat betaal je?`,
@@ -339,7 +348,7 @@ function hulpHtml() {
 }
 
 function maakBlad() {
-  if (!staat.soorten.length) { $("melding").textContent = "Kies eerst minstens één soort opgave."; return; }
+  if (!staat.soorten.length) { $("melding").textContent = "Kies eerst minstens één soort opgave."; $("blad").innerHTML = `<p style="padding:48px 12px; text-align:center; color:#5b647f; font-weight:700;">${"Kies eerst minstens één soort opgave."}</p>`; return; }
   $("melding").textContent = "";
   const code = staat.code.trim() || String(Math.floor(1000 + Math.random() * 9000));
   $("code").value = code; staat.code = code; bewaar();
@@ -417,7 +426,27 @@ $("titel").value = staat.titel; $("aantal").value = staat.aantal;
 $("kolommen").value = staat.kolommen; $("grootte").value = staat.grootte; $("code").value = staat.code;
 [["heelChip", "heel"], ["euroChip", "euro"], ["hulpChip", "hulp"], ["antwoordChip", "antwoord"], ["naamChip", "naam"]]
   .forEach(([id, sleutel]) => $(id).classList.toggle("aan", staat[sleutel]));
+/* een oude bewaarde keuze die niet meer in een keuzelijst staat: terug naar de standaard */
+document.querySelectorAll(".instellingen select").forEach((s) => { if (s.value) return; const o = [...s.options].find((x) => x.defaultSelected) || s.options[0]; if (!o) return; s.value = o.value; if (s.id in staat) staat[s.id] = isNaN(o.value) ? o.value : Number(o.value); });
+/* elke wijziging in de instellingen meteen op het blad laten zien, met dezelfde herhaalcode */
+document.querySelector(".instellingen").addEventListener("click", (e) => { const b = e.target.closest("button"); if (b && !["maakKnop", "printKnop2"].includes(b.id)) maakBlad(); });
+document.querySelector(".instellingen").addEventListener("change", () => maakBlad());
 maakBlad();
+
+/* op papier staat de voetregel (met de code) klein onder de kop, zodat er nooit een vel met alleen de voetregel uit de printer komt */
+function kopCodes() {
+  const voeten = [...document.querySelectorAll("#blad .bladvoet")];
+  document.querySelectorAll("#blad .bladkop").forEach((kop) => {
+    if (kop.querySelector(".kopcode")) return;
+    const voet = voeten.find((v) => kop.compareDocumentPosition(v) & Node.DOCUMENT_POSITION_FOLLOWING);
+    if (!voet) return;
+    const s = document.createElement("span"); s.className = "kopcode";
+    s.textContent = [...voet.children].map((c) => c.textContent).join(" · ");
+    kop.appendChild(s);
+  });
+}
+new MutationObserver(kopCodes).observe(document.getElementById("blad"), { childList: true });
+kopCodes();
 </script>
 </body>
 </html>
