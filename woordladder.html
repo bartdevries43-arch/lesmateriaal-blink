@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Woordladder · Lesmateriaal Blink</title>
-<meta name="description" content="Van bal naar bus, elke stap verander je een letter en blijft het een woord. Woordladders voor groep 4 tot en met 8, op het digibord of als werkblad.">
+<meta name="description" content="Van bal naar bus, elke stap verander je één letter en blijft het een woord. Woordladders voor groep 4 tot en met 8, op het digibord of als werkblad.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&display=swap" rel="stylesheet">
@@ -201,7 +201,7 @@
       <button class="chip aan" type="button" id="geluidChip"><span class="bol"></span>Geluid aan</button>
     </div>
     <p class="klein" style="margin-top:9px; font-size:13.5px; color:var(--muted);">
-      Klik op een lege sport: het woord erboven komt er vanzelf in te staan. Daarna verander je een letter.
+      Klik op een lege sport: het woord erboven komt er vanzelf in te staan. Daarna verander je één letter.
       Met de spatiebalk krijg je een nieuwe ladder.</p>
   </section>
 
@@ -209,15 +209,15 @@
 
   <details class="uitleg">
     <summary>Waarom dit spel (voor de leerkracht)</summary>
-    <p>Bovenaan staat een woord, onderaan een ander. Elke stap verander je precies een letter, en elke tussenstap moet weer een bestaand woord zijn. Van <b>bal</b> naar <b>bus</b> gaat het bijvoorbeeld zo: bal, bol, bos, bus. De kinderen zoeken zelf een weg.</p>
+    <p>Bovenaan staat een woord, onderaan een ander. Elke stap verander je precies één letter, en elke tussenstap moet weer een bestaand woord zijn. Van <b>bal</b> naar <b>bus</b> gaat het bijvoorbeeld zo: bal, bol, bos, bus. De kinderen zoeken zelf een weg.</p>
     <h3>Waar dit goed voor is</h3>
     <p>Een woordladder dwingt kinderen om naar losse klanken en letters in een woord te kijken en er eentje te vervangen. Dat is precies wat fonemisch bewustzijn is: horen en manipuleren van klanken in woorden. Dat bewustzijn hangt sterk samen met hoe goed kinderen leren lezen en spellen (Kennistafel Effectief Leesonderwijs, 2021).</p>
     <p>Voor kinderen die al vlot lezen werkt het als woordenschatspel: ze komen woorden tegen die ze passief kennen maar zelf nooit gebruiken.</p>
     <h3>Waar ik op gelet heb</h3>
     <ul>
       <li><b>Er is altijd een oplossing.</b> De app zoekt eerst een weg tussen twee woorden en laat daarna pas de opgave zien. Een ladder zonder oplossing kan dus niet voorkomen.</li>
-      <li><b>Elke weg mag.</b> Er wordt niet gecontroleerd op mijn oplossing, maar op de regels: staat het woord in de lijst en verschilt het op precies een letter. Vindt een kind een andere route, dan is die ook goed.</li>
-      <li><b>Klikken vult voor.</b> Klik je op een lege sport, dan komt het woord erboven erin te staan. Zo hoef je maar een letter te veranderen en zie je meteen wat er verandert.</li>
+      <li><b>Elke weg mag.</b> Er wordt niet gecontroleerd op mijn oplossing, maar op de regels: staat het woord in de lijst en verschilt het op precies één letter. Vindt een kind een andere route, dan is die ook goed.</li>
+      <li><b>Klikken vult voor.</b> Klik je op een lege sport, dan komt het woord erboven erin te staan. Zo hoef je maar één letter te veranderen en zie je meteen wat er verandert.</li>
       <li><b>De woordenlijst is met de hand gemaakt.</b> Ruim zevenhonderd woorden die kinderen uit groep 4 kennen, zonder namen en zonder rare woorden uit een automatische lijst.</li>
       <li><b>De knop Werkblad</b> maakt een A4 met negen ladders en een antwoordblad eronder.</li>
     </ul>
@@ -235,10 +235,10 @@ const $ = (id) => document.getElementById(id);
 const BEWAAR = "blink-woordladder";
 
 const DRIE = (
-  "aal aan aap aas bad bak bal ban bar bas bed bel ben bes bij bil bit bod bok bol bom bon bos " +
+  "aal aan aap aas bad bak bal ban bar bas bed bel ben bes bij bit bod bok bol bon bos " +
   "bot bui bus dag dak dal dam dan das dat dek den dik dip dit doe dof dok dom dop dor dot duf " +
   "duw een eer eet eik eis elf elk erf erg ets fee fel fit fut gal gas gat gek gel gif gil gom " +
-  "gum had hak hal ham hap hei hek hel hem hen het hik hip hit hoe hof hok hol hop hou hut ijs " +
+  "gum had hak hal ham hap hei hek hem hen het hik hip hit hoe hof hok hol hop hou hut ijs " +
   "jas jij jou juf kaf kam kan kap kar kas kat kei ken kil kin kip koe kok kom kon kop kou kus " +
   "lak lam lap las lat lei lek les let lig lik lip lof log lok lol los lot lui lus mag mak mal " +
   "man map mat mee mei men mep mes met mij min mis moe mol mop mos mot mug mus nat nee nek nep " +
@@ -252,7 +252,7 @@ const DRIE = (
 
 const VIER = (
   "aard adem alle arts auto baal baan baas band bang bank beek been beer beet bent berg best " +
-  "bier bijl bijt bind blad blij boek boer bond bont boom boon boos boot bord bout bouw brak " +
+  "bijl bijt bind blad blij boek boer bond bont boom boon boos boot bord bout bouw brak " +
   "brok brom brug buik buis buit bult buur cent daad dame damp dans darm deeg deel deur dief " +
   "dier dijk ding doek doel doen doet dons dood door doos dorp draf drie drop druk duim duin " +
   "duur eend eeuw feit fijn film fles fout fris gaaf gaan gang gans gast gauw geel geen geit " +
@@ -262,17 +262,17 @@ const VIER = (
   "kaas kade kalf kalk kamp kant kast keel keer kern kers keus kiel kies kijk kind klap klas " +
   "klei klem klim klok knie knop koek koel komt kook kool koor kort kost koud kous krab kras " +
   "kuil kuit kurk kust kwal kwam laag laan laat lach lamp land lang last leeg leek leer lees " +
-  "lied lief liep lift lijk lijm lijn lint long lont lood loon loop luid luik luis maag maak " +
+  "lied lief liep lift lijm lijn lint long lont lood loon loop luid luik luis maag maak " +
   "maal maan maar maat mand mast meel meer mees meet melk mens merk mest mier mijl mijn mist " +
   "moed mond mooi muil muis muts muur naad naam naar neef neem neer nest neus niet nood noot " +
   "ogen olie onze oost open oren over paal paar pand park past pech peer perk pers pest piek " +
-  "pier pijl pijn pijp plan plas plat poel poes pols pond poot post prei pret prik punt raad " +
+  "pier pijl pijn plan plas plat poel poes pols pond poot post prei pret prik punt raad " +
   "raaf raak raam rand reep reis rest riem riet rijk rijm rijp ring rits roer rond rood rook " +
   "roos rots ruil ruim ruit rust saai slag slee slim slot smal snel snor soep spel spin spul " +
   "stad stal stam stap stem ster stil stof stok stom stuk taai taak taal tand tank teen tent " +
   "thee tien toen toon touw trap tuin tulp uien vaak vaas vals vang vast veel veer veld verf " +
   "vers vest vier vies vijf vijl vind vlag vlak vlek vlot voel voet vond voor vorm vuil vuur " +
-  "waar wand wang want warm week weer weet wens werk west wiel wijk wijn wijs wild wind wolk " +
+  "waar wand wang want warm week weer weet wens werk west wiel wijk wijs wild wind wolk " +
   "wond woon worm zaad zaag zaak zaal zang zeep zeer zeil zelf ziek zien zijn zing zoek zoen " +
   "zoet zoon zorg zout zuid zuur zwak "
 ).trim().split(/\s+/);
@@ -417,7 +417,7 @@ function teken() {
   $("opdracht").textContent = "Van " + start + " naar " + doel + ".";
   $("onder").textContent = klaar
     ? "Gelukt!"
-    : "Verander elke stap precies een letter. Elke stap moet een woord zijn.";
+    : "Verander elke stap precies één letter. Elke stap moet een woord zijn.";
 
   const az = "abcdefghijklmnopqrstuvwxyz".split("");
   $("letters").innerHTML = az.map((l) => '<button type="button" data-letter="' + l + '">' + l + "</button>").join("")
@@ -464,7 +464,7 @@ function controleer() {
     if (!w) continue;
     if (!INLIJST[staat.lengte].has(w)) { melding('"' + w + '" ken ik niet als woord.', "fout"); return; }
     const n = verschil(rij[i - 1], w);
-    if (n === 0) { melding("Dat is hetzelfde woord. Verander een letter.", "fout"); return; }
+    if (n === 0) { melding("Dat is hetzelfde woord. Verander één letter.", "fout"); return; }
     if (n > 1) { melding("Je veranderde " + n + " letters. Het mag er maar een zijn.", "fout"); return; }
   }
   const laatste = sporten[sporten.length - 1];
@@ -582,8 +582,8 @@ function vulPrintblad() {
     antwoorden.push("<b>" + nr + ".</b> " + o.weg.join(" &#8594; "));
   }
   $("printblad").innerHTML =
-    '<p class="printuitleg">Verander elke stap precies een letter, zodat er steeds weer een woord staat. '
-    + "Het bovenste en het onderste woord zijn al ingevuld. Er is soms meer dan een goede weg.</p>"
+    '<p class="printuitleg">Verander elke stap precies één letter, zodat er steeds weer een woord staat. '
+    + "Het bovenste en het onderste woord zijn al ingevuld. Er is soms meer dan één goede weg.</p>"
     + '<div class="printgrid">' + vakken.join("") + "</div>"
     + '<div class="antwoorden"><b>Antwoorden (een mogelijke weg):</b><br>' + antwoorden.join(" &nbsp;&nbsp; ") + "</div>";
 }

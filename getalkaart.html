@@ -226,6 +226,7 @@ function tot1000(n) {
 }
 function inWoorden(n) {
   if (n === 0) return "nul";
+  if (n === 1) return "één";
   const duizend = Math.floor(n / 1000), rest = n % 1000;
   const delen = [];
   if (duizend) delen.push(duizend === 1 ? "duizend" : tot1000(duizend) + "duizend");
